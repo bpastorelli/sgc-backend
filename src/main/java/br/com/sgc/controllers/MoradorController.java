@@ -28,7 +28,6 @@ public class MoradorController {
 	@Autowired
 	private AmqpService<MoradorDto> moradorAmqpService;
 	
-	
 	public MoradorController() {
 		
 	}
