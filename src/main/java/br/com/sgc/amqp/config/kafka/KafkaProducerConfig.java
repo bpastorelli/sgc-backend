@@ -24,10 +24,10 @@ public class KafkaProducerConfig {
 	@Value(value = "${spring.kafka.bootstrap-servers}")
 	private String bootStrapAddress;
 	
-	@Value(value = "${topic.morador.name}")
+	@Value(value = "${morador.topic.name}")
 	private String topicMorador;
 	
-	@Value(value = "${topic.residencia.name}")
+	@Value(value = "${residencia.topic.name}")
 	private String topicResidencia;
 	
 	@Bean

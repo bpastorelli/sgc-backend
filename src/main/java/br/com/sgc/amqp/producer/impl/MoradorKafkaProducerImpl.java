@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import br.com.sgc.amqp.AmqpProducer;
+import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.dto.MoradorDto;
 
 @Component
@@ -14,13 +14,19 @@ public class MoradorKafkaProducerImpl implements AmqpProducer<MoradorDto> {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MoradorKafkaProducerImpl.class);
 	
-	@Value("${topic.morador.name}")
-	private String topic;
+	private final String topic;
 	
-	private KafkaTemplate<String, MoradorDto> kafkaTemplate;
+	private final KafkaTemplate<String, MoradorDto> kafkaTemplate;
 
+	public MoradorKafkaProducerImpl(@Value("${morador.topic.name}") String topic, KafkaTemplate<String, MoradorDto> kafkaTemplate) {
+		
+		this.topic = topic;
+		this.kafkaTemplate = kafkaTemplate;
+		
+	}
+	
 	@Override
-	public void send(MoradorDto dto) {
+	public void producer(MoradorDto dto) {
 		
 		kafkaTemplate.send(topic, dto).addCallback(
 				success -> logger.info("Message send " + success.getProducerRecord().value()),
