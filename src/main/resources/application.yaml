@@ -1,0 +1,8 @@
+topic:
+  morador:
+    name: morador-mq
+
+topic:
+  residencia:
+    name: residencia-mq
+  
