@@ -26,8 +26,8 @@ public interface ResidenciaRepository extends JpaRepository<Residencia, Long> {
 	
 	Page<Residencia> findByEnderecoAndNumero(String endereco, Long numero, Pageable pageable);
 	
-	Residencia findByCepAndNumero(String cep, Long numero);
+	Optional<Residencia> findByCepAndNumero(String cep, Long numero);
 	
-	Residencia findByGuide(String guide);
+	Optional<Residencia> findByGuide(String guide);
 
 }
