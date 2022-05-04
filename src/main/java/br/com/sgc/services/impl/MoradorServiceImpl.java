@@ -3,23 +3,25 @@ package br.com.sgc.services.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.criteria.Predicate;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.entities.Morador;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.mapper.MoradorMapper;
 import br.com.sgc.repositories.MoradorRepository;
+import br.com.sgc.repositories.queries.MoradorQueryRepository;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.MoradorService;
 import br.com.sgc.validators.Validators;
@@ -31,6 +33,9 @@ public class MoradorServiceImpl implements MoradorService {
 	
 	@Autowired
 	private MoradorRepository moradorRepository;
+	
+	@Autowired
+	private MoradorQueryRepository<Morador> moradorQueryRepository;
 	
 	@Autowired
 	private MoradorMapper moradorMapper;
@@ -94,9 +99,18 @@ public class MoradorServiceImpl implements MoradorService {
 	}
 
 	@Override
-	public Page<MoradorDto> buscarMorador(Predicate predicate, PageRequest pageRequest) {
-		// TODO Auto-generated method stub
-		return null;
+	public Page<MoradorDto> buscarMorador(MoradorFilter filtros, Pageable pageable) {
+		
+		log.info("Buscando morador por " + filtros);
+		
+		Response<List<MoradorDto>> response = new Response<List<MoradorDto>>();
+		
+		response.setData(this.moradorMapper.listMoradorToListMoradorDto(
+				this.moradorQueryRepository.findMoradorBy(filtros, pageable)));
+		
+		long total = this.moradorQueryRepository.totalRegistros(filtros);
+		
+		return new PageImpl<>(response.getData(), pageable, total);
 	}
 
 }

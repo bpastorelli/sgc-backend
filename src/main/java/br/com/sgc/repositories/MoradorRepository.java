@@ -29,4 +29,6 @@ public interface MoradorRepository extends JpaRepository<Morador, Long> {
 	
 	Page<Morador> findByPosicao(Long posicao, Pageable pageable);
 	
+	
+	
 }

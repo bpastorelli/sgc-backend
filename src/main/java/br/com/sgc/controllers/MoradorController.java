@@ -1,5 +1,6 @@
 package br.com.sgc.controllers;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,6 +8,10 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ResponsePublisherDto;
+import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.MoradorService;
 	
@@ -89,5 +95,24 @@ public class MoradorController {
 				ResponseEntity.status(HttpStatus.OK).body(response.getData());
 		
 	}
+	
+	/**
+	 * Busca um morador pelo id.
+	 * 
+	 * @param id
+	 * @return ResponseEntity<Response<CadastroMoradorResponseDto>>
+	 * @throws NoSuchAlgorithmException
+	 */
+	@GetMapping(value = "/filtro")
+	public ResponseEntity<?> buscarMoradoresFiltro(
+			MoradorFilter filters,
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
+		
+		Page<MoradorDto> moradores = this.moradorService.buscarMorador(filters, paginacao);
+		
+		return new ResponseEntity<>(moradores.get(), HttpStatus.OK);
+		
+	}
+
 	
 }
