@@ -12,5 +12,7 @@ public class MoradorFilter {
 	private String nome;
 	
 	private Long posicao;
+	
+	private boolean content;
 
 }

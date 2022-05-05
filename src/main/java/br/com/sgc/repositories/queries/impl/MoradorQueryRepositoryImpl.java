@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import br.com.sgc.commons.CriteriaSubQuery;
 import br.com.sgc.entities.Morador;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.repositories.queries.MoradorQueryRepository;
@@ -41,7 +42,6 @@ public class MoradorQueryRepositoryImpl implements MoradorQueryRepository<Morado
         
         this.aplicarFiltroPaginacao(typedQuery, pageable);
         
-        
         return typedQuery.getResultList();
 	}
 	
@@ -65,13 +65,10 @@ public class MoradorQueryRepositoryImpl implements MoradorQueryRepository<Morado
 	@Override
 	public long totalRegistros(MoradorFilter filters) {
 		
-		CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-		Root<Morador> entity_ = countQuery.from(query.getResultType());
-		entity_.alias("entitySub"); //use the same alias in order to match the restrictions part and the selection part
-		countQuery.select(builder.count(entity_));
-		countQuery.where(this.criarFiltros(entity_, filters, builder)); // Copy restrictions
-
-		return manager.createQuery(countQuery).getSingleResult();
+		Root<Morador> entity_ = null;
+		
+		return CriteriaSubQuery.subQueryTotal(manager, entity_, builder, query, this.criarFiltros(entity_, filters, builder));
+		
 	}
 
 	@Override

@@ -110,7 +110,8 @@ public class MoradorController {
 		
 		Page<MoradorDto> moradores = this.moradorService.buscarMorador(filters, paginacao);
 		
-		return new ResponseEntity<>(moradores.get(), HttpStatus.OK);
+		return filters.isContent() ? new ResponseEntity<>(moradores.getContent(), HttpStatus.OK) :
+					new ResponseEntity<>(moradores, HttpStatus.OK);
 		
 	}
 
