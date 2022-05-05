@@ -5,12 +5,11 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.response.Response;
 
-public interface MoradorService {
+public interface MoradorService<T> {
 
 	/**
 	 * Cadastra uma lista de moradores na base de dados.
@@ -18,7 +17,7 @@ public interface MoradorService {
 	 * @param morador
 	 * @return Response<T>
 	 */
-	Response<List<MoradorDto>> persistir(List<MoradorDto> moradores) throws RegistroException;
+	Response<List<T>> persistir(List<T> moradores) throws RegistroException;
 	
 	/**
 	 * Cadastra um morador
@@ -26,7 +25,7 @@ public interface MoradorService {
 	 * @param morador
 	 * @return Response<T>
 	 */
-	Response<?> persistir(MoradorDto morador);
+	Response<T> persistir(T morador) throws RegistroException;
 	
 	/**
 	 * Busca moradores
@@ -39,14 +38,14 @@ public interface MoradorService {
 	 * @param pageRequest
 	 * @return Page<Morador>
 	 */
-	Page<MoradorDto> buscarMorador(MoradorFilter filter, Pageable pageable);
+	Page<T> buscarMorador(MoradorFilter filter, Pageable pageable);
 	
 	/**
 	 * Busca registro pelo ticket de envio
 	 * @param guide 
 	 * @return Response<T>
 	 */
-	Response<MoradorDto> buscarPorGuide(String guide);
+	Response<T> buscarPorGuide(String guide);
 
 	
 }

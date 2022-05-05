@@ -1,6 +1,7 @@
 package br.com.sgc.amqp.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,6 @@ import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.repositories.ResidenciaRepository;
-import br.com.sgc.utils.Guide;
 import br.com.sgc.validators.Validators;
 
 
@@ -24,9 +24,6 @@ import br.com.sgc.validators.Validators;
 public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 	
 	private static final Logger log = LoggerFactory.getLogger(ResidenciaServiceAMQPImpl.class);
-	
-	@Value("${guide.size}")
-	private int guideSize;
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
@@ -89,9 +86,9 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		do {
 			i++;
 			if(this.residenciaRepository.findByGuide(guide).isPresent())
-				guide = Guide.gerar(guideSize);
+				guide = UUID.randomUUID().toString();
 			else if(guide == null)
-				guide = Guide.gerar(guideSize);
+				guide = UUID.randomUUID().toString();
 			else {
 				ticketValido = true;
 			}

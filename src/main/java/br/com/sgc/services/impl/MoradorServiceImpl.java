@@ -1,5 +1,6 @@
 package br.com.sgc.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,10 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ import br.com.sgc.services.MoradorService;
 import br.com.sgc.validators.Validators;
 
 @Service
-public class MoradorServiceImpl implements MoradorService {
+public class MoradorServiceImpl implements MoradorService<MoradorDto> {
 
 	private static final Logger log = LoggerFactory.getLogger(MoradorServiceImpl.class);
 	
@@ -67,12 +66,6 @@ public class MoradorServiceImpl implements MoradorService {
 		return response;
 	}
 
-	@Cacheable(value = "moradorCache")
-	public Page<Morador> bucarTodos(PageRequest pageRequest) {
-		log.info("Buscando moradores paginado {}", pageRequest);
-		return this.moradorRepository.findAll(pageRequest);
-	}
-
 	@Override
 	public Response<MoradorDto> buscarPorGuide(String guide) {
 		
@@ -93,9 +86,32 @@ public class MoradorServiceImpl implements MoradorService {
 	}
 
 	@Override
-	public Response<MoradorDto> persistir(MoradorDto morador) {
-		// TODO Auto-generated method stub
-		return null;
+	public Response<MoradorDto> persistir(MoradorDto morador) throws RegistroException {
+
+		log.info("Persistir moradores {}", morador);
+		
+		Response<MoradorDto> response = new Response<MoradorDto>();
+		
+		List<MoradorDto> moradoresDto = new ArrayList<MoradorDto>();
+		
+		moradoresDto.add(morador);
+		
+		List<ErroRegistro> errors = this.validator.validar(moradoresDto);
+		
+		if(errors.size() == 0) {			
+			List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
+			moradores.forEach(m -> {
+				m.setSenha(m.getCpf().substring(6));
+			});
+			
+			this.moradorRepository.saveAll(moradores);
+			response.setData(this.moradorMapper.moradorToMoradorDto(moradores.get(0)));
+		}else {			
+			response.setErrors(errors);
+		}
+		
+		return response;
+		
 	}
 
 	@Override

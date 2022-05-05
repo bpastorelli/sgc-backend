@@ -66,10 +66,4 @@ public class Lancamento implements Serializable {
         dataAtualizacao = atual;
     }
 
-	@Override
-	public String toString() {
-		return "Lancamento [id=" + id + ", dataPagamento=" + dataPagamento + ", periodo=" + periodo + ", valor=" + valor
-				+ ", dataCriacao=" + dataCriacao + ", dataAtualizacao=" + dataAtualizacao + ", residenciaId=" + residenciaId + "]";
-	}
-
 }
