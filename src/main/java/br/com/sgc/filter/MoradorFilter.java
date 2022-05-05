@@ -11,6 +11,10 @@ public class MoradorFilter {
 	
 	private String nome;
 	
+	private String cpf;
+	
+	private String rg;
+	
 	private Long posicao;
 	
 	private boolean content;

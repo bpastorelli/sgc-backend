@@ -14,29 +14,29 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import br.com.sgc.commons.CriteriaSubQuery;
 import br.com.sgc.entities.Morador;
 import br.com.sgc.filter.MoradorFilter;
-import br.com.sgc.repositories.queries.MoradorQueryRepository;
+import br.com.sgc.repositories.queries.QueryRepository;
 
 @Repository
-public class MoradorQueryRepositoryImpl implements MoradorQueryRepository<Morador> {
+public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, MoradorFilter> {
 	
 	@PersistenceContext
 	private EntityManager manager;
+	private static Root<Morador> entity_;
 	private CriteriaBuilder builder;
 	private CriteriaQuery<Morador> query;
 	
 	
 	@Override
-	public List<Morador> findMoradorBy(MoradorFilter filters, Pageable pageable){
+	public List<Morador> query(MoradorFilter filters, Pageable pageable){
 		
 		builder = manager.getCriteriaBuilder();
 		query = builder.createQuery(Morador.class);
 		
-        Root<Morador> root = query.from(Morador.class);
+        entity_ = query.from(Morador.class);
         
-        query.where(this.criarFiltros(root, filters, builder));
+        this.query.where(this.criarFiltros(entity_, filters, builder));
         
         TypedQuery<Morador> typedQuery = manager.createQuery(query);
         
@@ -56,6 +56,12 @@ public class MoradorQueryRepositoryImpl implements MoradorQueryRepository<Morado
 		if(filters.getNome() != null)
 			predicates.add(builder.like(root.get("nome"), filters.getNome() + '%'));
 		
+		if(filters.getCpf() != null)
+			predicates.add(builder.equal(root.get("cpf"), filters.getCpf()));
+		
+		if(filters.getRg() != null)
+			predicates.add(builder.equal(root.get("rg"), filters.getRg()));
+		
 		if(filters.getPosicao() != null)
 			predicates.add(builder.equal(root.get("posicao"), filters.getPosicao()));
 		
@@ -65,9 +71,13 @@ public class MoradorQueryRepositoryImpl implements MoradorQueryRepository<Morado
 	@Override
 	public long totalRegistros(MoradorFilter filters) {
 		
-		Root<Morador> entity_ = null;
+		CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+		entity_ = countQuery.from(query.getResultType());
+		entity_.alias("total"); //use the same alias in order to match the restrictions part and the selection part
+		countQuery.select(builder.count(entity_));
+		countQuery.where(this.criarFiltros(entity_, filters, builder));
 		
-		return CriteriaSubQuery.subQueryTotal(manager, entity_, builder, query, this.criarFiltros(entity_, filters, builder));
+		return manager.createQuery(countQuery).getSingleResult();	
 		
 	}
 
@@ -83,6 +93,4 @@ public class MoradorQueryRepositoryImpl implements MoradorQueryRepository<Morado
 		
 	}
 	
-	
-
 }

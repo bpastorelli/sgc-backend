@@ -21,7 +21,7 @@ import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.mapper.MoradorMapper;
 import br.com.sgc.repositories.MoradorRepository;
-import br.com.sgc.repositories.queries.MoradorQueryRepository;
+import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.MoradorService;
 import br.com.sgc.validators.Validators;
@@ -35,7 +35,7 @@ public class MoradorServiceImpl implements MoradorService {
 	private MoradorRepository moradorRepository;
 	
 	@Autowired
-	private MoradorQueryRepository<Morador> moradorQueryRepository;
+	private QueryRepository<Morador, MoradorFilter> queryRepository;
 	
 	@Autowired
 	private MoradorMapper moradorMapper;
@@ -101,14 +101,14 @@ public class MoradorServiceImpl implements MoradorService {
 	@Override
 	public Page<MoradorDto> buscarMorador(MoradorFilter filtros, Pageable pageable) {
 		
-		log.info("Buscando morador por " + filtros);
+		log.info("Buscando morador(es)...");
 		
 		Response<List<MoradorDto>> response = new Response<List<MoradorDto>>();
 		
 		response.setData(this.moradorMapper.listMoradorToListMoradorDto(
-				this.moradorQueryRepository.findMoradorBy(filtros, pageable)));
+				this.queryRepository.query(filtros, pageable)));
 		
-		long total = this.moradorQueryRepository.totalRegistros(filtros);
+		long total = this.queryRepository.totalRegistros(filtros);
 		
 		return new PageImpl<>(response.getData(), pageable, total);
 	}

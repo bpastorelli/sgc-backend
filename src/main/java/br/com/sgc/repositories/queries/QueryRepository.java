@@ -9,15 +9,13 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.domain.Pageable;
 
-import br.com.sgc.filter.MoradorFilter;
-
-public interface MoradorQueryRepository<T> {
+public interface QueryRepository<T, Z> {
 	
-	public List<T> findMoradorBy(MoradorFilter filters, Pageable pageable);
+	public List<T> query(Z filters, Pageable pageable);
 	
-	public Predicate[] criarFiltros(Root<T> root, MoradorFilter filters, CriteriaBuilder builder);
+	public Predicate[] criarFiltros(Root<T> root, Z filters, CriteriaBuilder builder);
 	
-	public long totalRegistros(MoradorFilter filters);
+	public long totalRegistros(Z filters);
 	
 	public void aplicarFiltroPaginacao(TypedQuery<T> typedQuery, Pageable pageable);
 }
