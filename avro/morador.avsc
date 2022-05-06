@@ -1,0 +1,55 @@
+{
+	"type": "record",
+	"name": "Morador",
+	"namespace": "br.com.sgc.entities",
+	"fields": [
+		{
+			"name": "id",
+			"type": "long", 
+		},
+		{
+			"name": "nome",
+			"type": "string", 
+		},
+		{
+			"name": "email",
+			"type": "string", 
+		},
+		{
+			"name": "cpf",
+			"type": "string", 
+		},
+		{
+			"name": "rg",
+			"type": "string", 
+		},
+		{
+			"name": "telefone",
+			"type": "string", 
+		},
+		{
+			"name": "celular",
+			"type": "string", 
+		},
+		{
+			"name": "perfil",
+			"type": "string", 
+		},
+		{
+			"name": "residenciaId",
+			"type": "long", 
+		},
+		{
+			"name": "associado",
+			"type": "string", 
+		},
+		{
+			"name": "posicao",
+			"type": "string", 
+		},
+		{
+			"name": "guide",
+			"type": "string", 
+		}
+	] 
+}
