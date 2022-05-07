@@ -5,4 +5,8 @@ morador:
 residencia:
   topic:
     name: residencia-mq
+    
+veiculo:
+  topic:
+    name: veiculo-mq
   
