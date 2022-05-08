@@ -9,4 +9,8 @@ residencia:
 veiculo:
   topic:
     name: veiculo-mq
+    
+visita:
+  topic:
+    name: visita-mq
   
