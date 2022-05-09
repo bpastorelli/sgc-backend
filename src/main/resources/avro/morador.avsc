@@ -1,14 +1,10 @@
 {
 	"type": "record",
-	"name": "Morador",
+	"name": "MoradorAvro",
 	"namespace": "br.com.sgc",
 	"fields": [
 		{
 			"name": "nome",
-			"type": "string" 
-		},
-		{
-			"name": "email",
 			"type": "string" 
 		},
 		{
@@ -20,6 +16,10 @@
 			"type": "string" 
 		},
 		{
+			"name": "email",
+			"type": "string" 
+		},
+		{
 			"name": "telefone",
 			"type": "string" 
 		},
@@ -28,20 +28,12 @@
 			"type": "string" 
 		},
 		{
-			"name": "perfil",
-			"type": "string" 
-		},
-		{
 			"name": "residenciaId",
 			"type": "long" 
 		},
 		{
 			"name": "associado",
-			"type": "string" 
-		},
-		{
-			"name": "posicao",
-			"type": "string" 
+			"type": "long" 
 		},
 		{
 			"name": "guide",

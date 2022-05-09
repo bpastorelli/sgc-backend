@@ -14,7 +14,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import br.com.sgc.dto.MoradorDto;
+import br.com.sgc.MoradorAvro;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.VeiculoDto;
 import br.com.sgc.dto.VisitaDto;
@@ -63,7 +63,7 @@ public class KafkaProducerConfig {
 	}
 	
 	@Bean
-	public ProducerFactory<String, MoradorDto> moradorProducerFactory(){
+	public ProducerFactory<String, MoradorAvro> moradorProducerFactory(){
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -99,7 +99,7 @@ public class KafkaProducerConfig {
 	}
 	
 	@Bean
-	public KafkaTemplate<String, MoradorDto> moradorKafkaTemplate(){
+	public KafkaTemplate<String, MoradorAvro> moradorKafkaTemplate(){
 		return new KafkaTemplate<>(moradorProducerFactory());
 	}
 	
