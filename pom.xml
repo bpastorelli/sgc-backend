@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<lombok.version>1.18.24</lombok.version>
+		<avro.version>1.10.0</avro.version>
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<docker.image.prefix>docker</docker.image.prefix>
@@ -99,6 +100,12 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
 		</dependency>	
 		
 		<!--<dependency>
@@ -155,8 +162,27 @@
 			        </annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+			  <groupId>org.apache.avro</groupId>
+			  <artifactId>avro-maven-plugin</artifactId>
+			  <version>${avro.version}</version>
+			  <executions>
+			    <execution>
+			      <phase>generate-sources</phase>
+			      <goals>
+			        <goal>schema</goal>
+			      </goals>
+			      <configuration>
+			        <sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
+			        <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+			      </configuration>
+			    </execution>
+			  </executions>
+			</plugin>
+			
 		</plugins>
-		<finalName>docker-spring-boot</finalName>
+		<finalName>sgc_producer</finalName>
 	</build>
 
 </project>
