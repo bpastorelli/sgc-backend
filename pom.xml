@@ -20,6 +20,7 @@
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<docker.image.prefix>docker</docker.image.prefix>
+		<avro.version>1.10.0</avro.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -102,6 +103,12 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>	
 		
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
+		</dependency>
+		
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -155,6 +162,24 @@
 			            </path>
 			        </annotationProcessorPaths>
 				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>${avro.version}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schema</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+							<outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			
 		</plugins>
