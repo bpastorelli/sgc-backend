@@ -3,12 +3,11 @@ package br.com.sgc.amqp.service.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import br.com.sgc.ResidenciaAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
@@ -16,26 +15,29 @@ import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.mapper.ResidenciaMapper;
 import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.validators.Validators;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @Service
 public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
-	
-	private static final Logger log = LoggerFactory.getLogger(ResidenciaServiceAMQPImpl.class);
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
 	
 	@Autowired
-	private AmqpProducer<ResidenciaDto> amqp;
+	private AmqpProducer<ResidenciaAvro> amqp;
 	
 	@Autowired
 	private Validators<ResidenciaDto> validator;
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
+	
+	@Autowired
+	private ResidenciaMapper residenciaMapper;
 	
 	
 	@Override
@@ -62,7 +64,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(residenciaRequestBody);
+		this.amqp.producer(this.residenciaMapper.residenciaDtoTpResidenciaAvro(residenciaRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

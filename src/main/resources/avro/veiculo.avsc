@@ -1,0 +1,35 @@
+{
+	"type": "record",
+	"name": "VeiculoAvro",
+	"namespace": "br.com.sgc",
+	"fields": [
+		{
+			"name": "placa",
+			"type": "string" 
+		},
+		{
+			"name": "marca",
+			"type": "string" 
+		},
+		{
+			"name": "modelo",
+			"type": "string" 
+		},
+		{
+			"name": "cor",
+			"type": "string" 
+		},
+		{
+			"name": "ano",
+			"type": "long" 
+		},
+		{
+			"name": "visitanteId",
+			"type": "long" 
+		},
+		{
+			"name": "ticketVisitante",
+			"type": "string" 
+		}
+	] 
+}

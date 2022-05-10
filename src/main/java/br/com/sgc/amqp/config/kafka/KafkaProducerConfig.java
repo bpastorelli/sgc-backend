@@ -1,23 +1,9 @@
 package br.com.sgc.amqp.config.kafka;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
-
-import br.com.sgc.dto.MoradorDto;
-import br.com.sgc.dto.ResidenciaDto;
-import br.com.sgc.dto.VeiculoDto;
-import br.com.sgc.dto.VisitaDto;
 
 
 @Configuration
@@ -62,8 +48,8 @@ public class KafkaProducerConfig {
 		return new NewTopic(topicVisita, 1,(short) 1);
 	}
 	
-	@Bean
-	public ProducerFactory<String, MoradorDto> moradorProducerFactory(){
+	/*@Bean
+	public ProducerFactory<String, MoradorAvro> moradorProducerFactory(){
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -99,7 +85,7 @@ public class KafkaProducerConfig {
 	}
 	
 	@Bean
-	public KafkaTemplate<String, MoradorDto> moradorKafkaTemplate(){
+	public KafkaTemplate<String, MoradorAvro> moradorKafkaTemplate(){
 		return new KafkaTemplate<>(moradorProducerFactory());
 	}
 	
@@ -116,6 +102,6 @@ public class KafkaProducerConfig {
 	@Bean
 	public KafkaTemplate<String, VisitaDto> visitaKafkaTemplate(){
 		return new KafkaTemplate<>(visitaProducerFactory());
-	}
+	}*/
 	
 }

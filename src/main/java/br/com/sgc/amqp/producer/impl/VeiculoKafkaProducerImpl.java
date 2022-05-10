@@ -4,19 +4,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import br.com.sgc.MoradorAvro;
+import br.com.sgc.VeiculoAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class MoradorKafkaProducerImpl implements AmqpProducer<MoradorAvro> {
+public class VeiculoKafkaProducerImpl implements AmqpProducer<VeiculoAvro> {
 	
 	private final String topic;
 	
-	private final KafkaTemplate<String, MoradorAvro> kafkaTemplate;
+	private final KafkaTemplate<String, VeiculoAvro> kafkaTemplate;
 
-	public MoradorKafkaProducerImpl(@Value("${morador.topic.name}") String topic, KafkaTemplate<String, MoradorAvro> kafkaTemplate) {
+	public VeiculoKafkaProducerImpl(@Value("${veiculo.topic.name}") String topic, KafkaTemplate<String, VeiculoAvro> kafkaTemplate) {
 		
 		this.topic = topic;
 		this.kafkaTemplate = kafkaTemplate;
@@ -24,7 +24,7 @@ public class MoradorKafkaProducerImpl implements AmqpProducer<MoradorAvro> {
 	}
 	
 	@Override
-	public void producer(MoradorAvro dto) {
+	public void producer(VeiculoAvro dto) {
 		
 		kafkaTemplate.send(topic, dto).addCallback(
 				success -> log.info("Message send " + success.getProducerRecord().value()),
