@@ -3,8 +3,6 @@ package br.com.sgc.amqp.service.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,12 +18,11 @@ import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.mapper.ResidenciaMapper;
 import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.validators.Validators;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @Service
 public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
-	
-	private static final Logger log = LoggerFactory.getLogger(ResidenciaServiceAMQPImpl.class);
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
