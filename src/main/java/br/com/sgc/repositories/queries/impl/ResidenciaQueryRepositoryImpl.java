@@ -68,6 +68,9 @@ public class ResidenciaQueryRepositoryImpl implements QueryRepository<Residencia
 		if(filters.getUf() != null)
 			predicates.add(builder.equal(root.get("uf"), filters.getUf()));
 		
+		if(filters.getGuide() != null)
+			predicates.add(builder.equal(root.get("guide"), filters.getGuide()));
+		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 

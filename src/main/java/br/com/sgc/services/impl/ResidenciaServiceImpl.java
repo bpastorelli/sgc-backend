@@ -111,7 +111,7 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 	@Override
 	public Page<ResidenciaDto> buscarResidencia(ResidenciaFilter filtros, Pageable pageable) {
 		
-		log.info("Buscando residencia(es)...");
+		log.info("Buscando residencia(s)...");
 		
 		Response<List<ResidenciaDto>> response = new Response<List<ResidenciaDto>>();
 		
