@@ -1,14 +1,21 @@
 package br.com.sgc.controllers;
 
+import java.security.NoSuchAlgorithmException;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
+import br.com.sgc.filter.ResidenciaFilter;
+import br.com.sgc.services.ResidenciaService;
 
 
 @RestController
@@ -28,6 +37,9 @@ class ResidenciaController {
 	
 	@Autowired
 	private AmqpService<ResidenciaDto> residenciaAmqpService;
+	
+	@Autowired
+	private ResidenciaService<ResidenciaDto> residenciaService;
 	
 	public ResidenciaController() {
 		
@@ -44,6 +56,25 @@ class ResidenciaController {
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
 				ResponseEntity.status(HttpStatus.ACCEPTED).body(response.getTicket());
+		
+	}
+	
+	/**
+	 * Busca um morador pelo id.
+	 * 
+	 * @param id
+	 * @return ResponseEntity<Response<CadastroMoradorResponseDto>>
+	 * @throws NoSuchAlgorithmException
+	 */
+	@GetMapping(value = "/filtro")
+	public ResponseEntity<?> buscarResidenciasFiltro(
+			ResidenciaFilter filters,
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
+		
+		Page<ResidenciaDto> moradores = this.residenciaService.buscarResidencia(filters, paginacao);
+		
+		return filters.isContent() ? new ResponseEntity<>(moradores.getContent(), HttpStatus.OK) :
+					new ResponseEntity<>(moradores, HttpStatus.OK);
 		
 	}
 
