@@ -28,6 +28,15 @@
 			"type": "string" 
 		},
 		{
+            "name": "perfil",
+            "type": ["null", {
+                    "type": "enum",
+                    "name": "PerfilEnum",
+                    "symbols": ["ROLE_USUARIO", "ROLE_ADMIN"]
+                }
+            ]
+        },
+		{
 			"name": "residenciaId",
 			"type": "long" 
 		},

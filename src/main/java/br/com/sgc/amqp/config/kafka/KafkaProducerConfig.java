@@ -62,7 +62,7 @@ public class KafkaProducerConfig {
 		return new NewTopic(topicVisita, 1,(short) 1);
 	}
 	
-	@Bean
+	/*@Bean
 	public ProducerFactory<String, MoradorAvro> moradorProducerFactory(){
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
@@ -116,6 +116,6 @@ public class KafkaProducerConfig {
 	@Bean
 	public KafkaTemplate<String, VisitaDto> visitaKafkaTemplate(){
 		return new KafkaTemplate<>(visitaProducerFactory());
-	}
+	}*/
 	
 }
