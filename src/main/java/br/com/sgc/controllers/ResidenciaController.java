@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.filter.ResidenciaFilter;
+import br.com.sgc.response.Response;
 import br.com.sgc.services.ResidenciaService;
 
 
@@ -59,17 +61,22 @@ class ResidenciaController {
 		
 	}
 	
-	/**
-	 * Busca um morador pelo id.
-	 * 
-	 * @param id
-	 * @return ResponseEntity<Response<CadastroMoradorResponseDto>>
-	 * @throws NoSuchAlgorithmException
-	 */
+	@GetMapping(value = "/amqp/ticket")
+	public ResponseEntity<?> buscarPorTicket(
+			@RequestParam(value = "ticket", defaultValue = "null") String ticket){
+		
+		Response<ResidenciaDto> response = this.residenciaService.buscarPorGuide(ticket);	
+		
+		return response.getErrors().size() > 0 ?
+				ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.getErrors()) :
+				ResponseEntity.status(HttpStatus.OK).body(response.getData());
+		
+	}
+	
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarResidenciasFiltro(
 			ResidenciaFilter filters,
-			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
+			@PageableDefault(sort = "endereco", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
 		
 		Page<ResidenciaDto> moradores = this.residenciaService.buscarResidencia(filters, paginacao);
 		
