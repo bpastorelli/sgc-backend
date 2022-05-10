@@ -1,0 +1,43 @@
+{
+	"type": "record",
+	"name": "ResidenciaAvro",
+	"namespace": "br.com.sgc",
+	"fields": [
+		{
+			"name": "endereco",
+			"type": "string" 
+		},
+		{
+			"name": "numero",
+			"type": "long" 
+		},
+		{
+			"name": "complemento",
+			"type": "string" 
+		},
+		{
+			"name": "bairro",
+			"type": "string" 
+		},
+		{
+			"name": "cep",
+			"type": "string" 
+		},
+		{
+			"name": "cidade",
+			"type": "string" 
+		},
+		{
+			"name": "uf",
+			"type": "string" 
+		},
+		{
+			"name": "ticketMorador",
+			"type": "string" 
+		},
+		{
+			"name": "guide",
+			"type": "string" 
+		}
+	] 
+}

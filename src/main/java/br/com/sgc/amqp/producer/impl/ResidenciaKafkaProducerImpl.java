@@ -1,24 +1,22 @@
 package br.com.sgc.amqp.producer.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import br.com.sgc.ResidenciaAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
-import br.com.sgc.dto.ResidenciaDto;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
-public class ResidenciaKafkaProducerImpl implements AmqpProducer<ResidenciaDto> {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ResidenciaKafkaProducerImpl.class);
+public class ResidenciaKafkaProducerImpl implements AmqpProducer<ResidenciaAvro> {
 	
 	private final String topic;
 	
-	private final KafkaTemplate<String, ResidenciaDto> kafkaTemplate;
+	private final KafkaTemplate<String, ResidenciaAvro> kafkaTemplate;
 
-	public ResidenciaKafkaProducerImpl(@Value("${residencia.topic.name}") String topic, KafkaTemplate<String, ResidenciaDto> kafkaTemplate) {
+	public ResidenciaKafkaProducerImpl(@Value("${residencia.topic.name}") String topic, KafkaTemplate<String, ResidenciaAvro> kafkaTemplate) {
 		
 		this.topic = topic;
 		this.kafkaTemplate = kafkaTemplate;
@@ -26,11 +24,11 @@ public class ResidenciaKafkaProducerImpl implements AmqpProducer<ResidenciaDto> 
 	}
 	
 	@Override
-	public void producer(ResidenciaDto dto) {
+	public void producer(ResidenciaAvro dto) {
 		
 		kafkaTemplate.send(topic, dto).addCallback(
-				success -> logger.info("Message send " + success.getProducerRecord().value()),
-				failure -> logger.info("Message failure " + failure.getMessage())
+				success -> log.info("Message send " + success.getProducerRecord().value()),
+				failure -> log.info("Message failure " + failure.getMessage())
 		);	
 		
 	}
