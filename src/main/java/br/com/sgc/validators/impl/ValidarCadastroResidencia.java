@@ -13,7 +13,7 @@ import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
-public class ValidarCadastroResidencia implements Validators<ResidenciaDto> {
+public class ValidarCadastroResidencia implements Validators<List<ResidenciaDto>> {
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
@@ -24,17 +24,21 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto> {
 	private static final String TITULO = "Cadastro de residência recusado!";
 	
 	@Override
-	public List<ErroRegistro> validar(ResidenciaDto t) throws RegistroException {
+	public List<ErroRegistro> validar(List<ResidenciaDto> t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 
-		this.residenciaRepository.findByCepAndNumero(t.getCep(), t.getNumero())
-			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));
+		t.forEach(r -> {
+			
+			this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero())
+				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));
 
-		if(t.getTicketMorador() != null) {			
-			if(!this.moradorRepository.findByGuide(t.getTicketMorador()).isPresent())
-				errors.getErros().add(new ErroRegistro("", TITULO, " Morador a ser vinculado não encontrado"));
-		}
+			if(r.getTicketMorador() != null) {			
+				if(!this.moradorRepository.findByGuide(r.getTicketMorador()).isPresent())
+					errors.getErros().add(new ErroRegistro("", TITULO, " Morador a ser vinculado não encontrado"));
+			}
+			
+		});
 		
 		return errors.getErros();
 		
