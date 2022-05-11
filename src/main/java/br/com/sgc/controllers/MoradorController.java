@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,13 +28,13 @@ import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.MoradorService;
+import lombok.extern.slf4j.Slf4j;
 	
+@Slf4j
 @RestController
 @RequestMapping("/sgc/morador")
 @CrossOrigin(origins = "*")
 public class MoradorController {
-	
-	private static final Logger log = LoggerFactory.getLogger(MoradorController.class);
 	
 	@Autowired
 	private AmqpService<MoradorDto> moradorAmqpService;
@@ -57,6 +56,22 @@ public class MoradorController {
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP( 
 			@Valid @RequestBody MoradorDto moradorRequestBody,
+			BindingResult result) throws Exception{
+		
+		log.info("Enviando mensagem para o consumer...");
+		
+		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumer(moradorRequestBody);
+		
+		return response.getTicket() == null ? 
+				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
+				ResponseEntity.status(HttpStatus.ACCEPTED).body(response.getTicket());
+		
+	}
+	
+	@PutMapping(value = "/amqp/alterar")
+	public ResponseEntity<?> alterarAMQP( 
+			@Valid @RequestBody MoradorDto moradorRequestBody,
+			@RequestParam(value = "id", defaultValue = "null") Long id,
 			BindingResult result) throws Exception{
 		
 		log.info("Enviando mensagem para o consumer...");

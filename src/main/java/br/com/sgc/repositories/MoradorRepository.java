@@ -16,6 +16,8 @@ public interface MoradorRepository extends JpaRepository<Morador, Long> {
 	
 	Optional<Morador> findByNome(String nome);
 	
+	Optional<Morador> findByNomeAndCpf(String nome, String cpf);
+	
 	Optional<Morador> findByCpf(String cpf);
 	
 	Optional<Morador> findByRg(String rg);

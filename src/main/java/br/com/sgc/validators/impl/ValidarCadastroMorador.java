@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.sgc.commons.ValidaCPF;
 import br.com.sgc.dto.MoradorDto;
+import br.com.sgc.entities.Morador;
 import br.com.sgc.enums.PerfilEnum;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
@@ -36,48 +37,68 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 		
 		for(MoradorDto morador : t) {
 			
-			morador.setGuide(UUID.randomUUID().toString());
-			morador.setPerfil(morador.getPerfil() == null ? PerfilEnum.ROLE_USUARIO : PerfilEnum.ROLE_ADMIN);
-			morador.setResidenciaId(morador.getResidenciaId() == null ? 0 : morador.getResidenciaId());
+			if(morador.getId() == null || morador.getId() == 0) {
+				
+				morador.setGuide(UUID.randomUUID().toString());
+				morador.setPerfil(morador.getPerfil() == null ? PerfilEnum.ROLE_USUARIO : PerfilEnum.ROLE_ADMIN);
+				morador.setResidenciaId(morador.getResidenciaId() == null ? 0 : morador.getResidenciaId());
+				
+				if(morador.getNome().isEmpty())
+					errors.getErros().add(new ErroRegistro("", TITULO, " O campo Nome é obrigatório"));
+				
+				if(morador.getCpf().isEmpty())
+					errors.getErros().add(new ErroRegistro("", TITULO, " O campo CPF é obrigatório"));
+				
+				if(!ValidaCPF.isCPF(morador.getCpf()))
+					errors.getErros().add(new ErroRegistro("", TITULO, " CPF " + morador.getCpf() + " inválido"));
+				
+				if(morador.getRg().isEmpty())
+					errors.getErros().add(new ErroRegistro("", TITULO, " O campo RG é obrigatório"));
+				
+				if(morador.getEmail().isEmpty())
+					errors.getErros().add(new ErroRegistro("" , TITULO, " O campo e-mail é obrigatório"));
+				
+				if(morador.getTelefone().isEmpty() && morador.getCelular().isEmpty())
+					errors.getErros().add(new ErroRegistro("", TITULO, " Você deve informar um número de telefone ou celular"));
 			
-			if(morador.getNome().isEmpty())
-				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Nome é obrigatório"));
-			
-			if(morador.getCpf().isEmpty())
-				errors.getErros().add(new ErroRegistro("", TITULO, " O campo CPF é obrigatório"));
-			
-			if(!ValidaCPF.isCPF(morador.getCpf()))
-				errors.getErros().add(new ErroRegistro("", TITULO, " CPF " + morador.getCpf() + " inválido"));
-			
-			if(morador.getRg().isEmpty())
-				errors.getErros().add(new ErroRegistro("", TITULO, " O campo RG é obrigatório"));
-			
-			if(morador.getEmail().isEmpty())
-				errors.getErros().add(new ErroRegistro("" , TITULO, " O campo e-mail é obrigatório"));
-			
-			if(morador.getTelefone().isEmpty() && morador.getCelular().isEmpty())
-				errors.getErros().add(new ErroRegistro("", TITULO, " Você deve informar um número de telefone ou celular"));
-			
+			}else {
+				
+				Morador moradorSource = this.moradorRepository.findById(morador.getId()).get();
+				
+				if(morador.getNome() != moradorSource.getNome()) {
+					if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
+						errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
+				}	
+				
+			}
 		}
-
+		
 		t.forEach(morador ->{
-			this.moradorRepository.findByNome(morador.getNome())
+			if(morador.getId() == null || morador.getId() == 0) {				
+				this.moradorRepository.findByNome(morador.getNome())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Nome '" + morador.getNome() + "' já existe")));	
+			}
 		});
 		
 		t.forEach(morador ->{
-			this.moradorRepository.findByCpf(morador.getCpf())
-				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " CPF '" + morador.getCpf() + "' já existe")));	
+			if(morador.getId() == null || morador.getId() == 0) {
+				this.moradorRepository.findByCpf(morador.getCpf())
+					.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " CPF '" + morador.getCpf() + "' já existe")));
+			}
 		});
 		
 		t.forEach(morador ->{
-			this.moradorRepository.findByRg(morador.getRg())
+			if(morador.getId() == null || morador.getId() == 0){				
+				this.moradorRepository.findByRg(morador.getRg())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " RG '" + morador.getRg() + "' já existe")));	
+			}
 		});
 	
 		t.forEach(morador ->{
-			this.moradorRepository.findByEmail(morador.getEmail())
+			if(morador.getId() == null || morador.getId() == 0) {				
+				this.moradorRepository.findByEmail(morador.getEmail())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " E-mail '" + morador.getEmail() + "' já existe")));	
+			}
 		});
 		
 		t.forEach(morador -> {

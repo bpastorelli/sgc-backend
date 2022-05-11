@@ -4,6 +4,10 @@
 	"namespace": "br.com.sgc",
 	"fields": [
 		{
+			"name": "id",
+			"type": ["null", "long"], "default": null			
+		},
+		{
 			"name": "nome",
 			"type": "string" 
 		},
@@ -32,7 +36,8 @@
             "type": ["null", {
                     "type": "enum",
                     "name": "PerfilEnum",
-                    "symbols": ["ROLE_USUARIO", "ROLE_ADMIN"]
+                    "symbols": ["ROLE_USUARIO", "ROLE_ADMIN"],
+                    "default": null
                 }
             ]
         },
@@ -48,5 +53,5 @@
 			"name": "guide",
 			"type": "string" 
 		}
-	] 
+	]
 }
