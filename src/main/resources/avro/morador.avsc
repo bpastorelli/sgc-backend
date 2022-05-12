@@ -13,7 +13,7 @@
 		},
 		{
 			"name": "cpf",
-			"type": "string" 
+			"type": ["null", "string"], "default": null 
 		},
 		{
 			"name": "rg",
@@ -37,13 +37,13 @@
                     "type": "enum",
                     "name": "PerfilEnum",
                     "symbols": ["ROLE_USUARIO", "ROLE_ADMIN"],
-                    "default": null
+                    "default": "ROLE_USUARIO"
                 }
             ]
         },
 		{
 			"name": "residenciaId",
-			"type": "long" 
+			"type": ["null", "long"], "default": null 
 		},
 		{
 			"name": "associado",

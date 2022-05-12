@@ -37,6 +37,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 		
 		for(MoradorDto morador : t) {
 			
+			
 			if(morador.getId() == null || morador.getId() == 0) {
 				
 				morador.setGuide(UUID.randomUUID().toString());
@@ -68,7 +69,11 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 				if(morador.getNome() != moradorSource.getNome()) {
 					if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
-				}	
+				}
+				
+				morador.setCpf(moradorSource.getCpf());
+				morador.setPerfil(moradorSource.getPerfil());
+				morador.setGuide(moradorSource.getGuide());
 				
 			}
 		}
@@ -102,7 +107,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 		});
 		
 		t.forEach(morador -> {
-			if(!morador.getResidenciaId().equals(0L)) {
+			if(morador.getResidenciaId() != null) {
 				if (!this.residenciaRepository.findById(morador.getResidenciaId()).isPresent())
 					errors.getErros().add(new ErroRegistro("", TITULO, " A residencia de código '" + morador.getResidenciaId() + "' não existe"));				
 			}

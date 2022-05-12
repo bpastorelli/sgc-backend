@@ -19,6 +19,6 @@ public abstract class MoradorMapper {
 	
 	public abstract List<Morador> listMoradorDtoToListMorador(List<MoradorDto> moradoresDto);
 	
-	public abstract MoradorAvro moradorDtoToMoradorPostAvro(MoradorDto dto);
+	public abstract MoradorAvro moradorDtoToMoradorAvro(MoradorDto dto);
 
 }

@@ -58,7 +58,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto> {
 		
 		if(errors.size() > 0) {			
 			errors.forEach(error -> responseError.getErrors().add(
-					new ErroRegistro(
+				new ErroRegistro(
 					(String) error.getCodigo(), 
 					(String) error.getTitulo(), 
 					(String) error.getDetalhe())));
@@ -69,7 +69,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto> {
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(moradorMapper.moradorDtoToMoradorPostAvro(moradorRequestBody));
+		this.amqp.producer(moradorMapper.moradorDtoToMoradorAvro(moradorRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

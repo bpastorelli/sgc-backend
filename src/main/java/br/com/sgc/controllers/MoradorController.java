@@ -76,6 +76,7 @@ public class MoradorController {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
+		moradorRequestBody.setId(id);
 		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumer(moradorRequestBody);
 		
 		return response.getTicket() == null ? 
