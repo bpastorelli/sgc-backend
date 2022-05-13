@@ -5,7 +5,7 @@
 	"fields": [
 		{
 			"name": "id",
-			"type": ["null", "long"], "default": null			
+			"type": ["long", "null"], "default": 0			
 		},
 		{
 			"name": "nome",
@@ -13,7 +13,7 @@
 		},
 		{
 			"name": "cpf",
-			"type": ["null", "string"], "default": null 
+			"type": ["string", "null"], "default": "null" 
 		},
 		{
 			"name": "rg",
@@ -43,7 +43,7 @@
         },
 		{
 			"name": "residenciaId",
-			"type": ["null", "long"], "default": null 
+			"type": ["long", "null"], "default": 0 
 		},
 		{
 			"name": "associado",

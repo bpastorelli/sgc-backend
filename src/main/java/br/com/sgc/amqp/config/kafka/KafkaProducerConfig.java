@@ -27,13 +27,13 @@ public class KafkaProducerConfig {
 	@Bean
 	public NewTopic createMoradorTopic() {
 		
-		return new NewTopic(topicMorador, 1,(short) 1);
+		return new NewTopic(topicMorador, 2,(short) 1);
 	}
 	
 	@Bean
 	public NewTopic createResidenciaTopic() {
 		
-		return new NewTopic(topicResidencia, 1,(short) 1);
+		return new NewTopic(topicResidencia, 2,(short) 1);
 	}
 	
 	@Bean

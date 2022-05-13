@@ -1,6 +1,7 @@
 package br.com.sgc.validators.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,6 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 		
 		for(MoradorDto morador : t) {
 			
-			
 			if(morador.getId() == null || morador.getId() == 0) {
 				
 				morador.setGuide(UUID.randomUUID().toString());
@@ -64,16 +64,23 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 			
 			}else {
 				
-				Morador moradorSource = this.moradorRepository.findById(morador.getId()).get();
+				Optional<Morador> moradorSource = this.moradorRepository.findById(morador.getId());
 				
-				if(morador.getNome() != moradorSource.getNome()) {
+				if(!moradorSource.isPresent()) {
+					errors.getErros().add(new ErroRegistro("", TITULO, " O morador informado não existe!"));
+					return errors.getErros();
+				}
+				
+				
+				
+				if(morador.getNome() != moradorSource.get().getNome()) {
 					if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
 				}
 				
-				morador.setCpf(moradorSource.getCpf());
-				morador.setPerfil(moradorSource.getPerfil());
-				morador.setGuide(moradorSource.getGuide());
+				morador.setCpf(moradorSource.get().getCpf());
+				morador.setPerfil(moradorSource.get().getPerfil());
+				morador.setGuide(moradorSource.get().getGuide());
 				
 			}
 		}
