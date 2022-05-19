@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import br.com.sgc.commons.ValidaCPF;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.entities.Morador;
-import br.com.sgc.enums.PerfilEnum;
+import br.com.sgc.PerfilEnum;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.repositories.MoradorRepository;

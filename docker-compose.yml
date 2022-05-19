@@ -55,9 +55,9 @@ services:
   rest-proxy:
     image: confluentinc/cp-kafka-rest:5.5.1
     depends_on:
+      - schema-registry
       - zookeeper
       - broker
-      - schema-registry
     ports: 
       - "8082:8082"
     hostname: rest-proxy
@@ -107,9 +107,9 @@ services:
       - app-net
     depends_on:
       - mysql_sgc
-      - zookeeper
       - broker
       - schema-registry
+      - zookeeper
     environment:
       - MYSQL_HOST=mysql_sgc
       - SPRING_KAFKA_HOST=broker

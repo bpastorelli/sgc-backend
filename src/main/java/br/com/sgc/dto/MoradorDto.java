@@ -2,7 +2,7 @@ package br.com.sgc.dto;
 
 import java.io.Serializable;
 
-import br.com.sgc.enums.PerfilEnum;
+import br.com.sgc.PerfilEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,9 +34,9 @@ public class MoradorDto implements Serializable {
 	
 	private Long residenciaId;
 	
-	private String associado;
+	private Long associado;
 	
-	private String posicao;
+	private Long posicao;
 	
 	private String guide;
 
