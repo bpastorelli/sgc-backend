@@ -128,6 +128,11 @@ services:
       - "9191:8181"
     networks:
       - app-net
+    depends_on:
+      - mysql_sgc
+      - broker
+      - schema-registry
+      - zookeeper
     environment:
       - MYSQL_HOST=mysql_sgc
       - SPRING_KAFKA_HOST=broker

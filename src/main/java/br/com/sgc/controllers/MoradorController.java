@@ -115,7 +115,7 @@ public class MoradorController {
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarMoradoresFiltro(
 			MoradorFilter filters,
-			@PageableDefault(sort = "nome", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
+			@PageableDefault(sort = "nome", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
 		
 		Page<MoradorDto> moradores = this.moradorService.buscarMorador(filters, paginacao);
 		

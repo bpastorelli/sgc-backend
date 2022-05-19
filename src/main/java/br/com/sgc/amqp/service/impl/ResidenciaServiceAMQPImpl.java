@@ -1,6 +1,5 @@
 package br.com.sgc.amqp.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +31,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 	private AmqpProducer<ResidenciaAvro> amqp;
 	
 	@Autowired
-	private Validators<List<ResidenciaDto>> validator;
+	private Validators<ResidenciaDto> validator;
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
@@ -48,9 +47,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		
 		residenciaRequestBody.setGuide(this.gerarGuide()); 	
 		
-		List<ResidenciaDto> residencias = new ArrayList<ResidenciaDto>();
-		
-		List<ErroRegistro> errors = this.validator.validar(residencias);
+		List<ErroRegistro> errors = this.validator.validar(residenciaRequestBody);
 		
 		final ResponsePublisherDto responseError = new ResponsePublisherDto();
 		
