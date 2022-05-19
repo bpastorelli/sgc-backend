@@ -58,7 +58,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto> {
 		
 		if(errors.size() > 0) {			
 			errors.forEach(error -> responseError.getErrors().add(
-					new ErroRegistro(
+				new ErroRegistro(
 					(String) error.getCodigo(), 
 					(String) error.getTitulo(), 
 					(String) error.getDetalhe())));

@@ -4,8 +4,6 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,14 +26,13 @@ import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.filter.ResidenciaFilter;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.ResidenciaService;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/sgc/residencia")
 @CrossOrigin(origins = "*")
 class ResidenciaController {
-	
-	private static final Logger log = LoggerFactory.getLogger(ResidenciaController.class);
 	
 	@Autowired
 	private AmqpService<ResidenciaDto> residenciaAmqpService;
