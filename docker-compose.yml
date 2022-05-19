@@ -118,6 +118,25 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      
+  sgc-consumer:
+    image: sgc_consumer
+    build: 
+      context: .
+      dockerfile: -f Dockerfile -t sgc_consumer .
+    ports:
+      - "9191:8181"
+    networks:
+      - app-net
+    environment:
+      - MYSQL_HOST=mysql_sgc
+      - SPRING_KAFKA_HOST=broker
+      - DEBIAN_FRONTEND=noninteractive
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=America/Sao_Paulo
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
  
 networks:
   app-net:       
