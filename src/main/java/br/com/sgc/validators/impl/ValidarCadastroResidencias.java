@@ -1,6 +1,5 @@
 package br.com.sgc.validators.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
-public class ValidarCadastroResidencia implements Validators<ResidenciaDto> {
+public class ValidarCadastroResidencias implements Validators<List<ResidenciaDto>> {
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
@@ -24,16 +23,7 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto> {
 	
 	private static final String TITULO = "Cadastro de residência recusado!";
 	
-	@Override
-	public List<ErroRegistro> validar(ResidenciaDto t) throws RegistroException {
-		
-		List<ResidenciaDto> residencias = new ArrayList<ResidenciaDto>();
-		residencias.add(t);
-		
-		return validar(residencias);
-		
-	}
-	
+	@Override	
 	public List<ErroRegistro> validar(List<ResidenciaDto> t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();

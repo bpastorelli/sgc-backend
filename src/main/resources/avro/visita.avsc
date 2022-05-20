@@ -1,0 +1,48 @@
+[
+    {
+    "type": "record",
+    "name": "VeiculoAvro",
+    "namespace": "br.com.sgc",
+    "fields": [
+      {
+        "name": "marca",
+        "type": "string"
+      },
+      {
+        "name": "modelo",
+        "type": "string"
+      },
+      {
+        "name": "ano",
+        "type": "long"
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "name": "VisitaAvro",
+    "namespace": "br.com.sgc",
+    "fields": [
+      {
+        "name": "guide",
+        "type": "string"
+      },
+      {
+        "name": "rg",
+        "type": "string"
+      },
+      {
+      	"name": "residenciaId",
+      	"type": "long"
+      },
+      {
+      	"name": "placa",
+      	"type": "string"
+      },
+      {
+        "name": "veiculo",
+        "type": "VeiculoAvro"
+      }
+    ]
+  }
+]

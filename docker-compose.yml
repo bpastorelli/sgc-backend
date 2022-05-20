@@ -55,9 +55,9 @@ services:
   rest-proxy:
     image: confluentinc/cp-kafka-rest:5.5.1
     depends_on:
+      - schema-registry
       - zookeeper
       - broker
-      - schema-registry
     ports: 
       - "8082:8082"
     hostname: rest-proxy
@@ -107,14 +107,38 @@ services:
       - app-net
     depends_on:
       - mysql_sgc
-      - zookeeper
       - broker
       - schema-registry
+      - zookeeper
     environment:
       - MYSQL_HOST=mysql_sgc
       - SPRING_KAFKA_HOST=broker
       - TZ=America/Sao_Paulo
       - DEBIAN_FRONTEND=noninteractive
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      
+  sgc-consumer:
+    image: sgc_consumer
+    build: 
+      context: .
+      dockerfile: -f Dockerfile -t sgc_consumer .
+    ports:
+      - "9191:8181"
+    networks:
+      - app-net
+    depends_on:
+      - mysql_sgc
+      - broker
+      - schema-registry
+      - zookeeper
+    environment:
+      - MYSQL_HOST=mysql_sgc
+      - SPRING_KAFKA_HOST=broker
+      - DEBIAN_FRONTEND=noninteractive
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=America/Sao_Paulo
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

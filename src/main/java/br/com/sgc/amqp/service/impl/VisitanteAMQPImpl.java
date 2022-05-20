@@ -7,47 +7,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.sgc.ResidenciaAvro;
+import br.com.sgc.VisitanteAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
-import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
+import br.com.sgc.dto.VisitanteDto;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
-import br.com.sgc.mapper.ResidenciaMapper;
-import br.com.sgc.repositories.ResidenciaRepository;
+import br.com.sgc.mapper.VisitanteMapper;
+import br.com.sgc.repositories.VisitanteRepository;
 import br.com.sgc.validators.Validators;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
+public class VisitanteAMQPImpl implements AmqpService<VisitanteDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
 	
 	@Autowired
-	private AmqpProducer<ResidenciaAvro> amqp;
+	private AmqpProducer<VisitanteAvro> amqp;
 	
 	@Autowired
-	private Validators<ResidenciaDto> validator;
+	private Validators<VisitanteDto> validator;
 	
 	@Autowired
-	private ResidenciaRepository residenciaRepository;
+	private VisitanteRepository visitanteRepository;
 	
 	@Autowired
-	private ResidenciaMapper residenciaMapper;
+	private VisitanteMapper visitanteMapper;
 	
 	
 	@Override
-	public ResponsePublisherDto sendToConsumer(ResidenciaDto residenciaRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumer(VisitanteDto visitanteRequestBody) throws RegistroException {
 		
-		log.info("Cadastrando um morador: {}", residenciaRequestBody.toString());
+		log.info("Cadastrando um veículo: {}", visitanteRequestBody.toString());
 		
-		residenciaRequestBody.setGuide(this.gerarGuide()); 	
+		visitanteRequestBody.setGuide(this.gerarGuide()); 	
 		
-		List<ErroRegistro> errors = this.validator.validar(residenciaRequestBody);
+		List<ErroRegistro> errors = this.validator.validar(visitanteRequestBody);
 		
 		final ResponsePublisherDto responseError = new ResponsePublisherDto();
 		
@@ -62,15 +62,15 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		}
 		
 		//Envia para a fila de Morador
-		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
+		log.info("Enviando mensagem " +  visitanteRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.residenciaMapper.residenciaDtoTpResidenciaAvro(residenciaRequestBody));
+		this.amqp.producer(this.visitanteMapper.visitanteDtoToVisitanteAvro(visitanteRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
 				.ticket(CabecalhoResponsePublisherDto
 						.builder()
-						.ticket(residenciaRequestBody.getGuide())
+						.ticket(visitanteRequestBody.getGuide())
 						.build())
 				.build();
 		
@@ -87,7 +87,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		
 		do {
 			i++;
-			if(this.residenciaRepository.findByGuide(guide).isPresent())
+			if(this.visitanteRepository.findByGuide(guide).isPresent())
 				guide = UUID.randomUUID().toString();
 			else if(guide == null)
 				guide = UUID.randomUUID().toString();
