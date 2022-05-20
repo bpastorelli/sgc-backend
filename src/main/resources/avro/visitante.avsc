@@ -1,0 +1,59 @@
+{
+	"type": "record",
+	"name": "VisitanteAvro",
+	"namespace": "br.com.sgc",
+	"fields": [
+		{
+			"name": "nome",
+			"type": "string" 
+		},
+		{
+			"name": "cpf",
+			"type": ["string", "null"], "default": "null" 
+		},
+		{
+			"name": "rg",
+			"type": "string" 
+		},
+		{
+			"name": "cep",
+			"type": "string" 
+		},
+		{
+			"name": "endereco",
+			"type": "string" 
+		},
+		{
+			"name": "numero",
+			"type": "string" 
+		},
+				{
+			"name": "complemento",
+			"type": "string" 
+		},
+		{
+			"name": "bairro",
+			"type": "string" 
+		},
+		{
+			"name": "cidade",
+			"type": "string" 
+		},
+		{
+			"name": "uf",
+			"type": "string" 
+		},
+		{
+			"name": "telefone",
+			"type": "string" 
+		},
+		{
+			"name": "celular",
+			"type": "string" 
+		},
+		{
+			"name": "guide",
+			"type": "string" 
+		}
+	]
+}

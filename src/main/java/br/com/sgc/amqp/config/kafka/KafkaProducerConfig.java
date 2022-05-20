@@ -24,6 +24,9 @@ public class KafkaProducerConfig {
 	@Value(value = "${visita.topic.name}")
 	private String topicVisita;
 	
+	@Value(value = "${visitante.topic.name}")
+	private String topicVisitante;
+	
 	@Bean
 	public NewTopic createMoradorTopic() {
 		
@@ -45,7 +48,13 @@ public class KafkaProducerConfig {
 	@Bean
 	public NewTopic createVisitaTopic() {
 		
-		return new NewTopic(topicVisita, 1,(short) 1);
+		return new NewTopic(topicVisita, 3,(short) 1);
+	}
+	
+	@Bean
+	public NewTopic createVisitanteTopic() {
+		
+		return new NewTopic(topicVisitante, 3,(short) 1);
 	}
 	
 	/*@Bean
