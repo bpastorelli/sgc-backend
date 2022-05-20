@@ -37,9 +37,6 @@ public interface VisitaRepository extends JpaRepository<Visita, Long> {
 																					  @Param("nome") String nome);
 	
 	@Transactional(readOnly = true)
-	Page<Visita> findByPosicaoOrVisitanteRgOrVisitanteCpfOrVisitanteNomeContaining(@Param("posicao") Integer posicao, @Param("rg") String rg, @Param("cpf") String cpf, @Param("nome") String nome, Pageable pageable);
-	
-	@Transactional(readOnly = true)
 	Page<Visita> findAll(Pageable pageable);
 	
 	Optional<Visita> findFirstByVisitanteIdOrderByDataEntradaDesc(Long id);
@@ -167,7 +164,5 @@ public interface VisitaRepository extends JpaRepository<Visita, Long> {
 	Page<Visita> findByPosicao(Integer posicao, Pageable pageRequest);
 	
 	Optional<Visita> findByGuide(String guide);
-	
-	Optional<Visita> saveAll(Visita visita);
 
 }

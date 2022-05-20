@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.sgc.VeiculoAvro;
+import br.com.sgc.VisitaAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
@@ -28,7 +28,7 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto> {
 	private int guideLimit;
 	
 	@Autowired
-	private AmqpProducer<VeiculoAvro> amqp;
+	private AmqpProducer<VisitaAvro> amqp;
 	
 	@Autowired
 	private Validators<VisitaDto> validator;
@@ -64,7 +64,7 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto> {
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  visitaRequestBody.toString() + " para o consumer.");
 		
-		//this.amqp.producer(this.visitaMapper.visitaDtoToVisitaAvro(visitaRequestBody));
+		this.amqp.producer(this.visitaMapper.visitaDtoToVisitaAvro(visitaRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
