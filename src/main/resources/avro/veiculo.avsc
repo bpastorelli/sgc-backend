@@ -30,6 +30,10 @@
 		{
 			"name": "ticketVisitante",
 			"type": "string" 
+		},
+		{
+			"name": "guide",
+			"type": "string" 
 		}
 	] 
 }
