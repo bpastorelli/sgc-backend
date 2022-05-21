@@ -20,13 +20,11 @@ public class VisitaDto {
 	@NotNull(message = "Campo RG é obrigatório!")
 	private String rg;
 	
-	private String cpf;
-	
 	@NotNull(message = "Não foi selecionada uma residência de destino!")
 	private Long residenciaId;
 	
 	private String placa;
 	
-	private VeiculoVisitaDto veiculo;
+	private VeiculoVisitaDto veiculoVisita;
 
 }
