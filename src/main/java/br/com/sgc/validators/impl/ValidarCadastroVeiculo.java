@@ -30,10 +30,13 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto> {
 		
 		RegistroException errors = new RegistroException();
 		
-		if(t.getTicketVisitante().isEmpty() && t.getVisitanteId() == null)
+		if(t.getTicketVisitante() == null && t.getVisitanteId() == null)
 			errors.getErros().add(new ErroRegistro("", TITULO, " Visitante responsável não informado!"));
 		
-		if(t.getTicketVisitante().isEmpty() || t.getTicketVisitante() != null) {
+		if(t.getTicketVisitante() == "" && t.getVisitanteId() == null)
+			errors.getErros().add(new ErroRegistro("", TITULO, " Visitante responsável não informado!"));
+		
+		if(t.getTicketVisitante() != "" && t.getTicketVisitante() != null) {
 			Optional<Visitante> visitante = this.visitanteRepository.findByGuide(t.getTicketVisitante());
 			if(!visitante.isPresent())
 				errors.getErros().add(new ErroRegistro("", TITULO, " O visitante informado não existe!"));
@@ -58,7 +61,7 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto> {
 		
 //		this.serviceVinculoVeiculo.buscarPorPlacaAndVisitanteId(t.getPlaca().replace("-", ""), t.getVisitanteId()).
 //			ifPresent(res -> result.addError(new ObjectError("veiculo", "Veiculo de placa " + t.getPlaca() + " já vinculado para esta pessoa!")));
-
+		t.setPlaca(t.getPlaca().replace("-", ""));
 		
 		return errors.getErros();
 		
