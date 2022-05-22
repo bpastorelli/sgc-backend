@@ -47,21 +47,16 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 		
 		RegistroException errors = new RegistroException();
 		
-		Optional<Visitante> visitante;
+		Optional<Visitante> visitante = null;
 		
-		if(t.getRg().equals("") && t.getCpf().equals(""))
-			errors.getErros().add(new ErroRegistro("", TITULO, " Você deve infomar o RG ou CPF do visitante" ));
+		if(t.getRg().equals(""))
+			errors.getErros().add(new ErroRegistro("", TITULO, " Você deve infomar o RG do visitante" ));
 		
 		//Valida se o visitante existe por RG ou CPF
 		if(t.getRg() != null) {			
 			visitante = visitanteRepository.findByRg(t.getRg());
 			if(!visitante.isPresent())
-				errors.getErros().add(new ErroRegistro("", TITULO, " Visitante não encontrado para o RG " + t.getRg() + "!"));
-		}
-		else {
-			visitante = visitanteRepository.findByCpf(t.getCpf());
-			if(!visitante.isPresent())
-				errors.getErros().add(new ErroRegistro("", TITULO, " Visitante não encontrado para o CPF " + t.getCpf() + "!"));				
+				errors.getErros().add(new ErroRegistro("", TITULO, " Visitante não encontrado para o RG " + t.getRg() + "!"));				
 		}
 		
 		//Valida se a residência existe
@@ -72,7 +67,7 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 		if(errors.getErros().size() == 0) {
 			
 			List<Visita> listVisitas = new ArrayList<Visita>();			
-			listVisitas = visitaRepository.findByPosicaoAndVisitanteRgAndVisitanteCpfAndVisitanteNomeContaining(1, visitante.get().getRg(), visitante.get().getCpf(), visitante.get().getNome());
+			listVisitas = visitaRepository.findByPosicaoAndVisitanteRgAndVisitanteNomeContaining(1, visitante.get().getRg(), visitante.get().getNome());
 			
 			if(listVisitas.size() > 0) {
 				errors.getErros().add(new ErroRegistro("", TITULO, " Este visitante já possui " + listVisitas.size() + " registro(s) ativo(s) de entrada!" ));	
@@ -82,15 +77,15 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 		//Validação dos campos de marca e modelo do veiculo
 		if(t.getPlaca() != null && t.getPlaca() != "" && !veiculoRepository.findByPlaca(t.getPlaca()).isPresent()) {
 				
-			if(t.getVeiculo().getMarca().isEmpty()) {
+			if(t.getVeiculoVisita().getMarca().isEmpty()) {
 				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Marca é obrigatório!"));	
 			}
 				
-			if(t.getVeiculo().getModelo().isEmpty()) {
+			if(t.getVeiculoVisita().getModelo().isEmpty()) {
 				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Modelo é obrigatório!"));	
 			}
 			
-			if(t.getVeiculo().getCor().isEmpty()) {
+			if(t.getVeiculoVisita().getCor().isEmpty()) {
 				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Cor é obrigatório!"));	
 			}
 				

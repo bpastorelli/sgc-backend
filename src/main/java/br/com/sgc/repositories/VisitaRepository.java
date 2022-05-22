@@ -31,9 +31,8 @@ public interface VisitaRepository extends JpaRepository<Visita, Long> {
 	
 	Optional<Visita> findById(Long id);
 	
-	List<Visita> findByPosicaoAndVisitanteRgAndVisitanteCpfAndVisitanteNomeContaining(@Param("posicao") Integer posicao, 
+	List<Visita> findByPosicaoAndVisitanteRgAndVisitanteNomeContaining(@Param("posicao") Integer posicao, 
 																					  @Param("rg") String rg, 
-																					  @Param("cpf") String cpf, 
 																					  @Param("nome") String nome);
 	
 	@Transactional(readOnly = true)

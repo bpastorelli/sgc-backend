@@ -1,7 +1,7 @@
 [
     {
     "type": "record",
-    "name": "VeiculoAvro",
+    "name": "VeiculoVisitaAvro",
     "namespace": "br.com.sgc",
     "fields": [
       {
@@ -10,6 +10,10 @@
       },
       {
         "name": "modelo",
+        "type": "string"
+      },
+      {
+        "name": "cor",
         "type": "string"
       },
       {
@@ -40,8 +44,8 @@
       	"type": "string"
       },
       {
-        "name": "veiculo",
-        "type": "VeiculoAvro"
+        "name": "veiculoVisita",
+        "type": "VeiculoVisitaAvro"
       }
     ]
   }
