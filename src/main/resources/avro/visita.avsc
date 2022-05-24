@@ -18,7 +18,8 @@
       },
       {
         "name": "ano",
-        "type": "long"
+        "type": "long",
+        "default": 0
       }
     ]
   },
@@ -45,7 +46,8 @@
       },
       {
         "name": "veiculoVisita",
-        "type": "VeiculoVisitaAvro"
+        "type": ["null", "VeiculoVisitaAvro"],
+        "default": null
       }
     ]
   }

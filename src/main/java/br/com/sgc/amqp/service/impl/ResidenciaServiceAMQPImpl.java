@@ -64,7 +64,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.residenciaMapper.residenciaDtoTpResidenciaAvro(residenciaRequestBody));
+		this.amqp.producer(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

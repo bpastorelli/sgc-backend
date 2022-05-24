@@ -74,8 +74,13 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 			}
 		}
 		
+		if(!t.getPlaca().equals("") && t.getVeiculoVisita() == null) {
+			if(!veiculoRepository.findByPlaca(t.getPlaca()).isPresent())
+				errors.getErros().add(new ErroRegistro("", TITULO, " Veiculo não cadastrado. É necessário informar os dados cadastrais do veículo!" ));
+		}
+		
 		//Validação dos campos de marca e modelo do veiculo
-		if(t.getPlaca() != null && t.getPlaca() != "" && !veiculoRepository.findByPlaca(t.getPlaca()).isPresent()) {
+		if(t.getPlaca() != null && t.getPlaca() != "" && !veiculoRepository.findByPlaca(t.getPlaca()).isPresent() && t.getVeiculoVisita() != null) {
 				
 			if(t.getVeiculoVisita().getMarca().isEmpty()) {
 				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Marca é obrigatório!"));	
@@ -89,6 +94,24 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Cor é obrigatório!"));	
 			}
 				
+		}else if(t.getVeiculoVisita() != null) {
+			
+			if(t.getVeiculoVisita().getMarca().isEmpty()) {
+				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Marca é obrigatório!"));	
+			}
+				
+			if(t.getVeiculoVisita().getModelo().isEmpty()) {
+				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Modelo é obrigatório!"));	
+			}
+			
+			if(t.getVeiculoVisita().getCor().isEmpty()) {
+				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Cor é obrigatório!"));	
+			}
+			
+			if(t.getVeiculoVisita().getAno() == null) {
+				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Ano é obrigatório!"));	
+			}
+			
 		}
 		
 		return errors.getErros();
