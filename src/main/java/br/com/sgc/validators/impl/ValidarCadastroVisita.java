@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import br.com.sgc.dto.VisitaDto;
+import br.com.sgc.entities.Veiculo;
 import br.com.sgc.entities.Visita;
 import br.com.sgc.entities.Visitante;
 import br.com.sgc.errorheadling.ErroRegistro;
@@ -47,6 +48,7 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 		
 		RegistroException errors = new RegistroException();
 		
+		Optional<Veiculo> veiculo = null;
 		Optional<Visitante> visitante = null;
 		
 		if(t.getRg().equals(""))
@@ -74,13 +76,15 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 			}
 		}
 		
+		veiculo = veiculoRepository.findByPlaca(t.getPlaca().replace("-", ""));
+		
 		if(!t.getPlaca().equals("") && t.getVeiculoVisita() == null) {
-			if(!veiculoRepository.findByPlaca(t.getPlaca()).isPresent())
+			if(!veiculo.isPresent())
 				errors.getErros().add(new ErroRegistro("", TITULO, " Veiculo não cadastrado. É necessário informar os dados cadastrais do veículo!" ));
 		}
 		
 		//Validação dos campos de marca e modelo do veiculo
-		if(t.getPlaca() != null && t.getPlaca() != "" && !veiculoRepository.findByPlaca(t.getPlaca()).isPresent() && t.getVeiculoVisita() != null) {
+		if(t.getPlaca() != null && t.getPlaca() != "" && !veiculo.isPresent() && t.getVeiculoVisita() != null) {
 				
 			if(t.getVeiculoVisita().getMarca().isEmpty()) {
 				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Marca é obrigatório!"));	
