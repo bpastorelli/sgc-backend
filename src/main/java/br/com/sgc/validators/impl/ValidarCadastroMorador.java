@@ -114,7 +114,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 		});
 		
 		t.forEach(morador -> {
-			if(morador.getResidenciaId() != null) {
+			if(morador.getResidenciaId() != null && morador.getResidenciaId() != 0) {
 				if (!this.residenciaRepository.findById(morador.getResidenciaId()).isPresent())
 					errors.getErros().add(new ErroRegistro("", TITULO, " A residencia de código '" + morador.getResidenciaId() + "' não existe"));				
 			}
