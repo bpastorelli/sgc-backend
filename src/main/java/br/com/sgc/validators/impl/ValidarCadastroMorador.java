@@ -71,9 +71,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 					return errors.getErros();
 				}
 				
-				
-				
-				if(morador.getNome() != moradorSource.get().getNome()) {
+				if(!morador.getNome().toUpperCase().equals(moradorSource.get().getNome())) {
 					if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
 				}

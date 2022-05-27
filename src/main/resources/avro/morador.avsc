@@ -50,6 +50,10 @@
 			"type": "long" 
 		},
 		{
+			"name": "posicao",
+			"type": ["long", "null"], "default": 1 
+		},
+		{
 			"name": "guide",
 			"type": "string" 
 		}
