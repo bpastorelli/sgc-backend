@@ -43,6 +43,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 				morador.setGuide(UUID.randomUUID().toString());
 				morador.setPerfil(morador.getPerfil() == null ? PerfilEnum.ROLE_USUARIO : PerfilEnum.ROLE_ADMIN);
 				morador.setResidenciaId(morador.getResidenciaId() == null ? 0 : morador.getResidenciaId());
+				morador.setPosicao((long) 1);
 				
 				if(morador.getNome().isEmpty())
 					errors.getErros().add(new ErroRegistro("", TITULO, " O campo Nome é obrigatório"));

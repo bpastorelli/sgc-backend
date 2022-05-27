@@ -51,7 +51,7 @@
 		},
 		{
 			"name": "posicao",
-			"type": ["long", "null"], "default": 1 
+			"type": "long" 
 		},
 		{
 			"name": "guide",
