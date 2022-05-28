@@ -15,7 +15,7 @@ public abstract class ResidenciaMapper {
 	
 	public abstract ResidenciaDto residenciaToResidenciaDto(Residencia residencia);
 	
-	public abstract ResidenciaAvro residenciaDtoTpResidenciaAvro(ResidenciaDto dto);
+	public abstract ResidenciaAvro residenciaDtoToResidenciaAvro(ResidenciaDto dto);
 	
 	public abstract List<Residencia> listResidenciaDtoToListResidencia(List<ResidenciaDto> dtos);
 

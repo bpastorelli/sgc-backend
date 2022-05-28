@@ -43,6 +43,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 				morador.setGuide(UUID.randomUUID().toString());
 				morador.setPerfil(morador.getPerfil() == null ? PerfilEnum.ROLE_USUARIO : PerfilEnum.ROLE_ADMIN);
 				morador.setResidenciaId(morador.getResidenciaId() == null ? 0 : morador.getResidenciaId());
+				morador.setPosicao((long) 1);
 				
 				if(morador.getNome().isEmpty())
 					errors.getErros().add(new ErroRegistro("", TITULO, " O campo Nome é obrigatório"));
@@ -71,9 +72,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 					return errors.getErros();
 				}
 				
-				
-				
-				if(morador.getNome() != moradorSource.get().getNome()) {
+				if(!morador.getNome().toUpperCase().equals(moradorSource.get().getNome())) {
 					if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
 				}
@@ -114,7 +113,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 		});
 		
 		t.forEach(morador -> {
-			if(morador.getResidenciaId() != null) {
+			if(morador.getResidenciaId() != null && morador.getResidenciaId() != 0) {
 				if (!this.residenciaRepository.findById(morador.getResidenciaId()).isPresent())
 					errors.getErros().add(new ErroRegistro("", TITULO, " A residencia de código '" + morador.getResidenciaId() + "' não existe"));				
 			}
