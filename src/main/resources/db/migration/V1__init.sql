@@ -89,8 +89,8 @@ CREATE TABLE `lancamento` (
 
 CREATE TABLE `vinculo_residencia` (
 	`id` bigint(20) NOT NULL,
-	`morador_id` bigint(20) NOT NULL,
-	`residencia_id` bigint(20) NOT NULL,
+	`morador_id` bigint(20) DEFAULT NULL,
+	`residencia_id` bigint(20) DEFAULT NULL,
 	`data_vinculo` datetime NOT NULL,
 	`guide` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
