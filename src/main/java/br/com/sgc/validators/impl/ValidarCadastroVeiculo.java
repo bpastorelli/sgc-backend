@@ -1,6 +1,5 @@
 package br.com.sgc.validators.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto> {
 	private static final String TITULO = "Cadastro de veículo recusado!";
 	
 	@Override
-	public List<ErroRegistro> validar(VeiculoDto t) throws RegistroException {
+	public void validar(VeiculoDto t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		
@@ -63,7 +62,8 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto> {
 //			ifPresent(res -> result.addError(new ObjectError("veiculo", "Veiculo de placa " + t.getPlaca() + " já vinculado para esta pessoa!")));
 		t.setPlaca(t.getPlaca().replace("-", ""));
 		
-		return errors.getErros();
+		if(!errors.getErros().isEmpty())
+			throw errors;
 		
 	}
 

@@ -25,16 +25,16 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto> {
 	private static final String TITULO = "Cadastro de residência recusado!";
 	
 	@Override
-	public List<ErroRegistro> validar(ResidenciaDto t) throws RegistroException {
+	public void validar(ResidenciaDto t) throws RegistroException {
 		
 		List<ResidenciaDto> residencias = new ArrayList<ResidenciaDto>();
 		residencias.add(t);
 		
-		return validar(residencias);
+		validar(residencias);
 		
 	}
 	
-	public List<ErroRegistro> validar(List<ResidenciaDto> t) throws RegistroException {
+	public void validar(List<ResidenciaDto> t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 
@@ -50,7 +50,8 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto> {
 			
 		});
 		
-		return errors.getErros();
+		if(!errors.getErros().isEmpty())
+			throw errors;
 		
 	}
 

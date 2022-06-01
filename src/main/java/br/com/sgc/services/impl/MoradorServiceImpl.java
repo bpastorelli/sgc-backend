@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.entities.Morador;
-import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.mapper.MoradorMapper;
@@ -47,19 +46,15 @@ public class MoradorServiceImpl implements MoradorService<MoradorDto> {
 		
 		Response<List<MoradorDto>> response = new Response<List<MoradorDto>>();
 		
-		List<ErroRegistro> errors = this.validator.validar(moradoresDto);
-		
-		if(errors.size() == 0) {			
-			List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
-			moradores.forEach(m -> {
-				m.setSenha(m.getCpf().substring(6));
-			});
+		this.validator.validar(moradoresDto);
+				
+		List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
+		moradores.forEach(m -> {
+			m.setSenha(m.getCpf().substring(6));
+		});
 			
-			this.moradorRepository.saveAll(moradores);
-			response.setData(this.moradorMapper.listMoradorToListMoradorDto(moradores));
-		}else {			
-			response.setErrors(errors);
-		}
+		this.moradorRepository.saveAll(moradores);
+		response.setData(this.moradorMapper.listMoradorToListMoradorDto(moradores));
 		
 		return response;
 	}
@@ -94,19 +89,15 @@ public class MoradorServiceImpl implements MoradorService<MoradorDto> {
 		
 		moradoresDto.add(morador);
 		
-		List<ErroRegistro> errors = this.validator.validar(moradoresDto);
-		
-		if(errors.size() == 0) {			
-			List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
-			moradores.forEach(m -> {
-				m.setSenha(m.getCpf().substring(6));
-			});
+		this.validator.validar(moradoresDto);
+					
+		List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
+		moradores.forEach(m -> {
+			m.setSenha(m.getCpf().substring(6));
+		});
 			
-			this.moradorRepository.saveAll(moradores);
-			response.setData(this.moradorMapper.moradorToMoradorDto(moradores.get(0)));
-		}else {			
-			response.setErrors(errors);
-		}
+		this.moradorRepository.saveAll(moradores);
+		response.setData(this.moradorMapper.moradorToMoradorDto(moradores.get(0)));
 		
 		return response;
 		

@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.dto.VeiculoDto;
+import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/sgc/veiculo")
 @CrossOrigin(origins = "*")
-class VeiculoController {
+class VeiculoController extends RegistroExceptionHandler {
 	
 	@Autowired
 	private AmqpService<VeiculoDto> veiculoAmqpService;
@@ -32,7 +34,7 @@ class VeiculoController {
 	
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody VeiculoDto veiculoRequestBody,
-											   BindingResult result ) throws Exception{
+											   BindingResult result ) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		

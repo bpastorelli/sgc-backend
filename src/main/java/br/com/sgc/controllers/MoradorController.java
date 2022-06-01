@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ResponsePublisherDto;
+import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.MoradorService;
@@ -34,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/sgc/morador")
 @CrossOrigin(origins = "*")
-public class MoradorController {
+public class MoradorController extends RegistroExceptionHandler {
 	
 	@Autowired
 	private AmqpService<MoradorDto> moradorAmqpService;
@@ -56,7 +58,7 @@ public class MoradorController {
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP( 
 			@Valid @RequestBody MoradorDto moradorRequestBody,
-			BindingResult result) throws Exception{
+			BindingResult result) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		
@@ -72,7 +74,7 @@ public class MoradorController {
 	public ResponseEntity<?> alterarAMQP( 
 			@Valid @RequestBody MoradorDto moradorRequestBody,
 			@RequestParam(value = "id", defaultValue = "null") Long id,
-			BindingResult result) throws Exception{
+			BindingResult result) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		
@@ -88,7 +90,7 @@ public class MoradorController {
 	@PostMapping(value = "/novo")
 	public ResponseEntity<?> cadastrarMoradores( 
 			@Valid @RequestBody List<MoradorDto> moradoresRequestBody,
-			BindingResult result) throws Exception{
+			BindingResult result) throws RegistroException{
 		
 		log.info("Cadastrando moradores em massa...");
 		

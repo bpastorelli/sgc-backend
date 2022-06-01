@@ -1,7 +1,5 @@
 package br.com.sgc.validators.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +19,7 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto> {
 	private static final String TITULO = "Cadastro de visitante recusado!";
 	
 	@Override
-	public List<ErroRegistro> validar(VisitanteDto t) throws RegistroException {
+	public void validar(VisitanteDto t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		
@@ -47,7 +45,8 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto> {
 		this.visitanteRepository.findByNome(t.getNome())
 			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Vistante já cadastrado para o nome "+ t.getNome() +"")));
 		
-		return errors.getErros();
+		if(!errors.getErros().isEmpty())
+			throw errors;
 		
 	}
 

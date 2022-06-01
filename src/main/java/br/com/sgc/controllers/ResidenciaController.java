@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
+import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.ResidenciaFilter;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.ResidenciaService;
@@ -32,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/sgc/residencia")
 @CrossOrigin(origins = "*")
-class ResidenciaController {
+class ResidenciaController extends RegistroExceptionHandler {
 	
 	@Autowired
 	private AmqpService<ResidenciaDto> residenciaAmqpService;
@@ -46,7 +48,7 @@ class ResidenciaController {
 	
 	@PostMapping(value = "/amqp/nova")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody ResidenciaDto residenciaRequestBody,
-											   BindingResult result ) throws Exception{
+											   BindingResult result ) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		

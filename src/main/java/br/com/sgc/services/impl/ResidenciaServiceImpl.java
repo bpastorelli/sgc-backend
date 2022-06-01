@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Residencia;
-import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.filter.ResidenciaFilter;
 import br.com.sgc.mapper.ResidenciaMapper;
@@ -47,16 +46,12 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 		
 		Response<List<ResidenciaDto>> response = new Response<List<ResidenciaDto>>();
 		
-		List<ErroRegistro> errors = this.validator.validar(residenciasDto);
-		
-		if(errors.size() == 0) {			
-			List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
+		this.validator.validar(residenciasDto);
+				
+		List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
 			
-			this.residenciaRepository.saveAll(residencias);
-			response.setData(this.residenciaMapper.listResidenciaToListResidenciaDto(residencias));
-		}else {			
-			response.setErrors(errors);
-		}
+		this.residenciaRepository.saveAll(residencias);
+		response.setData(this.residenciaMapper.listResidenciaToListResidenciaDto(residencias));
 		
 		return response;
 	}
@@ -91,16 +86,12 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 		
 		residenciasDto.add(residenciaDto);
 		
-		List<ErroRegistro> errors = this.validator.validar(residenciasDto);
-		
-		if(errors.size() == 0) {			
-			List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
+		this.validator.validar(residenciasDto);
+				
+		List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
 			
-			this.residenciaRepository.saveAll(residencias);
-			response.setData(this.residenciaMapper.residenciaToResidenciaDto(residencias.get(0)));
-		}else {			
-			response.setErrors(errors);
-		}
+		this.residenciaRepository.saveAll(residencias);
+		response.setData(this.residenciaMapper.residenciaToResidenciaDto(residencias.get(0)));
 		
 		return response;
 		
