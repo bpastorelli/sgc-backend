@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.MoradorDto;
+import br.com.sgc.dto.ProcessoCadastroDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
@@ -40,6 +41,9 @@ public class MoradorController extends RegistroExceptionHandler {
 	
 	@Autowired
 	private AmqpService<MoradorDto> moradorAmqpService;
+	
+	@Autowired
+	private AmqpService<ProcessoCadastroDto> processoAmqpService;
 	
 	@Autowired
 	private MoradorService<MoradorDto> moradorService;
@@ -63,6 +67,28 @@ public class MoradorController extends RegistroExceptionHandler {
 		log.info("Enviando mensagem para o consumer...");
 		
 		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumer(moradorRequestBody);
+		
+		return response.getTicket() == null ? 
+				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
+				ResponseEntity.status(HttpStatus.ACCEPTED).body(response.getTicket());
+		
+	}
+	
+	/**
+	 * Envia um objeto tipo MoradorDto para o Consumer
+	 * @param moradorRequestBody
+	 * @param result 
+	 * @return ResponsePublisher
+	 * @throws Exception
+	 */
+	@PostMapping(value = "/amqp/processo")
+	public ResponseEntity<?> processoCadastroAMQP( 
+			@Valid @RequestBody ProcessoCadastroDto processoRequestBody,
+			BindingResult result) throws RegistroException{
+		
+		log.info("Enviando mensagem para o consumer...");
+		
+		ResponsePublisherDto response = this.processoAmqpService.sendToConsumer(processoRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

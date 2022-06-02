@@ -5,7 +5,9 @@ import java.util.List;
 import org.mapstruct.Mapper;
 
 import br.com.sgc.MoradorAvro;
+import br.com.sgc.ProcessoCadastroAvro;
 import br.com.sgc.dto.MoradorDto;
+import br.com.sgc.dto.ProcessoCadastroDto;
 import br.com.sgc.entities.Morador;
 
 @Mapper(componentModel = "spring")
@@ -20,5 +22,7 @@ public abstract class MoradorMapper {
 	public abstract List<Morador> listMoradorDtoToListMorador(List<MoradorDto> moradoresDto);
 	
 	public abstract MoradorAvro moradorDtoToMoradorAvro(MoradorDto dto);
+	
+	public abstract ProcessoCadastroAvro processoDtoToProcessoAvro(ProcessoCadastroDto dto);
 
 }
