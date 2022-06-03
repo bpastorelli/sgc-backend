@@ -16,7 +16,7 @@ public class ProcessoCadastroMoradorKafkaProducerImpl implements AmqpProducer<Pr
 	
 	private final KafkaTemplate<String, ProcessoCadastroAvro> kafkaTemplate;
 
-	public ProcessoCadastroMoradorKafkaProducerImpl(@Value("${morador.topic.name}") String topic, KafkaTemplate<String, ProcessoCadastroAvro> kafkaTemplate) {
+	public ProcessoCadastroMoradorKafkaProducerImpl(@Value("${processo.topic.name}") String topic, KafkaTemplate<String, ProcessoCadastroAvro> kafkaTemplate) {
 		
 		this.topic = topic;
 		this.kafkaTemplate = kafkaTemplate;
