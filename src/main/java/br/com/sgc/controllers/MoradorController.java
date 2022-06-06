@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.GETMoradorResponseDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ProcessoCadastroDto;
 import br.com.sgc.dto.ResponsePublisherDto;
@@ -120,7 +121,7 @@ public class MoradorController extends RegistroExceptionHandler {
 		
 		log.info("Cadastrando moradores em massa...");
 		
-		Response<List<MoradorDto>> response = this.moradorService.persistir(moradoresRequestBody);
+		Response<List<GETMoradorResponseDto>> response = this.moradorService.persistir(moradoresRequestBody);
 		
 		return response.getErrors().size() > 0 ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -145,7 +146,7 @@ public class MoradorController extends RegistroExceptionHandler {
 			MoradorFilter filters,
 			@PageableDefault(sort = "nome", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
 		
-		Page<MoradorDto> moradores = this.moradorService.buscarMorador(filters, paginacao);
+		Page<GETMoradorResponseDto> moradores = this.moradorService.buscarMorador(filters, paginacao);
 		
 		return filters.isContent() ? new ResponseEntity<>(moradores.getContent(), HttpStatus.OK) :
 					new ResponseEntity<>(moradores, HttpStatus.OK);
