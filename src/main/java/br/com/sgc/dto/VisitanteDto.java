@@ -16,6 +16,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class VisitanteDto {
 	
+	private Long   id;
+	
 	@NotNull(message = "Campo nome é obrigatório")
 	private String nome;
 	
@@ -47,6 +49,8 @@ public class VisitanteDto {
 	private String telefone;
 	
 	private String celular;
+	
+	private Long posicao;
 	
 	@Transient
 	private String guide;
