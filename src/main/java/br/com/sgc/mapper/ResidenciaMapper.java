@@ -23,4 +23,6 @@ public abstract class ResidenciaMapper {
 	public abstract List<Residencia> listResidenciaDtoToListResidencia(List<ResidenciaDto> dtos);
 
 	public abstract List<ResidenciaDto> listResidenciaToListResidenciaDto(List<Residencia> residencias);
+	
+	public abstract List<GETResidenciaResponseDto> listResidenciaToListGETResidenciaResponseDto(List<Residencia> residencias);
 }

@@ -37,7 +37,7 @@
 		},
 		{
 			"name": "ticketMorador",
-			"type": "string" 
+			"type": ["string", "null"], "default": "null"  
 		},
 		{
 			"name": "guide",

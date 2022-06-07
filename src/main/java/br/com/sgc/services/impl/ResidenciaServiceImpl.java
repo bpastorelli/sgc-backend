@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.sgc.dto.GETResidenciaResponseDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Residencia;
 import br.com.sgc.errorheadling.RegistroException;
@@ -98,13 +99,13 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 	}
 
 	@Override
-	public Page<ResidenciaDto> buscarResidencia(ResidenciaFilter filtros, Pageable pageable) {
+	public Page<GETResidenciaResponseDto> buscarResidencia(ResidenciaFilter filtros, Pageable pageable) {
 		
 		log.info("Buscando residencia(s)...");
 		
-		Response<List<ResidenciaDto>> response = new Response<List<ResidenciaDto>>();
+		Response<List<GETResidenciaResponseDto>> response = new Response<List<GETResidenciaResponseDto>>();
 		
-		response.setData(this.residenciaMapper.listResidenciaToListResidenciaDto(
+		response.setData(this.residenciaMapper.listResidenciaToListGETResidenciaResponseDto(
 				this.queryRepository.query(filtros, pageable)));
 		
 		long total = this.queryRepository.totalRegistros(filtros);

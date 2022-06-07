@@ -15,12 +15,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.GETResidenciaResponseDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.errorheadling.RegistroException;
@@ -77,10 +79,27 @@ class ResidenciaController extends RegistroExceptionHandler {
 			ResidenciaFilter filters,
 			@PageableDefault(sort = "endereco", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
 		
-		Page<ResidenciaDto> moradores = this.residenciaService.buscarResidencia(filters, paginacao);
+		Page<GETResidenciaResponseDto> moradores = this.residenciaService.buscarResidencia(filters, paginacao);
 		
 		return filters.isContent() ? new ResponseEntity<>(moradores.getContent(), HttpStatus.OK) :
 					new ResponseEntity<>(moradores, HttpStatus.OK);
+		
+	}
+	
+	@PutMapping(value = "/amqp/alterar")
+	public ResponseEntity<?> alterarAMQP( 
+			@Valid @RequestBody ResidenciaDto residenciaRequestBody,
+			@RequestParam(value = "id", defaultValue = "null") Long id,
+			BindingResult result) throws RegistroException{
+		
+		log.info("Enviando mensagem para o consumer...");
+		
+		residenciaRequestBody.setId(id);
+		ResponsePublisherDto response = this.residenciaAmqpService.sendToConsumer(residenciaRequestBody);
+		
+		return response.getTicket() == null ? 
+				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
+				ResponseEntity.status(HttpStatus.ACCEPTED).body(response.getTicket());
 		
 	}
 
