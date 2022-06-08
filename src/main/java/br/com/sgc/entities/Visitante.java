@@ -2,12 +2,16 @@ package br.com.sgc.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -84,6 +88,9 @@ public class Visitante implements Serializable {
 	
 	@Column(name = "posicao", nullable = false)
 	private Long   posicao;
+	
+	@OneToMany(mappedBy = "visitante", fetch = FetchType.LAZY, cascade = CascadeType.ALL)	
+	private List<VinculoVeiculo> veiculos;
 	
 	@PreUpdate
 	public void preUpdate() {
