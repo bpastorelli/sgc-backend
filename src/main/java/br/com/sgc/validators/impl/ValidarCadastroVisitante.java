@@ -79,6 +79,14 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto> {
 					.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o nome "+ t.getNome() +" (" + t.getId() + ")")));
 			}
 			
+			if(!t.getCpf().replace(".", "").replace("-", "").equals(visitanteSource.get().getCpf().replace(".", "").replace("-", ""))) {
+				if(this.visitanteRepository.findByCpf(t.getCpf()).isPresent())
+					errors.getErros().add(new ErroRegistro("", TITULO, " O CPF já existe"));
+				
+				if(!ValidaCPF.isCPF(t.getCpf()))
+					errors.getErros().add(new ErroRegistro("", TITULO, " CPF inválido"));
+			}
+			
 		}
 				
 		if(!errors.getErros().isEmpty())
