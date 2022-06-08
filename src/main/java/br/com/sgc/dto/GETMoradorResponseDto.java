@@ -42,7 +42,7 @@ public class GETMoradorResponseDto implements Serializable {
 	
 	private Long posicao;
 	
-	private List<GETResidenciaResponseDto> residencias;
+	private List<ResidenciaDto> residencias;
 	
 	private String guide;
 

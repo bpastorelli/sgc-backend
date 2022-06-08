@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.sgc.converter.Converter;
 import br.com.sgc.dto.GETMoradorResponseDto;
-import br.com.sgc.dto.GETResidenciaResponseDto;
+import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Morador;
 import br.com.sgc.entities.VinculoResidencia;
 import br.com.sgc.mapper.ResidenciaMapper;
@@ -26,11 +26,11 @@ public class ConvertListMoradorToGETListMoradorResponseDto implements Converter<
 		
 		moradores.forEach(m -> {
 			
-			List<GETResidenciaResponseDto> residencias = new ArrayList<GETResidenciaResponseDto>();
+			List<ResidenciaDto> residencias = new ArrayList<ResidenciaDto>();
 			List<VinculoResidencia> vinculos = m.getResidencias();
 			
 			vinculos.forEach(v -> {
-				residencias.add(this.residenciaMapper.residenciaToGETResidenciaResponseDto(v.getResidencia()));
+				residencias.add(this.residenciaMapper.residenciaToResidenciaDto(v.getResidencia()));
 			});
 			
 			GETMoradorResponseDto morador = GETMoradorResponseDto.builder()

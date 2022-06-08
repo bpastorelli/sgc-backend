@@ -11,7 +11,6 @@ import lombok.Data;
 @Builder
 public class ResidenciaDto {
 	
-	private String guide;
 	
 	private Long   id;
 	
@@ -41,4 +40,5 @@ public class ResidenciaDto {
 	
 	private transient String ticketMorador;
 
+	private String guide;
 }
