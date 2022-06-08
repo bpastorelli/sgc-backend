@@ -14,7 +14,6 @@ import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ResponsePublisherDto;
-import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.mapper.MoradorMapper;
 import br.com.sgc.repositories.MoradorRepository;
@@ -52,19 +51,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto> {
 		
 		listMorador.add(moradorRequestBody);
 		
-		List<ErroRegistro> errors = this.validator.validar(listMorador);
-		
-		final ResponsePublisherDto responseError = new ResponsePublisherDto();
-		
-		if(errors.size() > 0) {			
-			errors.forEach(error -> responseError.getErrors().add(
-				new ErroRegistro(
-					(String) error.getCodigo(), 
-					(String) error.getTitulo(), 
-					(String) error.getDetalhe())));
-			
-			return responseError;
-		}
+		this.validator.validar(listMorador);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");

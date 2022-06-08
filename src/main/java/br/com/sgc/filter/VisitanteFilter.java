@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MoradorFilter {
+public class VisitanteFilter {
 	
 	private Long id;
 	

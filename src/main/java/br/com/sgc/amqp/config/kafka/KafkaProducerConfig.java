@@ -15,6 +15,9 @@ public class KafkaProducerConfig {
 	@Value(value = "${morador.topic.name}")
 	private String topicMorador;
 	
+	@Value(value = "${processo.topic.name}")
+	private String topicProcesso;
+	
 	@Value(value = "${residencia.topic.name}")
 	private String topicResidencia;
 	
@@ -31,6 +34,12 @@ public class KafkaProducerConfig {
 	public NewTopic createMoradorTopic() {
 		
 		return new NewTopic(topicMorador, 3,(short) 1);
+	}
+	
+	@Bean
+	public NewTopic createProcessoTopic() {
+		
+		return new NewTopic(topicProcesso, 3,(short) 1);
 	}
 	
 	@Bean

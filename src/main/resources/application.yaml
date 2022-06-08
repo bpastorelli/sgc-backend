@@ -1,6 +1,10 @@
 morador:
   topic:
     name: morador-mq
+    
+processo:
+  topic:
+    name: processo-mq
 
 residencia:
   topic:

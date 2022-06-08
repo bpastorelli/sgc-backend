@@ -14,31 +14,31 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import br.com.sgc.entities.Morador;
-import br.com.sgc.filter.MoradorFilter;
+import br.com.sgc.entities.Visitante;
+import br.com.sgc.filter.VisitanteFilter;
 import br.com.sgc.repositories.queries.QueryRepository;
 
 @Repository
-public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, MoradorFilter> {
+public class VisitanteQueryRepositoryImpl implements QueryRepository<Visitante, VisitanteFilter> {
 	
 	@PersistenceContext
 	private EntityManager manager;
-	private static Root<Morador> entity_;
+	private static Root<Visitante> entity_;
 	private CriteriaBuilder builder;
-	private CriteriaQuery<Morador> query;
+	private CriteriaQuery<Visitante> query;
 	
 	
 	@Override
-	public List<Morador> query(MoradorFilter filters, Pageable pageable){
+	public List<Visitante> query(VisitanteFilter filters, Pageable pageable){
 		
 		builder = manager.getCriteriaBuilder();
-		query = builder.createQuery(Morador.class);
+		query = builder.createQuery(Visitante.class);
 		
-        entity_ = query.from(Morador.class);
+        entity_ = query.from(Visitante.class);
         
         this.query.where(this.criarFiltros(entity_, filters, builder));
         
-        TypedQuery<Morador> typedQuery = manager.createQuery(query);
+        TypedQuery<Visitante> typedQuery = manager.createQuery(query);
         
         this.aplicarFiltroPaginacao(typedQuery, pageable);
         
@@ -46,7 +46,7 @@ public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, Mora
 	}
 	
 	@Override
-	public Predicate[] criarFiltros(Root<Morador> root, MoradorFilter filters, CriteriaBuilder builder) {
+	public Predicate[] criarFiltros(Root<Visitante> root, VisitanteFilter filters, CriteriaBuilder builder) {
 		
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		
@@ -72,7 +72,7 @@ public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, Mora
 	}
 
 	@Override
-	public long totalRegistros(MoradorFilter filters) {
+	public long totalRegistros(VisitanteFilter filters) {
 		
 		CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 		entity_ = countQuery.from(query.getResultType());
@@ -85,7 +85,7 @@ public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, Mora
 	}
 
 	@Override
-	public void aplicarFiltroPaginacao(TypedQuery<Morador> typedQuery, Pageable pageable) {
+	public void aplicarFiltroPaginacao(TypedQuery<Visitante> typedQuery, Pageable pageable) {
 		
         int paginaAtual = pageable.getPageNumber();
         int totalRegistrosPorPagina = pageable.getPageSize();

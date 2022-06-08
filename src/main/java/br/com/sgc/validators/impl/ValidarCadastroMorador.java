@@ -29,7 +29,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 	private static final String TITULO = "Cadastro de morador recusado!";
 	
 	@Override
-	public List<ErroRegistro> validar(List<MoradorDto> t) throws RegistroException {
+	public void validar(List<MoradorDto> t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		
@@ -69,10 +69,10 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 				
 				if(!moradorSource.isPresent()) {
 					errors.getErros().add(new ErroRegistro("", TITULO, " O morador informado não existe!"));
-					return errors.getErros();
+					throw errors;
 				}
 				
-				if(!morador.getNome().toUpperCase().equals(moradorSource.get().getNome())) {
+				if(!morador.getNome().toUpperCase().equals(moradorSource.get().getNome().toUpperCase())) {
 					if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
 				}
@@ -147,7 +147,8 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>> {
 			}
 		});
 
-		return errors.getErros();
+		if(!errors.getErros().isEmpty())
+			throw errors;
 		
 	}
 

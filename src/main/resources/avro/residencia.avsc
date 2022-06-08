@@ -4,6 +4,10 @@
 	"namespace": "br.com.sgc",
 	"fields": [
 		{
+			"name": "id",
+			"type": ["long", "null"], "default": 0			
+		},
+		{
 			"name": "endereco",
 			"type": "string" 
 		},
@@ -33,7 +37,7 @@
 		},
 		{
 			"name": "ticketMorador",
-			"type": "string" 
+			"type": ["string", "null"], "default": "null"  
 		},
 		{
 			"name": "guide",

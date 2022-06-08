@@ -1,6 +1,5 @@
 package br.com.sgc.amqp.service.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
-import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.mapper.ResidenciaMapper;
 import br.com.sgc.repositories.ResidenciaRepository;
@@ -47,19 +45,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		
 		residenciaRequestBody.setGuide(this.gerarGuide()); 	
 		
-		List<ErroRegistro> errors = this.validator.validar(residenciaRequestBody);
-		
-		final ResponsePublisherDto responseError = new ResponsePublisherDto();
-		
-		if(errors.size() > 0) {			
-			errors.forEach(error -> responseError.getErrors().add(
-					new ErroRegistro(
-					(String) error.getCodigo(), 
-					(String) error.getTitulo(), 
-					(String) error.getDetalhe())));
-			
-			return responseError;
-		}
+		this.validator.validar(residenciaRequestBody);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");

@@ -44,7 +44,7 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 	private static final String TITULO = "Cadastro de visita recusado!";
 	
 	@Override
-	public List<ErroRegistro> validar(VisitaDto t) throws RegistroException {
+	public void validar(VisitaDto t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		
@@ -118,7 +118,8 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 			
 		}
 		
-		return errors.getErros();
+		if(!errors.getErros().isEmpty())
+			throw errors;
 		
 	}
 

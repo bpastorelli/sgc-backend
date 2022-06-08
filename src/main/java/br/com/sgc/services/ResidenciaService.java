@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import br.com.sgc.dto.GETResidenciaResponseDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.filter.ResidenciaFilter;
 import br.com.sgc.response.Response;
@@ -34,7 +35,7 @@ public interface ResidenciaService<T> {
 	 * @param pageable
 	 * @return Page<Residencia>
 	 */
-	Page<T> buscarResidencia(ResidenciaFilter filter, Pageable pageable);
+	Page<GETResidenciaResponseDto> buscarResidencia(ResidenciaFilter filter, Pageable pageable);
 	
 	/**
 	 * Busca registro pelo ticket de envio

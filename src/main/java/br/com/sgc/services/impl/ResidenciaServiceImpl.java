@@ -11,9 +11,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.sgc.converter.Converter;
+import br.com.sgc.dto.GETResidenciaResponseDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Residencia;
-import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.filter.ResidenciaFilter;
 import br.com.sgc.mapper.ResidenciaMapper;
@@ -39,6 +40,9 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 	
 	@Autowired
 	private Validators<List<ResidenciaDto>> validator;
+	
+	@Autowired
+	private Converter<List<GETResidenciaResponseDto>, List<Residencia>> converter;
 
 	@CachePut(value = "residenciaCache")
 	public Response<List<ResidenciaDto>> persistir(List<ResidenciaDto> residenciasDto) throws RegistroException {
@@ -47,16 +51,12 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 		
 		Response<List<ResidenciaDto>> response = new Response<List<ResidenciaDto>>();
 		
-		List<ErroRegistro> errors = this.validator.validar(residenciasDto);
-		
-		if(errors.size() == 0) {			
-			List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
+		this.validator.validar(residenciasDto);
+				
+		List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
 			
-			this.residenciaRepository.saveAll(residencias);
-			response.setData(this.residenciaMapper.listResidenciaToListResidenciaDto(residencias));
-		}else {			
-			response.setErrors(errors);
-		}
+		this.residenciaRepository.saveAll(residencias);
+		response.setData(this.residenciaMapper.listResidenciaToListResidenciaDto(residencias));
 		
 		return response;
 	}
@@ -91,29 +91,25 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 		
 		residenciasDto.add(residenciaDto);
 		
-		List<ErroRegistro> errors = this.validator.validar(residenciasDto);
-		
-		if(errors.size() == 0) {			
-			List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
+		this.validator.validar(residenciasDto);
+				
+		List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
 			
-			this.residenciaRepository.saveAll(residencias);
-			response.setData(this.residenciaMapper.residenciaToResidenciaDto(residencias.get(0)));
-		}else {			
-			response.setErrors(errors);
-		}
+		this.residenciaRepository.saveAll(residencias);
+		response.setData(this.residenciaMapper.residenciaToResidenciaDto(residencias.get(0)));
 		
 		return response;
 		
 	}
 
 	@Override
-	public Page<ResidenciaDto> buscarResidencia(ResidenciaFilter filtros, Pageable pageable) {
+	public Page<GETResidenciaResponseDto> buscarResidencia(ResidenciaFilter filtros, Pageable pageable) {
 		
 		log.info("Buscando residencia(s)...");
 		
-		Response<List<ResidenciaDto>> response = new Response<List<ResidenciaDto>>();
+		Response<List<GETResidenciaResponseDto>> response = new Response<List<GETResidenciaResponseDto>>();
 		
-		response.setData(this.residenciaMapper.listResidenciaToListResidenciaDto(
+		response.setData(this.converter.convert(
 				this.queryRepository.query(filtros, pageable)));
 		
 		long total = this.queryRepository.totalRegistros(filtros);

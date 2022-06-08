@@ -11,9 +11,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.sgc.converter.Converter;
+import br.com.sgc.dto.GETMoradorResponseDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.entities.Morador;
-import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.mapper.MoradorMapper;
@@ -35,31 +36,30 @@ public class MoradorServiceImpl implements MoradorService<MoradorDto> {
 	private QueryRepository<Morador, MoradorFilter> queryRepository;
 	
 	@Autowired
+	private Converter<List<GETMoradorResponseDto>, List<Morador>> converter;
+	
+	@Autowired
 	private MoradorMapper moradorMapper;
 	
 	@Autowired
 	private Validators<List<MoradorDto>> validator;
 
 	@CachePut(value = "moradorCache")
-	public Response<List<MoradorDto>> persistir(List<MoradorDto> moradoresDto) throws RegistroException {
+	public Response<List<GETMoradorResponseDto>> persistir(List<MoradorDto> moradoresDto) throws RegistroException {
 		
 		log.info("Persistir moradores {}", moradoresDto);
 		
-		Response<List<MoradorDto>> response = new Response<List<MoradorDto>>();
+		Response<List<GETMoradorResponseDto>> response = new Response<List<GETMoradorResponseDto>>();
 		
-		List<ErroRegistro> errors = this.validator.validar(moradoresDto);
-		
-		if(errors.size() == 0) {			
-			List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
-			moradores.forEach(m -> {
-				m.setSenha(m.getCpf().substring(6));
-			});
+		this.validator.validar(moradoresDto);
+				
+		List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
+		moradores.forEach(m -> {
+			m.setSenha(m.getCpf().substring(6));
+		});
 			
-			this.moradorRepository.saveAll(moradores);
-			response.setData(this.moradorMapper.listMoradorToListMoradorDto(moradores));
-		}else {			
-			response.setErrors(errors);
-		}
+		this.moradorRepository.saveAll(moradores);
+		response.setData(this.moradorMapper.listMoradorToListGETMoradorResponseDto(moradores));
 		
 		return response;
 	}
@@ -94,37 +94,31 @@ public class MoradorServiceImpl implements MoradorService<MoradorDto> {
 		
 		moradoresDto.add(morador);
 		
-		List<ErroRegistro> errors = this.validator.validar(moradoresDto);
-		
-		if(errors.size() == 0) {			
-			List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
-			moradores.forEach(m -> {
-				m.setSenha(m.getCpf().substring(6));
-			});
+		this.validator.validar(moradoresDto);
+					
+		List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
+		moradores.forEach(m -> {
+			m.setSenha(m.getCpf().substring(6));
+		});
 			
-			this.moradorRepository.saveAll(moradores);
-			response.setData(this.moradorMapper.moradorToMoradorDto(moradores.get(0)));
-		}else {			
-			response.setErrors(errors);
-		}
+		this.moradorRepository.saveAll(moradores);
+		response.setData(this.moradorMapper.moradorToMoradorDto(moradores.get(0)));
 		
 		return response;
 		
 	}
 
 	@Override
-	public Page<MoradorDto> buscarMorador(MoradorFilter filtros, Pageable pageable) {
+	public Page<GETMoradorResponseDto> buscarMorador(MoradorFilter filtros, Pageable pageable) {
 		
 		log.info("Buscando morador(es)...");
 		
-		Response<List<MoradorDto>> response = new Response<List<MoradorDto>>();
+		Response<List<GETMoradorResponseDto>> response = new Response<List<GETMoradorResponseDto>>(); 
 		
-		response.setData(this.moradorMapper.listMoradorToListMoradorDto(
+		response.setData(this.converter.convert(
 				this.queryRepository.query(filtros, pageable)));
 		
-		long total = this.queryRepository.totalRegistros(filtros);
-		
-		return new PageImpl<>(response.getData(), pageable, total);
+		return new PageImpl<>(response.getData(), pageable, this.queryRepository.totalRegistros(filtros));
 	}
 
 }

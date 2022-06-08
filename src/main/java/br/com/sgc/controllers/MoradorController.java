@@ -23,8 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.GETMoradorResponseDto;
 import br.com.sgc.dto.MoradorDto;
+import br.com.sgc.dto.ProcessoCadastroDto;
 import br.com.sgc.dto.ResponsePublisherDto;
+import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.MoradorService;
@@ -34,10 +38,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/sgc/morador")
 @CrossOrigin(origins = "*")
-public class MoradorController {
+public class MoradorController extends RegistroExceptionHandler {
 	
 	@Autowired
 	private AmqpService<MoradorDto> moradorAmqpService;
+	
+	@Autowired
+	private AmqpService<ProcessoCadastroDto> processoAmqpService;
 	
 	@Autowired
 	private MoradorService<MoradorDto> moradorService;
@@ -56,7 +63,7 @@ public class MoradorController {
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP( 
 			@Valid @RequestBody MoradorDto moradorRequestBody,
-			BindingResult result) throws Exception{
+			BindingResult result) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		
@@ -68,11 +75,33 @@ public class MoradorController {
 		
 	}
 	
+	/**
+	 * Envia um objeto tipo MoradorDto para o Consumer
+	 * @param moradorRequestBody
+	 * @param result 
+	 * @return ResponsePublisher
+	 * @throws Exception
+	 */
+	@PostMapping(value = "/amqp/processo")
+	public ResponseEntity<?> processoCadastroAMQP( 
+			@Valid @RequestBody ProcessoCadastroDto processoRequestBody,
+			BindingResult result) throws RegistroException{
+		
+		log.info("Enviando mensagem para o consumer...");
+		
+		ResponsePublisherDto response = this.processoAmqpService.sendToConsumer(processoRequestBody);
+		
+		return response.getTicket() == null ? 
+				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
+				ResponseEntity.status(HttpStatus.ACCEPTED).body(response.getTicket());
+		
+	}
+	
 	@PutMapping(value = "/amqp/alterar")
 	public ResponseEntity<?> alterarAMQP( 
 			@Valid @RequestBody MoradorDto moradorRequestBody,
 			@RequestParam(value = "id", defaultValue = "null") Long id,
-			BindingResult result) throws Exception{
+			BindingResult result) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		
@@ -88,11 +117,11 @@ public class MoradorController {
 	@PostMapping(value = "/novo")
 	public ResponseEntity<?> cadastrarMoradores( 
 			@Valid @RequestBody List<MoradorDto> moradoresRequestBody,
-			BindingResult result) throws Exception{
+			BindingResult result) throws RegistroException{
 		
 		log.info("Cadastrando moradores em massa...");
 		
-		Response<List<MoradorDto>> response = this.moradorService.persistir(moradoresRequestBody);
+		Response<List<GETMoradorResponseDto>> response = this.moradorService.persistir(moradoresRequestBody);
 		
 		return response.getErrors().size() > 0 ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -117,7 +146,7 @@ public class MoradorController {
 			MoradorFilter filters,
 			@PageableDefault(sort = "nome", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
 		
-		Page<MoradorDto> moradores = this.moradorService.buscarMorador(filters, paginacao);
+		Page<GETMoradorResponseDto> moradores = this.moradorService.buscarMorador(filters, paginacao);
 		
 		return filters.isContent() ? new ResponseEntity<>(moradores.getContent(), HttpStatus.OK) :
 					new ResponseEntity<>(moradores, HttpStatus.OK);
