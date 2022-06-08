@@ -65,6 +65,9 @@ public class VisitanteQueryRepositoryImpl implements QueryRepository<Visitante, 
 		if(filters.getPosicao() != null)
 			predicates.add(builder.equal(root.get("posicao"), filters.getPosicao()));
 		
+		if(filters.getGuide() != null)
+			predicates.add(builder.equal(root.get("guide"), filters.getGuide()));
+		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 

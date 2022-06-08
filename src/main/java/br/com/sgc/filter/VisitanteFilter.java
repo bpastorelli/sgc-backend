@@ -17,6 +17,8 @@ public class VisitanteFilter {
 	
 	private Long posicao;
 	
+	private String guide;
+	
 	private boolean content;
 
 }
