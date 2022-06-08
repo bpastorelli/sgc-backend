@@ -42,7 +42,7 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto> {
 
 		t.forEach(r -> {
 			
-			if(r.getId() == 0L) {
+			if(r.getId() == null) {
 				if(r.getEndereco().isBlank() || r.getEndereco().isEmpty())
 					errors.getErros().add(new ErroRegistro("", TITULO, " Campo endereço é obrigatório!")); 
 				
