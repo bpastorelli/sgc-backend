@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.sgc.converter.Converter;
 import br.com.sgc.dto.GETResidenciaResponseDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Residencia;
@@ -39,6 +40,9 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 	
 	@Autowired
 	private Validators<List<ResidenciaDto>> validator;
+	
+	@Autowired
+	private Converter<List<GETResidenciaResponseDto>, List<Residencia>> converter;
 
 	@CachePut(value = "residenciaCache")
 	public Response<List<ResidenciaDto>> persistir(List<ResidenciaDto> residenciasDto) throws RegistroException {
@@ -105,7 +109,7 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 		
 		Response<List<GETResidenciaResponseDto>> response = new Response<List<GETResidenciaResponseDto>>();
 		
-		response.setData(this.residenciaMapper.listResidenciaToListGETResidenciaResponseDto(
+		response.setData(this.converter.convert(
 				this.queryRepository.query(filtros, pageable)));
 		
 		long total = this.queryRepository.totalRegistros(filtros);

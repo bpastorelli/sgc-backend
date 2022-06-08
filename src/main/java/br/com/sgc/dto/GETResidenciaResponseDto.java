@@ -1,5 +1,7 @@
 package br.com.sgc.dto;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,6 +24,8 @@ public class GETResidenciaResponseDto {
 	private String cidade;
 	
 	private String uf;
+	
+	private List<MoradorDto> moradores;
 
 	private String guide;
 }

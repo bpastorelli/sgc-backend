@@ -25,5 +25,7 @@ public abstract class MoradorMapper {
 	public abstract MoradorAvro moradorDtoToMoradorAvro(MoradorDto dto);
 	
 	public abstract ProcessoCadastroAvro processoDtoToProcessoAvro(ProcessoCadastroDto dto);
+	
+	public abstract GETMoradorResponseDto moradorToGETMoradorResponseDto(Morador morador);
 
 }
