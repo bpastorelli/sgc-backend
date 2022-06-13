@@ -2,6 +2,8 @@ package br.com.sgc.dto;
 
 import java.io.Serializable;
 
+import javax.persistence.Transient;
+
 import br.com.sgc.PerfilEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +40,7 @@ public class MoradorDto implements Serializable {
 	
 	private Long posicao;
 	
+	@Transient
 	private String guide;
 
 }

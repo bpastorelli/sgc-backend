@@ -1,5 +1,6 @@
 package br.com.sgc.dto;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -40,5 +41,6 @@ public class ResidenciaDto {
 	
 	private transient String ticketMorador;
 
+	@Transient
 	private String guide;
 }

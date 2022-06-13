@@ -32,7 +32,7 @@ class VinculoResidenciaController extends RegistroExceptionHandler {
 		
 	}
 	
-	@PostMapping(value = "/amqp/nova")
+	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody VinculoResidenciaDto vinculoRequestBody,
 											   BindingResult result ) throws RegistroException{
 		

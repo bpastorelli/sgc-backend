@@ -62,14 +62,16 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto> {
 			this.visitanteRepository.findByRg(t.getRg())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o rg "+ t.getRg() +"")));
 			
-			if(t.getCpf() != null) {
+			if(t.getCpf() != null && t.getCpf() != "") {
 				this.visitanteRepository.findByCpf(t.getCpf())				
 					.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o cpf "+ t.getCpf() +"")));
 			}
 			
 			this.visitanteRepository.findByNome(t.getNome())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o nome "+ t.getNome() +"")));
-	
+			
+			t.setPosicao(1L);
+			
 		}else {
 			
 			Optional<Visitante> visitanteSource = visitanteRepository.findById(t.getId());

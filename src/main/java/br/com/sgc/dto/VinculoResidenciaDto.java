@@ -1,5 +1,7 @@
 package br.com.sgc.dto;
 
+import javax.persistence.Transient;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +19,7 @@ public class VinculoResidenciaDto {
 	
 	private Long moradorId;
 	
+	@Transient
 	private String guide;
 
 }
