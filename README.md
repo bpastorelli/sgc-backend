@@ -11,4 +11,7 @@ sudo docker-compose up
 
 <b>Comando para atualizar o container:</b>
 
+sudo docker build -f Dockerfile -t <nome do .jar> .
+
+Exemplo:
 sudo docker build -f Dockerfile -t sgc_producer .
