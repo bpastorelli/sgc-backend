@@ -1,5 +1,6 @@
 package br.com.sgc.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ public interface VisitanteRepository extends JpaRepository<Visitante, Long> {
 	
 	Optional<Visitante> findByNome(String nome);
 	
-	Optional<Visitante> findByCpf(String cpf);
+	Optional<List<Visitante>> findByCpf(String cpf);
 	
 	Optional<Visitante> findByRg(String rg);
 	

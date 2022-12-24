@@ -2,23 +2,22 @@ package br.com.sgc.dto;
 
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProcessoCadastroDto {
+public class VinculoResidenciaDto {
 	
-	@JsonUnwrapped
-	private MoradorDto morador;
+	private Long residenciaId;
 	
-	private ResidenciaDto residencia;
+	private Long moradorId;
 	
 	@Transient
 	private String guide;

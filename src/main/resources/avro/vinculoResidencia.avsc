@@ -1,0 +1,19 @@
+{
+	"type": "record",
+	"name": "VinculoResidenciaAvro",
+	"namespace": "br.com.sgc",
+	"fields": [
+		{
+			"name": "moradorId",
+			"type": "long"			
+		},
+		{
+			"name": "residenciaId",
+			"type": "long" 
+		},
+		{
+			"name": "guide",
+			"type": "string" 
+		}
+	]
+}

@@ -19,12 +19,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Table(name = "VINCULO_RESIDENCIA")
 @Data
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "vinculo_residencia")
 public class VinculoResidencia implements Serializable {
 	
 	private static final long serialVersionUID = 3960436649365666214L;
@@ -32,9 +32,6 @@ public class VinculoResidencia implements Serializable {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	
-	@Column(name = "guide", nullable = true)
-	private String guide;
 	
 	@Column(name = "data_vinculo", nullable = false)
 	private Date dataVinculo;
@@ -46,6 +43,9 @@ public class VinculoResidencia implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="residencia_id")
 	private Residencia residencia;
+	
+	@Column(name = "guide", nullable = true)
+	private String guide;
 	
 	@PreUpdate
     public void preUpdate() {
