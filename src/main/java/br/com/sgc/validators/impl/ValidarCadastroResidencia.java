@@ -68,10 +68,14 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto> {
 			}else {
 				
 				Optional<Residencia> residenciaSource = this.residenciaRepository.findById(r.getId());
-		
-				if(!r.getCep().equals(residenciaSource.get().getCep()) && !r.getNumero().equals(residenciaSource.get().getNumero())) {
-					if(this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero()).isPresent())
-						errors.getErros().add(new ErroRegistro("", TITULO, " Não é possível realizar uma alteração de endereço para um endereço já existente!"));
+				
+				if(residenciaSource.isPresent()) {
+					if(!r.getCep().equals(residenciaSource.get().getCep()) && !r.getNumero().equals(residenciaSource.get().getNumero())) {
+						if(this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero()).isPresent())
+							errors.getErros().add(new ErroRegistro("", TITULO, " Não é possível realizar uma alteração de endereço para um endereço já existente!"));
+					}	
+				}else {
+					errors.getErros().add(new ErroRegistro("", TITULO, " Residência não encontrada!"));
 				}
 										
 				
