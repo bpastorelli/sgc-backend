@@ -10,6 +10,10 @@
 		{
 			"name": "residenciaId",
 			"type": "long" 
+		},
+		{
+			"name": "guide",
+			"type": "string" 
 		}
 	]
 }
