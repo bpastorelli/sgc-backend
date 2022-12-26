@@ -39,11 +39,15 @@ public class ValidarEncerrarVisita implements Validators<EncerraVisitaDto> {
 			
 			if(!visita.isPresent())
 				errors.getErros().add(new ErroRegistro("", TITULO, " Visita não encontrada!"));
-			
-			if(visita.get().getPosicao() == 0) 
-				errors.getErros().add(new ErroRegistro("", TITULO, " Esta visita já foi encerrada em " + Utils.dateFormat(visita.get().getDataSaida(), "dd/MM/yyyy") + " às " + new Time(visita.get().getDataSaida().getTime()) + "!"));	
+			else {
+				if(visita.get().getPosicao() == 0) 
+					errors.getErros().add(new ErroRegistro("", TITULO, " Esta visita já foi encerrada em " + Utils.dateFormat(visita.get().getDataSaida(), "dd/MM/yyyy") + " às " + new Time(visita.get().getDataSaida().getTime()) + "!"));					
+			}
 		
 		}
+		
+		if(!errors.getErros().isEmpty())
+			throw errors;
 		
 	}
 
