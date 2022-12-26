@@ -3,10 +3,8 @@ package br.com.sgc.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import br.com.sgc.EncerraVisitaAvro;
 import br.com.sgc.VeiculoAvro;
 import br.com.sgc.VisitaAvro;
-import br.com.sgc.dto.EncerraVisitaDto;
 import br.com.sgc.dto.VisitaDto;
 import br.com.sgc.entities.Visita;
 
@@ -24,6 +22,4 @@ public abstract class VisitaMapper {
 	@Mapping(target = "rg", source = "visitante.rg")
 	@Mapping(target = "residenciaId", source = "residencia.id")
 	public abstract VisitaAvro visitaToVisitaAvro(Visita dto);
-	
-	public abstract EncerraVisitaAvro encerravisitaDtoToEncerraVisitaAvro(EncerraVisitaDto dto); 
 }
