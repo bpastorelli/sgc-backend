@@ -1,5 +1,6 @@
 package br.com.sgc.dto;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +15,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VisitaDto {
+	
+	@Transient
+	private Long id;
 	
 	private String guide;
 	
