@@ -23,11 +23,11 @@ public class VisitaFilter {
 	private String cpf;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/yyyy 00:00")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dataInicio;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/yyyy 00:59")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dataFim;
 	
 	private Integer posicao;
