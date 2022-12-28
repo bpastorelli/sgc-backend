@@ -45,19 +45,22 @@ public class Visita implements Serializable {
 	private Residencia residencia;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	@Column(name = "data_entrada", nullable = false)
 	private Date       dataEntrada;
 	
+	@Temporal(TemporalType.TIME)
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column(name = "hora_entrada", nullable = false)
 	private Date       horaEntrada;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	@Column(name = "data_saida", nullable = false)
 	private Date       dataSaida;
 	
 	@DateTimeFormat(pattern = "HH:mm")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@Column(name = "hora_saida", nullable = false)
 	private Date       horaSaida;
 	
