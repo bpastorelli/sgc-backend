@@ -1,6 +1,10 @@
 package br.com.sgc.repositories.queries.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -71,10 +75,13 @@ public class VisitaQueryRepositoryImpl implements QueryRepository<Visita, Visita
 			predicates.add(builder.equal(visitanteJoin_.get("cpf"), filters.getCpf()));
 		
 		if(filters.getDataInicio() != null && filters.getDataFim() != null)
-			predicates.add(builder.between(root.get("dataEntrada"), filters.getDataInicio(), filters.getDataFim()));
+			predicates.add(builder.between(root.get("dataEntrada"), ajustaData(filters.getDataInicio(), true), ajustaData(filters.getDataFim(), false)));
 		
 		if(filters.getDataInicio() != null && filters.getDataFim() == null)
-			predicates.add(builder.equal(root.get("dataEntrada"), filters.getDataInicio()));
+			predicates.add(builder.between(root.get("dataEntrada"), ajustaData(filters.getDataInicio(), true), ajustaData(filters.getDataInicio(), false)));
+		
+		if(filters.getGuide() != null)
+			predicates.add(builder.equal(root.get("guide"), filters.getGuide()));
 		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
@@ -85,7 +92,7 @@ public class VisitaQueryRepositoryImpl implements QueryRepository<Visita, Visita
 		CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 		entity_ = countQuery.from(query.getResultType());
 		visitanteJoin_ = entity_.join("visitante", JoinType.INNER);
-		entity_.alias("total"); //use the same alias in order to match the restrictions part and the selection part
+		entity_.alias("total"); 
 		countQuery.select(builder.count(entity_));
 		countQuery.where(this.criarFiltros(entity_, filters, builder));
 		
@@ -102,6 +109,22 @@ public class VisitaQueryRepositoryImpl implements QueryRepository<Visita, Visita
         
         typedQuery.setFirstResult(primeiroRegistro);
         typedQuery.setMaxResults(totalRegistrosPorPagina);
+		
+	}
+	
+	public Date ajustaData(LocalDate date, boolean startDate) {
+		
+		Date newDate = new Date();
+				
+		if(startDate) {
+			LocalDateTime date1 = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 0, 0, 0);
+			newDate = Date.from(date1.atZone(ZoneId.systemDefault()).toInstant());
+		}else {
+			LocalDateTime date2 = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 23, 59, 59);
+			newDate = Date.from(date2.atZone(ZoneId.systemDefault()).toInstant());
+		}
+		
+		return newDate;
 		
 	}
 

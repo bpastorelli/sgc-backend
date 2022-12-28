@@ -1,6 +1,6 @@
 package br.com.sgc.filter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,13 +24,15 @@ public class VisitaFilter {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private Date dataInicio;
+	private LocalDate dataInicio;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private Date dataFim;
+	private LocalDate dataFim;
 	
 	private Integer posicao;
+	
+	private String guide;
 	
 	private int pag;
 	

@@ -39,6 +39,7 @@ public class ResidenciaDto {
 	@Length(min = 2, max = 2, message = "Campo UF deve conter 2 caracteres.")
 	private String uf;
 	
+	@Transient
 	private transient String ticketMorador;
 
 	@Transient
