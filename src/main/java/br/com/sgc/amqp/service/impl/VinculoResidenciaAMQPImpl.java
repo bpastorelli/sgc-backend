@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.sgc.VinculoResidenciaAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.AtualizaVinculoResidenciaDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.dto.VinculoResidenciaDto;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaDto> {
+public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
@@ -29,7 +30,7 @@ public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaD
 	private AmqpProducer<VinculoResidenciaAvro> amqp;
 	
 	@Autowired
-	private Validators<VinculoResidenciaDto> validator;
+	private Validators<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> validator;
 	
 	@Autowired
 	private VinculoResidenciaRepository vinculoRepository;
@@ -39,13 +40,13 @@ public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaD
 	
 	
 	@Override
-	public ResponsePublisherDto sendToConsumer(VinculoResidenciaDto vinculoRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPost(VinculoResidenciaDto vinculoRequestBody) throws RegistroException {
 		
 		log.info("Cadastrando um vinculo: {}", vinculoRequestBody.toString());
 		
 		vinculoRequestBody.setGuide(this.gerarGuide()); 	
 		
-		this.validator.validar(vinculoRequestBody);
+		this.validator.validarPost(vinculoRequestBody);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  vinculoRequestBody.toString() + " para o consumer.");
@@ -62,6 +63,12 @@ public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaD
 		
 		return response;
 		
+	}
+	
+	@Override
+	public ResponsePublisherDto sendToConsumerPut(AtualizaVinculoResidenciaDto x) throws RegistroException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -84,6 +91,12 @@ public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaD
 		}while(!ticketValido && i < guideLimit);
 		
 		return guide;
+	}
+
+	@Override
+	public VinculoResidenciaDto mergeObject(VinculoResidenciaDto t, AtualizaVinculoResidenciaDto x) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

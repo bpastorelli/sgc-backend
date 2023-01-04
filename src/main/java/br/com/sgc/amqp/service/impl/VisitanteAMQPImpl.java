@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import br.com.sgc.VisitanteAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.AtualizaVisitanteDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.dto.VisitanteDto;
+import br.com.sgc.entities.Visitante;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.mapper.VisitanteMapper;
 import br.com.sgc.repositories.VisitanteRepository;
@@ -20,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VisitanteAMQPImpl implements AmqpService<VisitanteDto> {
+public class VisitanteAMQPImpl implements AmqpService<VisitanteDto, AtualizaVisitanteDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
@@ -29,7 +31,7 @@ public class VisitanteAMQPImpl implements AmqpService<VisitanteDto> {
 	private AmqpProducer<VisitanteAvro> amqp;
 	
 	@Autowired
-	private Validators<VisitanteDto> validator;
+	private Validators<VisitanteDto, AtualizaVisitanteDto> validator;
 	
 	@Autowired
 	private VisitanteRepository visitanteRepository;
@@ -39,18 +41,49 @@ public class VisitanteAMQPImpl implements AmqpService<VisitanteDto> {
 	
 	
 	@Override
-	public ResponsePublisherDto sendToConsumer(VisitanteDto visitanteRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPost(VisitanteDto visitanteRequestBody) throws RegistroException {
 		
-		log.info("Cadastrando um veículo: {}", visitanteRequestBody.toString());
+		log.info("Cadastrando um visitante: {}", visitanteRequestBody.toString());
 		
 		visitanteRequestBody.setGuide(this.gerarGuide()); 	
 		
-		this.validator.validar(visitanteRequestBody);
+		this.validator.validarPost(visitanteRequestBody);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  visitanteRequestBody.toString() + " para o consumer.");
 		
 		this.amqp.producer(this.visitanteMapper.visitanteDtoToVisitanteAvro(visitanteRequestBody));
+		
+		ResponsePublisherDto response = ResponsePublisherDto
+				.builder()
+				.ticket(CabecalhoResponsePublisherDto
+						.builder()
+						.ticket(visitanteRequestBody.getGuide())
+						.build())
+				.build();
+		
+		return response;
+		
+	}
+	
+	@Override
+	public ResponsePublisherDto sendToConsumerPut(AtualizaVisitanteDto visitanteRequestBody) throws RegistroException {
+
+		log.info("Atualizando um visitante: {}", visitanteRequestBody.toString());
+		
+		visitanteRequestBody.setGuide(this.gerarGuide()); 	
+		
+		this.validator.validarPut(visitanteRequestBody);
+		
+		//Prepara os dados para enviar para a fila.
+		Visitante visitante = visitanteRepository.findById(visitanteRequestBody.getId()).get();
+		VisitanteDto visitanteDto = this.visitanteMapper.visitanteToVisitanteDto(visitante);
+		visitanteDto = this.mergeObject(visitanteDto, visitanteRequestBody);
+		
+		//Envia para a fila de Morador
+		log.info("Enviando mensagem " +  visitanteRequestBody.toString() + " para o consumer.");
+		
+		this.amqp.producer(this.visitanteMapper.visitanteDtoToVisitanteAvro(visitanteDto));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -84,6 +117,26 @@ public class VisitanteAMQPImpl implements AmqpService<VisitanteDto> {
 		}while(!ticketValido && i < guideLimit);
 		
 		return guide;
+	}
+
+	@Override
+	public VisitanteDto mergeObject(VisitanteDto t, AtualizaVisitanteDto x) {
+		
+
+		t.setNome(x.getNome());	
+		t.setCpf(x.getCpf());
+		t.setCep(x.getCep());
+		t.setEndereco(x.getEndereco());
+		t.setNumero(x.getNumero());
+		t.setComplemento(x.getComplemento());
+		t.setBairro(x.getBairro());
+		t.setCidade(x.getCidade());
+		t.setUf(x.getUf());
+		t.setTelefone(x.getTelefone());
+		t.setCelular(x.getCelular());
+		t.setPosicao(x.getPosicao());
+		
+		return t;
 	}
 
 }

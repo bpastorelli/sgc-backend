@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 
 import br.com.sgc.MoradorAvro;
 import br.com.sgc.ProcessoCadastroAvro;
+import br.com.sgc.dto.AtualizaMoradorDto;
 import br.com.sgc.dto.GETMoradorResponseDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ProcessoCadastroDto;
@@ -24,8 +25,12 @@ public abstract class MoradorMapper {
 	
 	public abstract MoradorAvro moradorDtoToMoradorAvro(MoradorDto dto);
 	
+	public abstract MoradorAvro atualizaMoradorDtoToMoradorAvro(AtualizaMoradorDto dto);
+	
 	public abstract ProcessoCadastroAvro processoDtoToProcessoAvro(ProcessoCadastroDto dto);
 	
 	public abstract GETMoradorResponseDto moradorToGETMoradorResponseDto(Morador morador);
+	
+	public abstract MoradorDto atualizaMoradorDtoToMoradorDto(AtualizaMoradorDto dto);
 
 }

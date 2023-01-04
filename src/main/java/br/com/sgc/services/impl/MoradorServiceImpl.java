@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sgc.converter.Converter;
+import br.com.sgc.dto.AtualizaMoradorDto;
 import br.com.sgc.dto.GETMoradorResponseDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.entities.Morador;
@@ -42,7 +43,7 @@ public class MoradorServiceImpl implements MoradorService<MoradorDto> {
 	private MoradorMapper moradorMapper;
 	
 	@Autowired
-	private Validators<List<MoradorDto>> validator;
+	private Validators<List<MoradorDto>, List<AtualizaMoradorDto>> validator;
 
 	@CachePut(value = "moradorCache")
 	public Response<List<GETMoradorResponseDto>> persistir(List<MoradorDto> moradoresDto) throws RegistroException {
@@ -51,7 +52,7 @@ public class MoradorServiceImpl implements MoradorService<MoradorDto> {
 		
 		Response<List<GETMoradorResponseDto>> response = new Response<List<GETMoradorResponseDto>>();
 		
-		this.validator.validar(moradoresDto);
+		this.validator.validarPost(moradoresDto);
 				
 		List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
 		moradores.forEach(m -> {
@@ -94,7 +95,7 @@ public class MoradorServiceImpl implements MoradorService<MoradorDto> {
 		
 		moradoresDto.add(morador);
 		
-		this.validator.validar(moradoresDto);
+		this.validator.validarPost(moradoresDto);
 					
 		List<Morador> moradores = this.moradorMapper.listMoradorDtoToListMorador(moradoresDto);
 		moradores.forEach(m -> {

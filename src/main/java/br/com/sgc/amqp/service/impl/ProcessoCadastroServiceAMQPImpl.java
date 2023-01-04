@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.sgc.ProcessoCadastroAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.AtualizaProcessoCadastroDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.ProcessoCadastroDto;
 import br.com.sgc.dto.ResponsePublisherDto;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCadastroDto> {
+public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCadastroDto, AtualizaProcessoCadastroDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
@@ -29,7 +30,7 @@ public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCada
 	private AmqpProducer<ProcessoCadastroAvro> amqp;
 	
 	@Autowired
-	private Validators<ProcessoCadastroDto> validator;
+	private Validators<ProcessoCadastroDto, AtualizaProcessoCadastroDto> validator;
 	
 	@Autowired
 	private MoradorRepository moradorRepository;
@@ -39,13 +40,13 @@ public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCada
 	
 	
 	@Override
-	public ResponsePublisherDto sendToConsumer(ProcessoCadastroDto processoRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPost(ProcessoCadastroDto processoRequestBody) throws RegistroException {
 		
 		log.info("Cadastrando um morador: {}", processoRequestBody.toString());
 		
 		processoRequestBody.setGuide(this.gerarGuide());
 		
-		this.validator.validar(processoRequestBody);
+		this.validator.validarPost(processoRequestBody);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  processoRequestBody.toString() + " para o consumer.");
@@ -62,6 +63,12 @@ public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCada
 		
 		return response;
 		
+	}
+	
+	@Override
+	public ResponsePublisherDto sendToConsumerPut(AtualizaProcessoCadastroDto x) throws RegistroException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -85,6 +92,12 @@ public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCada
 		
 		return guide;
 		
+	}
+
+	@Override
+	public ProcessoCadastroDto mergeObject(ProcessoCadastroDto t, AtualizaProcessoCadastroDto x) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

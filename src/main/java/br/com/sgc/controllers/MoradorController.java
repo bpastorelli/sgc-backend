@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.AtualizaMoradorDto;
+import br.com.sgc.dto.AtualizaProcessoCadastroDto;
 import br.com.sgc.dto.GETMoradorResponseDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ProcessoCadastroDto;
@@ -41,10 +43,10 @@ import lombok.extern.slf4j.Slf4j;
 public class MoradorController extends RegistroExceptionHandler {
 	
 	@Autowired
-	private AmqpService<MoradorDto> moradorAmqpService;
+	private AmqpService<MoradorDto, AtualizaMoradorDto> moradorAmqpService;
 	
 	@Autowired
-	private AmqpService<ProcessoCadastroDto> processoAmqpService;
+	private AmqpService<ProcessoCadastroDto, AtualizaProcessoCadastroDto> processoAmqpService;
 	
 	@Autowired
 	private MoradorService<MoradorDto> moradorService;
@@ -67,7 +69,7 @@ public class MoradorController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumer(moradorRequestBody);
+		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumerPost(moradorRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -89,7 +91,7 @@ public class MoradorController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.processoAmqpService.sendToConsumer(processoRequestBody);
+		ResponsePublisherDto response = this.processoAmqpService.sendToConsumerPost(processoRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -99,14 +101,14 @@ public class MoradorController extends RegistroExceptionHandler {
 	
 	@PutMapping(value = "/amqp/alterar")
 	public ResponseEntity<?> alterarAMQP( 
-			@Valid @RequestBody MoradorDto moradorRequestBody,
+			@Valid @RequestBody AtualizaMoradorDto moradorRequestBody,
 			@RequestParam(value = "id", defaultValue = "null") Long id,
 			BindingResult result) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		
 		moradorRequestBody.setId(id);
-		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumer(moradorRequestBody);
+		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumerPut(moradorRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

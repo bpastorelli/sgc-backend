@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.AtualizaResidenciaDto;
 import br.com.sgc.dto.GETResidenciaResponseDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
@@ -39,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 class ResidenciaController extends RegistroExceptionHandler {
 	
 	@Autowired
-	private AmqpService<ResidenciaDto> residenciaAmqpService;
+	private AmqpService<ResidenciaDto, AtualizaResidenciaDto> residenciaAmqpService;
 	
 	@Autowired
 	private ResidenciaService<ResidenciaDto> residenciaService;
@@ -54,7 +55,7 @@ class ResidenciaController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.residenciaAmqpService.sendToConsumer(residenciaRequestBody);
+		ResponsePublisherDto response = this.residenciaAmqpService.sendToConsumerPost(residenciaRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -88,14 +89,14 @@ class ResidenciaController extends RegistroExceptionHandler {
 	
 	@PutMapping(value = "/amqp/alterar")
 	public ResponseEntity<?> alterarAMQP( 
-			@Valid @RequestBody ResidenciaDto residenciaRequestBody,
+			@Valid @RequestBody AtualizaResidenciaDto residenciaRequestBody,
 			@RequestParam(value = "id", defaultValue = "null") Long id,
 			BindingResult result) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		
 		residenciaRequestBody.setId(id);
-		ResponsePublisherDto response = this.residenciaAmqpService.sendToConsumer(residenciaRequestBody);
+		ResponsePublisherDto response = this.residenciaAmqpService.sendToConsumerPut(residenciaRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

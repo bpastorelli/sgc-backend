@@ -41,10 +41,7 @@ class VisitaController extends RegistroExceptionHandler {
 	private VisitaService<GETVisitaResponseDto, VisitaFilter> visitaService;
 	
 	@Autowired
-	private AmqpService<VisitaDto> visitaAmqpService;
-	
-	@Autowired
-	private AmqpService<EncerraVisitaDto> encerraVisitaAmqpService;
+	private AmqpService<VisitaDto, EncerraVisitaDto> visitaAmqpService;
 	
 	public VisitaController() {
 		
@@ -56,7 +53,7 @@ class VisitaController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.visitaAmqpService.sendToConsumer(visitaRequestBody);
+		ResponsePublisherDto response = this.visitaAmqpService.sendToConsumerPost(visitaRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -70,7 +67,7 @@ class VisitaController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.encerraVisitaAmqpService.sendToConsumer(encerraVisitaDto);
+		ResponsePublisherDto response = this.visitaAmqpService.sendToConsumerPut(encerraVisitaDto);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

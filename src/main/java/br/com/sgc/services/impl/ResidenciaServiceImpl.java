@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sgc.converter.Converter;
+import br.com.sgc.dto.AtualizaResidenciaDto;
 import br.com.sgc.dto.GETResidenciaResponseDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Residencia;
@@ -39,7 +40,7 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 	private ResidenciaMapper residenciaMapper;
 	
 	@Autowired
-	private Validators<List<ResidenciaDto>> validator;
+	private Validators<List<ResidenciaDto>, List<AtualizaResidenciaDto>> validator;
 	
 	@Autowired
 	private Converter<List<GETResidenciaResponseDto>, List<Residencia>> converter;
@@ -51,7 +52,7 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 		
 		Response<List<ResidenciaDto>> response = new Response<List<ResidenciaDto>>();
 		
-		this.validator.validar(residenciasDto);
+		this.validator.validarPost(residenciasDto);
 				
 		List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
 			
@@ -91,7 +92,7 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 		
 		residenciasDto.add(residenciaDto);
 		
-		this.validator.validar(residenciasDto);
+		this.validator.validarPost(residenciasDto);
 				
 		List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
 			

@@ -1,5 +1,6 @@
 package br.com.sgc.validators.impl;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import br.com.sgc.dto.EncerraVisitaDto;
 import br.com.sgc.dto.VisitaDto;
 import br.com.sgc.entities.Veiculo;
 import br.com.sgc.entities.Visita;
@@ -18,10 +20,11 @@ import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.repositories.VeiculoRepository;
 import br.com.sgc.repositories.VisitaRepository;
 import br.com.sgc.repositories.VisitanteRepository;
+import br.com.sgc.utils.Utils;
 import br.com.sgc.validators.Validators;
 
 @Component
-public class ValidarCadastroVisita implements Validators<VisitaDto> {
+public class ValidarCadastroVisita implements Validators<VisitaDto, EncerraVisitaDto> {
 	
 	@Value("${guide.size}")
 	private int guideSize;
@@ -44,7 +47,7 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 	private static final String TITULO = "Cadastro de visita recusado!";
 	
 	@Override
-	public void validar(VisitaDto t) throws RegistroException {
+	public void validarPost(VisitaDto t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		
@@ -116,6 +119,28 @@ public class ValidarCadastroVisita implements Validators<VisitaDto> {
 				errors.getErros().add(new ErroRegistro("", TITULO, " O campo Ano é obrigatório!"));	
 			}
 			
+		}
+		
+		if(!errors.getErros().isEmpty())
+			throw errors;
+		
+	}
+
+	@Override
+	public void validarPut(EncerraVisitaDto t) throws RegistroException {
+		
+		RegistroException errors = new RegistroException();
+		
+		if(t.getId() != null || t.getId() != 0) {
+			Optional<Visita> visita = visitaRepository.findById(t.getId());
+			
+			if(!visita.isPresent())
+				errors.getErros().add(new ErroRegistro("", TITULO, " Visita não encontrada!"));
+			else {
+				if(visita.get().getPosicao() == 0) 
+					errors.getErros().add(new ErroRegistro("", TITULO, " Esta visita já foi encerrada em " + Utils.dateFormat(visita.get().getDataSaida(), "dd/MM/yyyy") + " às " + new Time(visita.get().getDataSaida().getTime()) + "!"));					
+			}
+		
 		}
 		
 		if(!errors.getErros().isEmpty())

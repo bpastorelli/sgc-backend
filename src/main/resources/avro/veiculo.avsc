@@ -4,6 +4,10 @@
 	"namespace": "br.com.sgc",
 	"fields": [
 		{
+			"name": "id",
+			"type": ["long", "null"], "default": 0			
+		},
+		{
 			"name": "placa",
 			"type": "string" 
 		},
@@ -25,15 +29,19 @@
 		},
 		{
 			"name": "visitanteId",
-			"type": "long" 
+			"type": ["long", "null"], "default": 0
 		},
 		{
 			"name": "ticketVisitante",
-			"type": "string" 
+			"type": ["string", "null"], "default": "null"
 		},
 		{
 			"name": "guide",
-			"type": "string" 
+			"type": ["string", "null"] 
+		},
+		{
+			"name": "posicao",
+			"type": ["long", "null"], "default": 1 
 		}
 	] 
 }

@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MoradorDto implements Serializable {
+public class AtualizaMoradorDto implements Serializable {
 
 	private static final long serialVersionUID = -5754246207015712518L;
+	
+	private Long id;
 	
 	private String nome;
 	
 	private String email;
-	
-	private String cpf;
 	
 	private String rg;
 	

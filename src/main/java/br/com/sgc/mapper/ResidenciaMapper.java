@@ -5,6 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 
 import br.com.sgc.ResidenciaAvro;
+import br.com.sgc.dto.AtualizaResidenciaDto;
 import br.com.sgc.dto.GETResidenciaResponseDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Residencia;
@@ -15,6 +16,8 @@ public abstract class ResidenciaMapper {
 	public abstract Residencia residenciaDtoToResiencia(ResidenciaDto dto);
 	
 	public abstract ResidenciaDto residenciaToResidenciaDto(Residencia residencia);
+	
+	public abstract ResidenciaDto atualizaResidenciaDtoToResidenciaDto(AtualizaResidenciaDto dto);
 	
 	public abstract GETResidenciaResponseDto residenciaToGETResidenciaResponseDto(Residencia residencia);
 	

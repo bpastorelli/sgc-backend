@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.AtualizaVisitanteDto;
 import br.com.sgc.dto.GETVisitanteResponseDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.dto.VisitanteDto;
@@ -38,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 class VisitanteController extends RegistroExceptionHandler {
 	
 	@Autowired
-	private AmqpService<VisitanteDto> visitanteAmqpService;
+	private AmqpService<VisitanteDto, AtualizaVisitanteDto> visitanteAmqpService;
 	
 	@Autowired
 	private VisitanteService<GETVisitanteResponseDto> visitanteService;
@@ -53,7 +54,7 @@ class VisitanteController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.visitanteAmqpService.sendToConsumer(visitanteRequestBody);
+		ResponsePublisherDto response = this.visitanteAmqpService.sendToConsumerPost(visitanteRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -63,14 +64,14 @@ class VisitanteController extends RegistroExceptionHandler {
 	
 	@PutMapping(value = "/amqp/alterar")
 	public ResponseEntity<?> alterarAMQP( 
-			@Valid @RequestBody VisitanteDto visitanteRequestBody,
+			@Valid @RequestBody AtualizaVisitanteDto visitanteRequestBody,
 			@RequestParam(value = "id", defaultValue = "null") Long id,
 			BindingResult result) throws RegistroException{
 		
 		log.info("Enviando mensagem para o consumer...");
 		
 		visitanteRequestBody.setId(id);
-		ResponsePublisherDto response = this.visitanteAmqpService.sendToConsumer(visitanteRequestBody);
+		ResponsePublisherDto response = this.visitanteAmqpService.sendToConsumerPut(visitanteRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

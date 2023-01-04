@@ -48,7 +48,7 @@ public class VisitanteServiceImpl implements VisitanteService<GETVisitanteRespon
 		Optional<Visitante> visitante = this.visitanteRepository.findByGuide(guide);
 		
 		if(visitante.isPresent()) {
-			visitanteDto = this.visitanteMapper.visitanteToVisitanteDto(visitante.get());
+			visitanteDto = this.visitanteMapper.visitanteToGETVisitanteResponseDto(visitante.get());
 			response.setData(visitanteDto);
 		}
 		

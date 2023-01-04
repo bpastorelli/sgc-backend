@@ -10,8 +10,10 @@ import br.com.sgc.VisitaAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
+import br.com.sgc.dto.EncerraVisitaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.dto.VisitaDto;
+import br.com.sgc.entities.Visita;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.mapper.VisitaMapper;
 import br.com.sgc.repositories.VisitaRepository;
@@ -20,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VisitaAMQPImpl implements AmqpService<VisitaDto> {
+public class VisitaAMQPImpl implements AmqpService<VisitaDto, EncerraVisitaDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
@@ -29,7 +31,7 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto> {
 	private AmqpProducer<VisitaAvro> amqp;
 	
 	@Autowired
-	private Validators<VisitaDto> validator;
+	private Validators<VisitaDto, EncerraVisitaDto> validator;
 	
 	@Autowired
 	private VisitaRepository visitaRepository;
@@ -39,13 +41,13 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto> {
 	
 	
 	@Override
-	public ResponsePublisherDto sendToConsumer(VisitaDto visitaRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPost(VisitaDto visitaRequestBody) throws RegistroException {
 		
 		log.info("Cadastrando um veículo: {}", visitaRequestBody.toString());
 		
 		visitaRequestBody.setGuide(this.gerarGuide()); 	
 		
-		this.validator.validar(visitaRequestBody);
+		this.validator.validarPost(visitaRequestBody);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  visitaRequestBody.toString() + " para o consumer.");
@@ -57,6 +59,32 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto> {
 				.ticket(CabecalhoResponsePublisherDto
 						.builder()
 						.ticket(visitaRequestBody.getGuide())
+						.build())
+				.build();
+		
+		return response;
+		
+	}
+	
+	@Override
+	public ResponsePublisherDto sendToConsumerPut(EncerraVisitaDto visitaRequestBody) throws RegistroException {
+
+		log.info("Cadastrando um veículo: {}", visitaRequestBody.toString());
+		
+		this.validator.validarPut(visitaRequestBody);
+		
+		Visita visita = visitaRepository.findById(visitaRequestBody.getId()).get();
+		
+		//Envia para a fila de Morador
+		log.info("Enviando mensagem " +  visitaRequestBody.toString() + " para o consumer.");
+		
+		this.amqp.producer(this.visitaMapper.visitaToVisitaAvro(visita));
+		
+		ResponsePublisherDto response = ResponsePublisherDto
+				.builder()
+				.ticket(CabecalhoResponsePublisherDto
+						.builder()
+						.ticket(visita.getGuide())
 						.build())
 				.build();
 		
@@ -84,6 +112,12 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto> {
 		}while(!ticketValido && i < guideLimit);
 		
 		return guide;
+	}
+
+	@Override
+	public VisitaDto mergeObject(VisitaDto t, EncerraVisitaDto x) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

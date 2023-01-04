@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import br.com.sgc.ResidenciaAvro;
 import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.AtualizaResidenciaDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
+import br.com.sgc.entities.Residencia;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.mapper.ResidenciaMapper;
 import br.com.sgc.repositories.ResidenciaRepository;
@@ -20,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
+public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, AtualizaResidenciaDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
@@ -29,7 +31,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 	private AmqpProducer<ResidenciaAvro> amqp;
 	
 	@Autowired
-	private Validators<ResidenciaDto> validator;
+	private Validators<ResidenciaDto, AtualizaResidenciaDto> validator;
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
@@ -39,13 +41,13 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 	
 	
 	@Override
-	public ResponsePublisherDto sendToConsumer(ResidenciaDto residenciaRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPost(ResidenciaDto residenciaRequestBody) throws RegistroException {
 		
 		log.info("Cadastrando um morador: {}", residenciaRequestBody.toString());
 		
 		residenciaRequestBody.setGuide(this.gerarGuide()); 	
 		
-		this.validator.validar(residenciaRequestBody);
+		this.validator.validarPost(residenciaRequestBody);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
@@ -62,6 +64,36 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		
 		return response;
 		
+	}
+	
+	@Override
+	public ResponsePublisherDto sendToConsumerPut(AtualizaResidenciaDto residenciaRequestBody) throws RegistroException {
+
+		log.info("Atualizando uma residencia: {}", residenciaRequestBody.toString());
+		
+		residenciaRequestBody.setGuide(this.gerarGuide()); 	
+		
+		this.validator.validarPut(residenciaRequestBody);
+		
+		//Prepara os dados para enviar para a fila.
+		Residencia residencia = residenciaRepository.findById(residenciaRequestBody.getId()).get();
+		ResidenciaDto residenciaDto = this.residenciaMapper.residenciaToResidenciaDto(residencia);
+		residenciaDto = this.mergeObject(residenciaDto, residenciaRequestBody);
+		
+		//Envia para a fila de Morador
+		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
+		
+		this.amqp.producer(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaDto));
+		
+		ResponsePublisherDto response = ResponsePublisherDto
+				.builder()
+				.ticket(CabecalhoResponsePublisherDto
+						.builder()
+						.ticket(residenciaRequestBody.getGuide())
+						.build())
+				.build();
+		
+		return response;
 	}
 
 	@Override
@@ -84,6 +116,20 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto> {
 		}while(!ticketValido && i < guideLimit);
 		
 		return guide;
+	}
+
+	@Override
+	public ResidenciaDto mergeObject(ResidenciaDto t, AtualizaResidenciaDto x) {
+		
+		t.setEndereco(x.getEndereco());
+		t.setNumero(x.getNumero());
+		t.setComplemento(x.getComplemento());
+		t.setBairro(x.getBairro());
+		t.setCep(x.getCep());
+		t.setCidade(x.getCidade());
+		t.setUf(x.getUf());
+		
+		return t;
 	}
 
 }

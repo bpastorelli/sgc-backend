@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.amqp.service.AmqpService;
+import br.com.sgc.dto.AtualizaVinculoResidenciaDto;
 import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.dto.VinculoResidenciaDto;
 import br.com.sgc.errorheadling.RegistroException;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 class VinculoResidenciaController extends RegistroExceptionHandler {
 	
 	@Autowired
-	private AmqpService<VinculoResidenciaDto> vinculoAmqpService;
+	private AmqpService<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> vinculoAmqpService;
 	
 	public VinculoResidenciaController() {
 		
@@ -38,7 +39,7 @@ class VinculoResidenciaController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.vinculoAmqpService.sendToConsumer(vinculoRequestBody);
+		ResponsePublisherDto response = this.vinculoAmqpService.sendToConsumerPost(vinculoRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
