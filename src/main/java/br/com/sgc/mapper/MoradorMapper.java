@@ -10,6 +10,7 @@ import br.com.sgc.MoradorAvro;
 import br.com.sgc.ProcessoCadastroAvro;
 import br.com.sgc.dto.AtualizaMoradorDto;
 import br.com.sgc.dto.GETMoradorResponseDto;
+import br.com.sgc.dto.GETMoradorSemResidenciasResponseDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ProcessoCadastroDto;
 import br.com.sgc.entities.Morador;
@@ -33,6 +34,9 @@ public interface MoradorMapper {
 	
 	@Mapping(source = "nome", target = "nome", qualifiedByName = "ToUpperCase")
 	public abstract GETMoradorResponseDto moradorToGETMoradorResponseDto(Morador morador);
+	
+	@Mapping(source = "nome", target = "nome", qualifiedByName = "ToUpperCase")
+	public abstract GETMoradorSemResidenciasResponseDto moradorToGETMoradorSemResidenciasResponseDto(Morador morador);
 	
 	public abstract MoradorDto atualizaMoradorDtoToMoradorDto(AtualizaMoradorDto dto);
 	

@@ -14,12 +14,12 @@ import br.com.sgc.entities.Visita;
 import br.com.sgc.filter.VisitaFilter;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
-import br.com.sgc.services.VisitaService;
+import br.com.sgc.services.Services;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VisitaServiceImpl implements VisitaService<GETVisitaResponseDto, VisitaFilter> {
+public class VisitaServiceImpl implements Services<GETVisitaResponseDto, VisitaFilter> {
 
 	@Autowired
 	private QueryRepository<Visita, VisitaFilter> queryRepository;
@@ -28,7 +28,7 @@ public class VisitaServiceImpl implements VisitaService<GETVisitaResponseDto, Vi
 	private Converter<List<GETVisitaResponseDto>, List<Visita>> converter;
 	
 	@Override
-	public Page<GETVisitaResponseDto> buscarVisitas(VisitaFilter filtros, Pageable pageable) {
+	public Page<GETVisitaResponseDto> buscar(VisitaFilter filtros, Pageable pageable) {
 
 		log.info("Buscando visita(s)...");
 		
