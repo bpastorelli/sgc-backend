@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.sgc.dto.AtualizaVeiculoDto;
 import br.com.sgc.dto.VeiculoDto;
 import br.com.sgc.entities.Visitante;
 import br.com.sgc.errorheadling.ErroRegistro;
@@ -14,7 +15,7 @@ import br.com.sgc.repositories.VisitanteRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
-public class ValidarCadastroVeiculo implements Validators<VeiculoDto> {
+public class ValidarCadastroVeiculo implements Validators<VeiculoDto, AtualizaVeiculoDto> {
 
 	@Autowired
 	private VeiculoRepository veiculoRepository;
@@ -25,7 +26,7 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto> {
 	private static final String TITULO = "Cadastro de veículo recusado!";
 	
 	@Override
-	public void validar(VeiculoDto t) throws RegistroException {
+	public void validarPost(VeiculoDto t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		
@@ -61,6 +62,16 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto> {
 //		this.serviceVinculoVeiculo.buscarPorPlacaAndVisitanteId(t.getPlaca().replace("-", ""), t.getVisitanteId()).
 //			ifPresent(res -> result.addError(new ObjectError("veiculo", "Veiculo de placa " + t.getPlaca() + " já vinculado para esta pessoa!")));
 		t.setPlaca(t.getPlaca().replace("-", ""));
+		
+		if(!errors.getErros().isEmpty())
+			throw errors;
+		
+	}
+
+	@Override
+	public void validarPut(AtualizaVeiculoDto r) throws RegistroException {
+		
+		RegistroException errors = new RegistroException();
 		
 		if(!errors.getErros().isEmpty())
 			throw errors;

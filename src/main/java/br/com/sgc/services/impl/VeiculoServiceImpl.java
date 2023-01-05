@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sgc.converter.Converter;
-import br.com.sgc.dto.GETVisitaResponseDto;
-import br.com.sgc.entities.Visita;
-import br.com.sgc.filter.VisitaFilter;
+import br.com.sgc.dto.GETVeiculoResponseDto;
+import br.com.sgc.entities.Veiculo;
+import br.com.sgc.filter.VeiculoFilter;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.Services;
@@ -19,20 +19,20 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VisitaServiceImpl implements Services<GETVisitaResponseDto, VisitaFilter> {
-
-	@Autowired
-	private QueryRepository<Visita, VisitaFilter> queryRepository;
+public class VeiculoServiceImpl implements Services<GETVeiculoResponseDto, VeiculoFilter> {
 	
 	@Autowired
-	private Converter<List<GETVisitaResponseDto>, List<Visita>> converter;
+	private QueryRepository<Veiculo, VeiculoFilter> queryRepository;
+	
+	@Autowired
+	private Converter<List<GETVeiculoResponseDto>, List<Veiculo>> converter;
 	
 	@Override
-	public Page<GETVisitaResponseDto> buscar(VisitaFilter filtros, Pageable pageable) {
+	public Page<GETVeiculoResponseDto> buscar(VeiculoFilter filtros, Pageable pageable) {
 
 		log.info("Buscando visita(s)...");
 		
-		Response<List<GETVisitaResponseDto>> response = new Response<List<GETVisitaResponseDto>>(); 
+		Response<List<GETVeiculoResponseDto>> response = new Response<List<GETVeiculoResponseDto>>(); 
 		
 		response.setData(this.converter.convert(
 				this.queryRepository.query(filtros, pageable)));

@@ -10,15 +10,14 @@ import org.springframework.stereotype.Component;
 import br.com.sgc.converter.Converter;
 import br.com.sgc.dto.GETVisitaResponseDto;
 import br.com.sgc.entities.Visita;
-import br.com.sgc.mapper.VisitaMapper;
+import br.com.sgc.mapper.VeiculoMapper;
 import br.com.sgc.utils.Utils;
 
 @Component
 public class ConvertListVisitaToGETListVisitaResponseDto implements Converter<List<GETVisitaResponseDto>, List<Visita>> {
-
-
+	
 	@Autowired
-	private VisitaMapper visitaMapper;
+	private VeiculoMapper veiculoMapper;
 	
 	@Override
 	public List<GETVisitaResponseDto> convert(List<Visita> visitas) {
@@ -42,15 +41,16 @@ public class ConvertListVisitaToGETListVisitaResponseDto implements Converter<Li
 					.bairro(m.getResidencia().getBairro())
 					.cidade(m.getResidencia().getCidade())
 					.uf(m.getResidencia().getUf())
-					.placa(m.getPlaca() != null ? m.getPlaca() : "")
+					.placa(Utils.formatPlaca(m.getPlaca()))
 					.posicao(m.getPosicao())
 					.veiculo(!m.getPlaca().isBlank() ? 
-							visitaMapper.veiculoToGETVeiculoResponseDto(m.getVisitante().getVeiculos()
-							.stream()
-							.filter(p -> p.getVeiculo().getPlaca().trim().equals(m.getPlaca().trim()))
-							.findFirst()
-							.get()
-							.getVeiculo()) : null)
+							veiculoMapper.veiculoToGETVeiculoResponseDto(
+									m.getVisitante().getVeiculos()
+										.stream()
+										.filter(p -> p.getVeiculo().getPlaca().trim().equals(m.getPlaca().trim()))
+										.findFirst()
+										.get()
+										.getVeiculo()) : null)
 					.guide(m.getGuide())
 					.build();
 			

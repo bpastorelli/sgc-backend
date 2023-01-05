@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.sgc.dto.AtualizaVinculoResidenciaDto;
 import br.com.sgc.dto.VinculoResidenciaDto;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
@@ -15,7 +16,7 @@ import br.com.sgc.repositories.VinculoResidenciaRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
-public class ValidarVinculoResidencia implements Validators<VinculoResidenciaDto> {
+public class ValidarVinculoResidencia implements Validators<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> {
 	
 	@Autowired
 	private VinculoResidenciaRepository vinculoRepository;
@@ -29,12 +30,18 @@ public class ValidarVinculoResidencia implements Validators<VinculoResidenciaDto
 	private static final String TITULO = "Cadastro de residência recusado!";
 	
 	@Override
-	public void validar(VinculoResidenciaDto t) throws RegistroException {
+	public void validarPost(VinculoResidenciaDto t) throws RegistroException {
 		
 		List<VinculoResidenciaDto> residencias = new ArrayList<VinculoResidenciaDto>();
 		residencias.add(t);
 		
 		validar(residencias);
+		
+	}
+	
+	@Override
+	public void validarPut(AtualizaVinculoResidenciaDto x) throws RegistroException {
+		// TODO Auto-generated method stub
 		
 	}
 	

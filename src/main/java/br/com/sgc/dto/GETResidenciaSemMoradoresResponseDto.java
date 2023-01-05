@@ -1,17 +1,11 @@
 package br.com.sgc.dto;
 
-import java.util.List;
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class GETResidenciaResponseDto {
+public class GETResidenciaSemMoradoresResponseDto {
 	
 	private Long   id;
 	
@@ -28,8 +22,6 @@ public class GETResidenciaResponseDto {
 	private String cidade;
 	
 	private String uf;
-	
-	private List<GETMoradorSemResidenciasResponseDto> moradores;
 
 	private String guide;
 }

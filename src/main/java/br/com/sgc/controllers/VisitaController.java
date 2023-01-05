@@ -28,7 +28,7 @@ import br.com.sgc.dto.VisitaDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.VisitaFilter;
-import br.com.sgc.services.VisitaService;
+import br.com.sgc.services.Services;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -38,13 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 class VisitaController extends RegistroExceptionHandler {
 	
 	@Autowired
-	private VisitaService<GETVisitaResponseDto, VisitaFilter> visitaService;
+	private Services<GETVisitaResponseDto, VisitaFilter> visitaService;
 	
 	@Autowired
-	private AmqpService<VisitaDto> visitaAmqpService;
-	
-	@Autowired
-	private AmqpService<EncerraVisitaDto> encerraVisitaAmqpService;
+	private AmqpService<VisitaDto, EncerraVisitaDto> visitaAmqpService;
 	
 	public VisitaController() {
 		
@@ -56,7 +53,7 @@ class VisitaController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.visitaAmqpService.sendToConsumer(visitaRequestBody);
+		ResponsePublisherDto response = this.visitaAmqpService.sendToConsumerPost(visitaRequestBody);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -70,7 +67,7 @@ class VisitaController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.encerraVisitaAmqpService.sendToConsumer(encerraVisitaDto);
+		ResponsePublisherDto response = this.visitaAmqpService.sendToConsumerPut(encerraVisitaDto);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
@@ -85,7 +82,7 @@ class VisitaController extends RegistroExceptionHandler {
 		
 		log.info("Buscando visitas...");
 		
-		Page<GETVisitaResponseDto> visitas = this.visitaService.buscarVisitas(filters, paginacao);
+		Page<GETVisitaResponseDto> visitas = this.visitaService.buscar(filters, paginacao);
 		
 		return filters.isContent() ? new ResponseEntity<>(visitas.getContent(), HttpStatus.OK) :
 					new ResponseEntity<>(visitas, HttpStatus.OK);

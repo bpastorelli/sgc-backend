@@ -1,9 +1,8 @@
 package br.com.sgc.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import javax.persistence.Transient;
 
 import br.com.sgc.PerfilEnum;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GETMoradorResponseDto implements Serializable {
+public class AtualizaMoradorDto implements Serializable {
 
 	private static final long serialVersionUID = -5754246207015712518L;
 	
@@ -25,8 +24,6 @@ public class GETMoradorResponseDto implements Serializable {
 	
 	private String email;
 	
-	private String cpf;
-	
 	private String rg;
 	
 	private String telefone;
@@ -35,15 +32,13 @@ public class GETMoradorResponseDto implements Serializable {
 	
 	private PerfilEnum perfil;
 	
-	@JsonUnwrapped
 	private Long residenciaId;
 	
 	private Long associado;
 	
 	private Long posicao;
 	
-	private List<GETResidenciaSemMoradoresResponseDto> residencias;
-	
+	@Transient
 	private String guide;
 
 }
