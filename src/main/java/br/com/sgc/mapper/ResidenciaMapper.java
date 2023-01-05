@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import br.com.sgc.ResidenciaAvro;
 import br.com.sgc.dto.AtualizaResidenciaDto;
 import br.com.sgc.dto.GETResidenciaResponseDto;
+import br.com.sgc.dto.GETResidenciaSemMoradoresResponseDto;
 import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Residencia;
 
@@ -20,6 +21,8 @@ public abstract class ResidenciaMapper {
 	public abstract ResidenciaDto atualizaResidenciaDtoToResidenciaDto(AtualizaResidenciaDto dto);
 	
 	public abstract GETResidenciaResponseDto residenciaToGETResidenciaResponseDto(Residencia residencia);
+	
+	public abstract GETResidenciaSemMoradoresResponseDto residenciaToGETResidenciaSemMoradoresResponseDto(Residencia residencisa);
 	
 	public abstract ResidenciaAvro residenciaDtoToResidenciaAvro(ResidenciaDto dto);
 	

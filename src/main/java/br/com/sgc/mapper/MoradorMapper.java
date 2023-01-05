@@ -3,6 +3,8 @@ package br.com.sgc.mapper;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import br.com.sgc.MoradorAvro;
 import br.com.sgc.ProcessoCadastroAvro;
@@ -13,7 +15,7 @@ import br.com.sgc.dto.ProcessoCadastroDto;
 import br.com.sgc.entities.Morador;
 
 @Mapper(componentModel = "spring")
-public abstract class MoradorMapper {
+public interface MoradorMapper {
 	
 	public abstract Morador moradorDtoToMorador(MoradorDto dto);
 	
@@ -29,8 +31,16 @@ public abstract class MoradorMapper {
 	
 	public abstract ProcessoCadastroAvro processoDtoToProcessoAvro(ProcessoCadastroDto dto);
 	
+	@Mapping(source = "nome", target = "nome", qualifiedByName = "ToUpperCase")
 	public abstract GETMoradorResponseDto moradorToGETMoradorResponseDto(Morador morador);
 	
 	public abstract MoradorDto atualizaMoradorDtoToMoradorDto(AtualizaMoradorDto dto);
+	
+	@Named("ToUpperCase")
+	default String toUpperCase(String value) {
+		
+		return value.toUpperCase();
+		
+	}
 
 }

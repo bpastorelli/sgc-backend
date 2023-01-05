@@ -1,7 +1,6 @@
 package br.com.sgc.services.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,50 +12,23 @@ import br.com.sgc.converter.Converter;
 import br.com.sgc.dto.GETVisitanteResponseDto;
 import br.com.sgc.entities.Visitante;
 import br.com.sgc.filter.VisitanteFilter;
-import br.com.sgc.mapper.VisitanteMapper;
-import br.com.sgc.repositories.VisitanteRepository;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
-import br.com.sgc.services.VisitanteService;
+import br.com.sgc.services.Services;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VisitanteServiceImpl implements VisitanteService<GETVisitanteResponseDto> {
-	
-	@Autowired
-	private VisitanteRepository visitanteRepository;
+public class VisitanteServiceImpl implements Services<GETVisitanteResponseDto, VisitanteFilter> {
 	
 	@Autowired
 	private QueryRepository<Visitante, VisitanteFilter> queryRepository;
 	
 	@Autowired
 	private Converter<List<GETVisitanteResponseDto>, List<Visitante>> converter;
-	
-	@Autowired
-	private VisitanteMapper visitanteMapper;
 
 	@Override
-	public Response<GETVisitanteResponseDto> buscarPorGuide(String guide) {
-		
-		log.info("Buscando morador pelo ticket " + guide);
-		
-		Response<GETVisitanteResponseDto> response = new Response<GETVisitanteResponseDto>();
-		
-		GETVisitanteResponseDto visitanteDto;
-		
-		Optional<Visitante> visitante = this.visitanteRepository.findByGuide(guide);
-		
-		if(visitante.isPresent()) {
-			visitanteDto = this.visitanteMapper.visitanteToGETVisitanteResponseDto(visitante.get());
-			response.setData(visitanteDto);
-		}
-		
-		return response;
-	}
-
-	@Override
-	public Page<GETVisitanteResponseDto> buscarVisitante(VisitanteFilter filtros, Pageable pageable) {
+	public Page<GETVisitanteResponseDto> buscar(VisitanteFilter filtros, Pageable pageable) {
 		
 		log.info("Buscando visitantes(es)...");
 		

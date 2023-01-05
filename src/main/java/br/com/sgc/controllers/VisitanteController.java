@@ -29,7 +29,7 @@ import br.com.sgc.dto.VisitanteDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.VisitanteFilter;
-import br.com.sgc.services.VisitanteService;
+import br.com.sgc.services.Services;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,7 +42,7 @@ class VisitanteController extends RegistroExceptionHandler {
 	private AmqpService<VisitanteDto, AtualizaVisitanteDto> visitanteAmqpService;
 	
 	@Autowired
-	private VisitanteService<GETVisitanteResponseDto> visitanteService;
+	private Services<GETVisitanteResponseDto, VisitanteFilter> visitanteService;
 	
 	public VisitanteController() {
 		
@@ -84,7 +84,7 @@ class VisitanteController extends RegistroExceptionHandler {
 			VisitanteFilter filters,
 			@PageableDefault(sort = "nome", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
 		
-		Page<GETVisitanteResponseDto> visitantes = this.visitanteService.buscarVisitante(filters, paginacao);
+		Page<GETVisitanteResponseDto> visitantes = this.visitanteService.buscar(filters, paginacao);
 		
 		return filters.isContent() ? new ResponseEntity<>(visitantes.getContent(), HttpStatus.OK) :
 					new ResponseEntity<>(visitantes, HttpStatus.OK);

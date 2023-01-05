@@ -8,9 +8,10 @@ import org.springframework.stereotype.Component;
 
 import br.com.sgc.converter.Converter;
 import br.com.sgc.dto.GETMoradorResponseDto;
-import br.com.sgc.dto.ResidenciaDto;
+import br.com.sgc.dto.GETResidenciaSemMoradoresResponseDto;
 import br.com.sgc.entities.Morador;
 import br.com.sgc.entities.VinculoResidencia;
+import br.com.sgc.mapper.MoradorMapper;
 import br.com.sgc.mapper.ResidenciaMapper;
 
 @Component
@@ -19,6 +20,9 @@ public class ConvertListMoradorToGETListMoradorResponseDto implements Converter<
 	@Autowired
 	private ResidenciaMapper residenciaMapper;
 	
+	@Autowired
+	private MoradorMapper moradorMapper;
+	
 	@Override
 	public List<GETMoradorResponseDto> convert(List<Morador> moradores) {
 		
@@ -26,27 +30,16 @@ public class ConvertListMoradorToGETListMoradorResponseDto implements Converter<
 		
 		moradores.forEach(m -> {
 			
-			List<ResidenciaDto> residencias = new ArrayList<ResidenciaDto>();
+			List<GETResidenciaSemMoradoresResponseDto> residencias = new ArrayList<GETResidenciaSemMoradoresResponseDto>();
 			List<VinculoResidencia> vinculos = m.getResidencias();
 			
 			vinculos.forEach(v -> {
-				residencias.add(this.residenciaMapper.residenciaToResidenciaDto(v.getResidencia()));
+				residencias.add(this.residenciaMapper.residenciaToGETResidenciaSemMoradoresResponseDto(v.getResidencia()));
 			});
 			
-			GETMoradorResponseDto morador = GETMoradorResponseDto.builder()
-					.id(m.getId())
-					.nome(m.getNome())
-					.cpf(m.getCpf())
-					.rg(m.getRg())
-					.email(m.getEmail())
-					.associado(m.getAssociado())
-					.telefone(m.getTelefone())
-					.celular(m.getCelular())
-					.guide(m.getGuide())
-					.perfil(m.getPerfil())
-					.posicao(m.getPosicao())
-					.residencias(residencias)
-					.build();
+			GETMoradorResponseDto morador = new GETMoradorResponseDto();
+			morador = this.moradorMapper.moradorToGETMoradorResponseDto(m);
+			morador.setResidencias(residencias);
 			
 			response.add(morador);
 			

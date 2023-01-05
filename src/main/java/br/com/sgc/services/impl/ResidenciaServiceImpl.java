@@ -1,8 +1,6 @@
 package br.com.sgc.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
@@ -22,13 +20,13 @@ import br.com.sgc.mapper.ResidenciaMapper;
 import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
-import br.com.sgc.services.ResidenciaService;
+import br.com.sgc.services.Services;
 import br.com.sgc.validators.Validators;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
+public class ResidenciaServiceImpl implements Services<GETResidenciaResponseDto, ResidenciaFilter> {
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
@@ -63,48 +61,7 @@ public class ResidenciaServiceImpl implements ResidenciaService<ResidenciaDto> {
 	}
 
 	@Override
-	public Response<ResidenciaDto> buscarPorGuide(String guide) {
-		
-		log.info("Buscando morador pelo ticket " + guide);
-		
-		Response<ResidenciaDto> response = new Response<ResidenciaDto>();
-		
-		ResidenciaDto residenciaDto;
-		
-		Optional<Residencia> residencia = this.residenciaRepository.findByGuide(guide);
-		
-		if(residencia.isPresent()) {
-			residenciaDto = this.residenciaMapper.residenciaToResidenciaDto(residencia.get());
-			response.setData(residenciaDto);
-		}
-		
-		return response;
-	}
-
-	@Override
-	public Response<ResidenciaDto> persistir(ResidenciaDto residenciaDto) throws RegistroException {
-
-		log.info("Persistir moradores {}", residenciaDto);
-		
-		Response<ResidenciaDto> response = new Response<ResidenciaDto>();
-		
-		List<ResidenciaDto> residenciasDto = new ArrayList<ResidenciaDto>();
-		
-		residenciasDto.add(residenciaDto);
-		
-		this.validator.validarPost(residenciasDto);
-				
-		List<Residencia> residencias = this.residenciaMapper.listResidenciaDtoToListResidencia(residenciasDto);
-			
-		this.residenciaRepository.saveAll(residencias);
-		response.setData(this.residenciaMapper.residenciaToResidenciaDto(residencias.get(0)));
-		
-		return response;
-		
-	}
-
-	@Override
-	public Page<GETResidenciaResponseDto> buscarResidencia(ResidenciaFilter filtros, Pageable pageable) {
+	public Page<GETResidenciaResponseDto> buscar(ResidenciaFilter filtros, Pageable pageable) {
 		
 		log.info("Buscando residencia(s)...");
 		
