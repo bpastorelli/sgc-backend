@@ -18,6 +18,8 @@ public class GETVeiculoResponseDto implements Serializable {
 
 	private static final long serialVersionUID = 1423232434532327L;
 	
+	private Long id;
+	
 	@NotNull(message = "Campo Placa é obrigatório!")
 	private String placa;
 	

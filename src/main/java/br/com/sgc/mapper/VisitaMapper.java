@@ -5,9 +5,7 @@ import org.mapstruct.Mapping;
 
 import br.com.sgc.VeiculoAvro;
 import br.com.sgc.VisitaAvro;
-import br.com.sgc.dto.GETVeiculoResponseDto;
 import br.com.sgc.dto.VisitaDto;
-import br.com.sgc.entities.Veiculo;
 import br.com.sgc.entities.Visita;
 
 @Mapper(componentModel = "spring")
@@ -24,6 +22,4 @@ public abstract class VisitaMapper {
 	@Mapping(target = "rg", source = "visitante.rg")
 	@Mapping(target = "residenciaId", source = "residencia.id")
 	public abstract VisitaAvro visitaToVisitaAvro(Visita dto);
-	
-	public abstract GETVeiculoResponseDto veiculoToGETVeiculoResponseDto(Veiculo veiculo);
 }

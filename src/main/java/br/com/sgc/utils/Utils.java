@@ -79,5 +79,21 @@ public class Utils {
         }
         return true;
     }
+    
+    public static String formatPlaca(String placa) {
+    	
+    	String p1 = null;
+    	String p2 = null;
+    	
+    	if(placa != null && !placa.isBlank()) {
+    		p1 = placa.substring(0, 3);
+    		p2 = placa.substring(3, 7);
+    		placa = p1.concat("-").concat(p2);
+    	}else {
+    		placa = "";
+    	}
+		
+		return placa;
+    }
 	
 }
