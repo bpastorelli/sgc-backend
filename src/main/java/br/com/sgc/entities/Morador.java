@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.sgc.PerfilEnum;
+import br.com.sgc.enums.PerfilEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

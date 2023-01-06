@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null)
             throw new UsernameNotFoundException(username);
         
-        setAuthorities(PerfilEnum.ROLE_ADMIN);
+        setAuthorities(user.getPerfil());
         
         return new User(user.getEmail(), user.getSenha(), roles);
     }
