@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.sgc.access.constants.SecurityConstants;
 import br.com.sgc.access.dto.TokenDto;
 import br.com.sgc.entities.Morador;
 
@@ -31,7 +34,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
 
-        setFilterProcessesUrl("/api/services/controller/user/login"); 
+        setFilterProcessesUrl("/sgc/login"); 
     }
     
     @Override
@@ -62,14 +65,24 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()));
 
-        String body = ((User) auth.getPrincipal()).getUsername() + " " + token;
+        //String body = ((User) auth.getPrincipal()).getUsername() + " " + token;
         
         TokenDto dto = TokenDto.builder()
+        				.login(auth.getName())
         				.token(token)
         				.build();
 
-        res.getWriter().write(body);
+        res.getWriter().write(token);
         res.getWriter().flush();
+        
+        this.response(dto);
     }
+    
+    
+    public ResponseEntity<?> response(TokenDto dto){
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+    
 
 }

@@ -56,8 +56,8 @@ public class MyUserPrincipal implements UserDetails  {
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+	
+		return this.morador.getPosicao() == 1 ? true : false;
 	}
 
 }
