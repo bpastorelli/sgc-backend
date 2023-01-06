@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Transient;
 
-import br.com.sgc.PerfilEnum;
+import br.com.sgc.enums.PerfilEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

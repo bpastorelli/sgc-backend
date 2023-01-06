@@ -37,7 +37,7 @@ public class ConvertListVisitaToGETListVisitaResponseDto implements Converter<Li
 					.horaSaida(m.getHoraSaida() != null ? new Time(m.getDataSaida().getTime()) : null)
 					.endereco(m.getResidencia().getEndereco() != null ? m.getResidencia().getEndereco() : "")
 					.numero(m.getResidencia().getNumero().toString() != null ? m.getResidencia().getNumero().toString() : "")
-					.complemento(m.getResidencia().getNumero().toString() != null ? m.getResidencia().getNumero().toString() : "")
+					.complemento(m.getResidencia().getComplemento().toString() != null ? m.getResidencia().getComplemento().toString() : "")
 					.bairro(m.getResidencia().getBairro())
 					.cidade(m.getResidencia().getCidade())
 					.uf(m.getResidencia().getUf())

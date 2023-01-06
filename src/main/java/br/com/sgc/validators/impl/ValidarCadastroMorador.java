@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.sgc.PerfilEnum;
+import br.com.sgc.enums.PerfilEnum;
 import br.com.sgc.commons.ValidaCPF;
 import br.com.sgc.dto.AtualizaMoradorDto;
 import br.com.sgc.dto.MoradorDto;
