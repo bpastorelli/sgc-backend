@@ -1,4 +1,4 @@
-package br.com.sgc.access.auth;
+package br.com.sgc.security.auth;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,9 +22,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.sgc.access.constants.SecurityConstants;
-import br.com.sgc.access.dto.TokenDto;
 import br.com.sgc.entities.Morador;
+import br.com.sgc.security.constants.SecurityConstants;
+import br.com.sgc.security.dto.TokenDto;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 

@@ -9,8 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
-import br.com.sgc.access.dto.AlterarSenhaDto;
 import br.com.sgc.entities.Morador;
+import br.com.sgc.security.dto.AlterarSenhaDto;
 
 public class PasswordUtils {
 
