@@ -1,4 +1,4 @@
-package br.com.sgc.access.auth;
+package br.com.sgc.security.auth;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-import br.com.sgc.access.constants.SecurityConstants;
+import br.com.sgc.security.constants.SecurityConstants;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter  {
 	

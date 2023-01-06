@@ -1,4 +1,4 @@
-package br.com.sgc.access.config;
+package br.com.sgc.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -13,8 +13,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import br.com.sgc.access.auth.JWTAuthenticationFilter;
-import br.com.sgc.access.auth.JWTAuthorizationFilter;
+import br.com.sgc.security.auth.JWTAuthenticationFilter;
+import br.com.sgc.security.auth.JWTAuthorizationFilter;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {

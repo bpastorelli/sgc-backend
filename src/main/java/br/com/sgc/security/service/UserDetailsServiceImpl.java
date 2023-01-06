@@ -1,4 +1,4 @@
-package br.com.sgc.access.service;
+package br.com.sgc.security.service;
 
 import java.util.ArrayList;
 import java.util.Collection;

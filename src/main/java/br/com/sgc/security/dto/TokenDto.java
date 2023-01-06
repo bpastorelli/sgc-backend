@@ -1,4 +1,4 @@
-package br.com.sgc.access.dto;
+package br.com.sgc.security.dto;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package br.com.sgc.access.constants;
+package br.com.sgc.security.constants;
 
 public class SecurityConstants {
 	
