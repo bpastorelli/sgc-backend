@@ -31,7 +31,7 @@ import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.MoradorFilter;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 	
 @Slf4j
@@ -47,7 +47,7 @@ public class MoradorController extends RegistroExceptionHandler {
 	private AmqpService<ProcessoCadastroDto, AtualizaProcessoCadastroDto> processoAmqpService;
 	
 	@Autowired
-	private Services<GETMoradorResponseDto, MoradorFilter> moradorService;
+	private ServicesCore<GETMoradorResponseDto, MoradorFilter> moradorService;
 	
 	public MoradorController() {
 		
@@ -106,7 +106,7 @@ public class MoradorController extends RegistroExceptionHandler {
 		log.info("Enviando mensagem para o consumer...");
 		
 		moradorRequestBody.setId(id);
-		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumerPut(moradorRequestBody);
+		ResponsePublisherDto response = this.moradorAmqpService.sendToConsumerPut(moradorRequestBody, id);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

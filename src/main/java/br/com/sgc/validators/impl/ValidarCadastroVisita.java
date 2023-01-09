@@ -127,7 +127,7 @@ public class ValidarCadastroVisita implements Validators<VisitaDto, EncerraVisit
 	}
 
 	@Override
-	public void validarPut(EncerraVisitaDto t) throws RegistroException {
+	public void validarPut(EncerraVisitaDto t, Long id) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		

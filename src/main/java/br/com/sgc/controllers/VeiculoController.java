@@ -29,7 +29,7 @@ import br.com.sgc.dto.VeiculoDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.VeiculoFilter;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,7 +42,7 @@ class VeiculoController extends RegistroExceptionHandler {
 	private AmqpService<VeiculoDto, AtualizaVeiculoDto> cadastraVeiculoAmqpService;
 	
 	@Autowired
-	private Services<GETVeiculoResponseDto, VeiculoFilter> veiculoService;
+	private ServicesCore<GETVeiculoResponseDto, VeiculoFilter> veiculoService;
 	
 	public VeiculoController() {
 		
@@ -71,7 +71,7 @@ class VeiculoController extends RegistroExceptionHandler {
 		log.info("Enviando mensagem para o consumer...");
 		
 		veiculoRequestBody.setId(id);
-		ResponsePublisherDto response = this.cadastraVeiculoAmqpService.sendToConsumerPut(veiculoRequestBody);
+		ResponsePublisherDto response = this.cadastraVeiculoAmqpService.sendToConsumerPut(veiculoRequestBody, id);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

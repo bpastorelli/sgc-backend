@@ -131,7 +131,7 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>, List
 	}
 
 	@Override
-	public void validarPut(List<AtualizaMoradorDto> t) throws RegistroException {
+	public void validarPut(List<AtualizaMoradorDto> t, Long id) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		

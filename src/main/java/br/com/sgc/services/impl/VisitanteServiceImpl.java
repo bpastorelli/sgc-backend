@@ -14,12 +14,12 @@ import br.com.sgc.entities.Visitante;
 import br.com.sgc.filter.VisitanteFilter;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VisitanteServiceImpl implements Services<GETVisitanteResponseDto, VisitanteFilter> {
+public class VisitanteServiceImpl implements ServicesCore<GETVisitanteResponseDto, VisitanteFilter> {
 	
 	@Autowired
 	private QueryRepository<Visitante, VisitanteFilter> queryRepository;

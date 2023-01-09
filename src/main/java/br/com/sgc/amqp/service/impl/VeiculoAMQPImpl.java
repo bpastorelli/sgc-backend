@@ -67,14 +67,14 @@ public class VeiculoAMQPImpl implements AmqpService<VeiculoDto, AtualizaVeiculoD
 	}
 	
 	@Override
-	public ResponsePublisherDto sendToConsumerPut(AtualizaVeiculoDto veiculoRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPut(AtualizaVeiculoDto veiculoRequestBody, Long id) throws RegistroException {
 		
 		log.info("Atualizando um veículo: {}", veiculoRequestBody.toString()); 	
 		
-		this.validator.validarPut(veiculoRequestBody);
+		this.validator.validarPut(veiculoRequestBody, veiculoRequestBody.getId());
 		
 		//Prepara os dados para enviar para a fila.
-		Veiculo veiculo = veiculoRepository.findById(veiculoRequestBody.getId()).get();
+		Veiculo veiculo = veiculoRepository.findById(id).get();
 		VeiculoDto veiculoDto = this.veiculoMapper.veiculoToVeiculoDto(veiculo);
 		veiculoDto = this.mergeObject(veiculoDto, veiculoRequestBody);
 		

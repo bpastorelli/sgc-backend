@@ -6,5 +6,5 @@ public interface Validators<T, X> {
 	
 	void validarPost(T t) throws RegistroException;
 	
-	void validarPut(X x) throws RegistroException;
+	void validarPut(X x, Long id) throws RegistroException;
 }

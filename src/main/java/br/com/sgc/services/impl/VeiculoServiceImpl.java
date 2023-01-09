@@ -14,12 +14,12 @@ import br.com.sgc.entities.Veiculo;
 import br.com.sgc.filter.VeiculoFilter;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VeiculoServiceImpl implements Services<GETVeiculoResponseDto, VeiculoFilter> {
+public class VeiculoServiceImpl implements ServicesCore<GETVeiculoResponseDto, VeiculoFilter> {
 	
 	@Autowired
 	private QueryRepository<Veiculo, VeiculoFilter> queryRepository;

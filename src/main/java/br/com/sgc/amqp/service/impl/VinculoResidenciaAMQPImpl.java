@@ -66,7 +66,7 @@ public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaD
 	}
 	
 	@Override
-	public ResponsePublisherDto sendToConsumerPut(AtualizaVinculoResidenciaDto x) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPut(AtualizaVinculoResidenciaDto x, Long id) throws RegistroException {
 		// TODO Auto-generated method stub
 		return null;
 	}

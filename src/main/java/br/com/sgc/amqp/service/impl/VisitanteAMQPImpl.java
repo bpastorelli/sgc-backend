@@ -67,13 +67,13 @@ public class VisitanteAMQPImpl implements AmqpService<VisitanteDto, AtualizaVisi
 	}
 	
 	@Override
-	public ResponsePublisherDto sendToConsumerPut(AtualizaVisitanteDto visitanteRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPut(AtualizaVisitanteDto visitanteRequestBody, Long id) throws RegistroException {
 
 		log.info("Atualizando um visitante: {}", visitanteRequestBody.toString());
 		
 		visitanteRequestBody.setGuide(this.gerarGuide()); 	
 		
-		this.validator.validarPut(visitanteRequestBody);
+		this.validator.validarPut(visitanteRequestBody, id);
 		
 		//Prepara os dados para enviar para a fila.
 		Visitante visitante = visitanteRepository.findById(visitanteRequestBody.getId()).get();

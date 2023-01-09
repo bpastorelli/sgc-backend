@@ -14,12 +14,12 @@ import br.com.sgc.entities.Morador;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class MoradorServiceImpl implements Services<GETMoradorResponseDto, MoradorFilter> {
+public class MoradorServiceImpl implements ServicesCore<GETMoradorResponseDto, MoradorFilter> {
 	
 	@Autowired
 	private QueryRepository<Morador, MoradorFilter> queryRepository;

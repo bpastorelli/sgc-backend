@@ -28,7 +28,7 @@ import br.com.sgc.dto.VisitaDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.VisitaFilter;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 class VisitaController extends RegistroExceptionHandler {
 	
 	@Autowired
-	private Services<GETVisitaResponseDto, VisitaFilter> visitaService;
+	private ServicesCore<GETVisitaResponseDto, VisitaFilter> visitaService;
 	
 	@Autowired
 	private AmqpService<VisitaDto, EncerraVisitaDto> visitaAmqpService;
@@ -67,7 +67,7 @@ class VisitaController extends RegistroExceptionHandler {
 		
 		log.info("Enviando mensagem para o consumer...");
 		
-		ResponsePublisherDto response = this.visitaAmqpService.sendToConsumerPut(encerraVisitaDto);
+		ResponsePublisherDto response = this.visitaAmqpService.sendToConsumerPut(encerraVisitaDto, encerraVisitaDto.getId());
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 
