@@ -29,13 +29,14 @@ import br.com.sgc.access.dto.CadastroModuloDto;
 import br.com.sgc.access.dto.GETModuloResponseDto;
 import br.com.sgc.access.filter.ModuloFilter;
 import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.ServicesAccess;
 
 @RestController
-@RequestMapping("/access/modulo")
+@RequestMapping("/sgc/access/modulo")
 @CrossOrigin(origins = "*")
-public class ModuloController {
+public class ModuloController extends RegistroExceptionHandler {
 	
 	private static final Logger log = LoggerFactory.getLogger(ModuloController.class);
 	
@@ -64,20 +65,22 @@ public class ModuloController {
 	@PostMapping(value = "/incluir")
 	public ResponseEntity<?> cadastrar(
 			@Valid @RequestBody CadastroModuloDto requestBody, 
-			BindingResult result) throws NoSuchAlgorithmException, RegistroException{
+			BindingResult result) throws RegistroException{
 		
 		log.info("Cadastro de módulos: {}", requestBody.toString());
 		Response<GETModuloResponseDto> response = new Response<GETModuloResponseDto>();
 		
 		response.setData(this.service.cadastra(requestBody));
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(response.getData());
+		return response.getErrors().size() == 0 ? 
+				ResponseEntity.status(HttpStatus.OK).body(response.getData()) :
+				ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.getErrors()); 
 		
 	}
 	
-	@PutMapping(value = "/idModulo/{idModulo}")
+	@PutMapping(value = "/id/{id}")
 	public ResponseEntity<?> atualizar(
-			@PathVariable("idModulo") Long id,
+			@PathVariable("id") Long id,
 			@Valid @RequestBody AtualizaModuloDto requestBody, 
 			BindingResult result) throws NoSuchAlgorithmException, RegistroException{
 		
@@ -93,7 +96,7 @@ public class ModuloController {
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarModuloFiltro(
 			ModuloFilter filters,
-			@PageableDefault(sort = "nome", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException, RegistroException {
+			@PageableDefault(sort = "descricao", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException, RegistroException {
 		
 		Page<GETModuloResponseDto> modulos = this.service.buscaPaginado(filters, paginacao);
 		

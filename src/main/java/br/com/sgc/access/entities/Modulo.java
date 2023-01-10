@@ -10,25 +10,29 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Getter
-@Setter
 @Table(name = "modulo")
 public class Modulo implements Serializable {
 	
 	private static final long serialVersionUID = 6524560251526772839L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name = "descricao", nullable = false)
 	private String descricao;
 	
-	@Column(name = "path_modulo", nullable = false)
+	@Column(name = "path_modulo", nullable = true)
 	private String pathModulo;
 	
 	@Column(name = "posicao", nullable = false)

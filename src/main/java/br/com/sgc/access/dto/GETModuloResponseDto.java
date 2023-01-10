@@ -15,6 +15,4 @@ public class GETModuloResponseDto {
 	
 	private Long posicao;
 	
-	private boolean content;
-	
 }
