@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,13 +30,13 @@ import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.ServicesAccess;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/sgc/access/modulo")
 @CrossOrigin(origins = "*")
 public class ModuloController extends RegistroExceptionHandler {
-	
-	private static final Logger log = LoggerFactory.getLogger(ModuloController.class);
 	
 	@Autowired
 	private ServicesAccess<CadastroModuloDto, AtualizaModuloDto, GETModuloResponseDto, ModuloFilter> service;
