@@ -73,7 +73,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 	}
 	
 	@Override
-	public ResponsePublisherDto sendToConsumerPut(AtualizaMoradorDto moradorRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPut(AtualizaMoradorDto moradorRequestBody, Long id) throws RegistroException {
 
 		log.info("Atualizando um morador: {}", moradorRequestBody.toString());
 		
@@ -83,7 +83,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 		
 		listMorador.add(moradorRequestBody);
 		
-		this.validator.validarPut(listMorador);
+		this.validator.validarPut(listMorador, id);
 		
 		//Prepara os dados para enviar para a fila.
 		Morador morador = moradorRepository.findById(moradorRequestBody.getId()).get();

@@ -66,7 +66,7 @@ public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCada
 	}
 	
 	@Override
-	public ResponsePublisherDto sendToConsumerPut(AtualizaProcessoCadastroDto x) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPut(AtualizaProcessoCadastroDto x, Long id) throws RegistroException {
 		// TODO Auto-generated method stub
 		return null;
 	}

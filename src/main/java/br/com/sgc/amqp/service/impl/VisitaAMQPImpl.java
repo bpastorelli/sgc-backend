@@ -67,11 +67,11 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto, EncerraVisitaDto> 
 	}
 	
 	@Override
-	public ResponsePublisherDto sendToConsumerPut(EncerraVisitaDto visitaRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPut(EncerraVisitaDto visitaRequestBody, Long id) throws RegistroException {
 
 		log.info("Cadastrando um veículo: {}", visitaRequestBody.toString());
 		
-		this.validator.validarPut(visitaRequestBody);
+		this.validator.validarPut(visitaRequestBody, id);
 		
 		Visita visita = visitaRepository.findById(visitaRequestBody.getId()).get();
 		

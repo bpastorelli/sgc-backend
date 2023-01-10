@@ -38,12 +38,12 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 	}
 	
 	@Override
-	public void validarPut(AtualizaResidenciaDto t) throws RegistroException {
+	public void validarPut(AtualizaResidenciaDto t, Long id) throws RegistroException {
 		
 		List<AtualizaResidenciaDto> residencias = new ArrayList<AtualizaResidenciaDto>();
 		residencias.add(t);
 		
-		validarPut(residencias);
+		validarPut(residencias, id);
 		
 	}
 	
@@ -83,7 +83,7 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 		
 	}
 	
-	public void validarPut(List<AtualizaResidenciaDto> t) throws RegistroException {
+	public void validarPut(List<AtualizaResidenciaDto> t, Long id) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 

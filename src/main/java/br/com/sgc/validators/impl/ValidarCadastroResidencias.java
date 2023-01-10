@@ -49,7 +49,7 @@ public class ValidarCadastroResidencias implements Validators<List<ResidenciaDto
 	}
 
 	@Override
-	public void validarPut(List<AtualizaResidenciaDto> t) throws RegistroException {
+	public void validarPut(List<AtualizaResidenciaDto> t, Long id) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 

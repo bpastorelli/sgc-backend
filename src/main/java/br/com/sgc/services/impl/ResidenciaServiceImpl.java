@@ -14,12 +14,12 @@ import br.com.sgc.entities.Residencia;
 import br.com.sgc.filter.ResidenciaFilter;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ResidenciaServiceImpl implements Services<GETResidenciaResponseDto, ResidenciaFilter> {
+public class ResidenciaServiceImpl implements ServicesCore<GETResidenciaResponseDto, ResidenciaFilter> {
 	
 	@Autowired
 	private QueryRepository<Residencia, ResidenciaFilter> queryRepository;

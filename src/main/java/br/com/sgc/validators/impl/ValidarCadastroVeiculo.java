@@ -69,7 +69,7 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto, AtualizaVe
 	}
 
 	@Override
-	public void validarPut(AtualizaVeiculoDto r) throws RegistroException {
+	public void validarPut(AtualizaVeiculoDto r, Long id) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		

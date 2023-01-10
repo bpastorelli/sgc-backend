@@ -77,11 +77,11 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto, Atuali
 	}
 
 	@Override
-	public void validarPut(AtualizaVisitanteDto t) throws RegistroException {
+	public void validarPut(AtualizaVisitanteDto t, Long id) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
 		
-		Optional<Visitante> visitanteSource = visitanteRepository.findById(t.getId());
+		Optional<Visitante> visitanteSource = visitanteRepository.findById(id);
 		
 		if(!t.getNome().toUpperCase().equals(visitanteSource.get().getNome().toUpperCase())){
 			visitanteRepository.findByNome(t.getNome())

@@ -29,7 +29,7 @@ import br.com.sgc.dto.VisitanteDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.VisitanteFilter;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,7 +42,7 @@ class VisitanteController extends RegistroExceptionHandler {
 	private AmqpService<VisitanteDto, AtualizaVisitanteDto> visitanteAmqpService;
 	
 	@Autowired
-	private Services<GETVisitanteResponseDto, VisitanteFilter> visitanteService;
+	private ServicesCore<GETVisitanteResponseDto, VisitanteFilter> visitanteService;
 	
 	public VisitanteController() {
 		
@@ -71,7 +71,7 @@ class VisitanteController extends RegistroExceptionHandler {
 		log.info("Enviando mensagem para o consumer...");
 		
 		visitanteRequestBody.setId(id);
-		ResponsePublisherDto response = this.visitanteAmqpService.sendToConsumerPut(visitanteRequestBody);
+		ResponsePublisherDto response = this.visitanteAmqpService.sendToConsumerPut(visitanteRequestBody, id);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

@@ -29,7 +29,7 @@ import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.ResidenciaFilter;
-import br.com.sgc.services.Services;
+import br.com.sgc.services.ServicesCore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,7 +42,7 @@ class ResidenciaController extends RegistroExceptionHandler {
 	private AmqpService<ResidenciaDto, AtualizaResidenciaDto> residenciaAmqpService;
 	
 	@Autowired
-	private Services<GETResidenciaResponseDto, ResidenciaFilter> residenciaService;
+	private ServicesCore<GETResidenciaResponseDto, ResidenciaFilter> residenciaService;
 	
 	public ResidenciaController() {
 		
@@ -83,7 +83,7 @@ class ResidenciaController extends RegistroExceptionHandler {
 		log.info("Enviando mensagem para o consumer...");
 		
 		residenciaRequestBody.setId(id);
-		ResponsePublisherDto response = this.residenciaAmqpService.sendToConsumerPut(residenciaRequestBody);
+		ResponsePublisherDto response = this.residenciaAmqpService.sendToConsumerPut(residenciaRequestBody, id);
 		
 		return response.getTicket() == null ? 
 				ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response.getErrors()) : 

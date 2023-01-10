@@ -7,7 +7,7 @@ public interface AmqpService<T, X> {
 	
 	public ResponsePublisherDto sendToConsumerPost(T t) throws RegistroException;
 	
-	public ResponsePublisherDto sendToConsumerPut(X x) throws RegistroException;
+	public ResponsePublisherDto sendToConsumerPut(X x, Long id) throws RegistroException;
 	
 	public T mergeObject(T t, X x);
 	

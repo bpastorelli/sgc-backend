@@ -67,13 +67,13 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, Atu
 	}
 	
 	@Override
-	public ResponsePublisherDto sendToConsumerPut(AtualizaResidenciaDto residenciaRequestBody) throws RegistroException {
+	public ResponsePublisherDto sendToConsumerPut(AtualizaResidenciaDto residenciaRequestBody, Long id) throws RegistroException {
 
 		log.info("Atualizando uma residencia: {}", residenciaRequestBody.toString());
 		
 		residenciaRequestBody.setGuide(this.gerarGuide()); 	
 		
-		this.validator.validarPut(residenciaRequestBody);
+		this.validator.validarPut(residenciaRequestBody, id);
 		
 		//Prepara os dados para enviar para a fila.
 		Residencia residencia = residenciaRepository.findById(residenciaRequestBody.getId()).get();
