@@ -5,17 +5,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sgc.access.dto.AtualizaModuloDto;
 import br.com.sgc.access.dto.CadastroModuloDto;
 import br.com.sgc.access.dto.GETModuloResponseDto;
-import br.com.sgc.access.dto.ModuloFilter;
 import br.com.sgc.access.entities.Modulo;
+import br.com.sgc.access.filter.ModuloFilter;
 import br.com.sgc.access.repositories.ModuloRepository;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.mapper.ModuloMapper;
+import br.com.sgc.repositories.queries.QueryRepository;
+import br.com.sgc.response.Response;
 import br.com.sgc.services.ServicesAccess;
 import br.com.sgc.validators.Validators;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,9 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 	private ModuloMapper mapper;
 	
 	@Autowired
+	private QueryRepository<Modulo, ModuloFilter> query;
+	
+	@Autowired
 	private Validators<CadastroModuloDto, AtualizaModuloDto> validar;
 	
 	@Autowired
@@ -37,7 +43,6 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 	public GETModuloResponseDto cadastra(CadastroModuloDto post) throws RegistroException {
 		
 		log.info("Cadastrando módulo...");
-		
 		Modulo modulo = this.mapper.cadastroModuloDtoToModulo(post);
 		
 		//Validação
@@ -51,8 +56,9 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 	@Override
 	public List<GETModuloResponseDto> cadastraEmLote(List<CadastroModuloDto> post) {
 
-		log.info("Cadastrando módulo...");
+		log.info("Cadastrando módulos...");
 		List<Modulo> listSalvar = new ArrayList<Modulo>();
+		List<GETModuloResponseDto> response = new ArrayList<GETModuloResponseDto>();
 		
 		post.forEach(p -> {
 			try {
@@ -62,9 +68,7 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 			}
 			
 			listSalvar.add(this.mapper.cadastroModuloDtoToModulo(p));
-		});
-		
-		List<GETModuloResponseDto> response = new ArrayList<GETModuloResponseDto>();
+		});		
 		
 		this.moduloRepository.saveAll(listSalvar).forEach(m -> {
 			response.add(this.mapper.moduloToGETModuloResponseDto(m));
@@ -94,8 +98,20 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 
 	@Override
 	public Page<GETModuloResponseDto> buscaPaginado(ModuloFilter filter, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
+
+		log.info("Buscando módulo(s)...");
+		
+		Response<List<GETModuloResponseDto>> response = new Response<List<GETModuloResponseDto>>(); 
+		
+		List<GETModuloResponseDto> listModulos = new ArrayList<GETModuloResponseDto>();
+		
+		this.query.query(filter, pageable).forEach(m -> {
+			listModulos.add(this.mapper.moduloToGETModuloResponseDto(m));
+		});
+		
+		response.setData(listModulos);
+		return new PageImpl<>(response.getData(), pageable, this.query.totalRegistros(filter));
+		
 	}
 
 	@Override

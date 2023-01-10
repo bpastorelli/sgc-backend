@@ -1,11 +1,11 @@
-package br.com.sgc.access.dto;
+package br.com.sgc.access.filter;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class GETModuloResponseDto {
+public class ModuloFilter {
 
 	private Long id;
 	
