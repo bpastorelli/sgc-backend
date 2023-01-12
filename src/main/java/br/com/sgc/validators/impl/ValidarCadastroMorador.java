@@ -19,7 +19,7 @@ import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
-public class ValidarCadastroMorador implements Validators<List<MoradorDto>, List<AtualizaMoradorDto>> {
+public class ValidarCadastroMorador implements Validators<MoradorDto, AtualizaMoradorDto> {
 	
 	@Autowired
 	private MoradorRepository moradorRepository;
@@ -131,63 +131,84 @@ public class ValidarCadastroMorador implements Validators<List<MoradorDto>, List
 	}
 
 	@Override
-	public void validarPut(List<AtualizaMoradorDto> t, Long id) throws RegistroException {
+	public void validarPut(AtualizaMoradorDto morador, Long id) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
-		
-		if(t.size() == 0) 
-			errors.getErros().add(new ErroRegistro("", TITULO, " Você deve informar ao menos um morador"));	
-		
-		for(AtualizaMoradorDto morador : t) {
-			
+							
+		Optional<Morador> moradorSource = this.moradorRepository.findById(morador.getId());
 				
-				Optional<Morador> moradorSource = this.moradorRepository.findById(morador.getId());
-				
-				if(!moradorSource.isPresent()) {
-					errors.getErros().add(new ErroRegistro("", TITULO, " O morador informado não existe!"));
-					throw errors;
-				}
-				
-				if(!morador.getNome().toUpperCase().equals(moradorSource.get().getNome().toUpperCase())) {
-					if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
-						errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
-				}
-				
-				morador.setPerfil(moradorSource.get().getPerfil());
-				morador.setGuide(moradorSource.get().getGuide());
-				
+		if(!moradorSource.isPresent()) {
+			errors.getErros().add(new ErroRegistro("", TITULO, " O morador informado não existe!"));
+			throw errors;
 		}
+				
+		if(!morador.getNome().toUpperCase().equals(moradorSource.get().getNome().toUpperCase())) {
+			if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
+				errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
+		}
+				
+		morador.setPerfil(moradorSource.get().getPerfil());
+		morador.setGuide(moradorSource.get().getGuide());
 	
-	
-		t.forEach(morador -> {
-			if(morador.getResidenciaId() != null && morador.getResidenciaId() != 0) {
-				if (!this.residenciaRepository.findById(morador.getResidenciaId()).isPresent())
-					errors.getErros().add(new ErroRegistro("", TITULO, " A residencia de código '" + morador.getResidenciaId() + "' não existe"));				
-			}
-		});	
-		
-		//Valida se o RG não está duplicado na requisição.
-		t.forEach(morador -> {
-			if(t
-					.stream()
-					.filter(pessoa -> pessoa.getRg()
-					.equals(morador.getRg())).count() > 1)
-				errors.getErros().add(new ErroRegistro("", TITULO, " RG '" + morador.getRg() + "' está duplicado"));
-		});
-		
-		//Valida se o E-mail não está duplicado na requisição.
-		t.forEach(morador -> {
-			if(t
-				.stream()
-				.filter(pessoa -> pessoa.getEmail()
-				.equals(morador.getEmail())).count() > 1) {
-				errors.getErros().add(new ErroRegistro("", TITULO, " E-mail '" + morador.getEmail() + "' está duplicado"));				
-			}
-		});
+
+		if(morador.getResidenciaId() != null && morador.getResidenciaId() != 0) {
+			if (!this.residenciaRepository.findById(morador.getResidenciaId()).isPresent())
+				errors.getErros().add(new ErroRegistro("", TITULO, " A residencia de código '" + morador.getResidenciaId() + "' não existe"));				
+		}
 
 		if(!errors.getErros().isEmpty())
 			throw errors;
 		
+		
+	}
+
+	@Override
+	public void validarPost(MoradorDto morador) throws RegistroException {
+		
+		RegistroException errors = new RegistroException();
+				
+		morador.setGuide(UUID.randomUUID().toString());
+		morador.setPerfil(morador.getPerfil() == null ? PerfilEnum.ROLE_USUARIO : PerfilEnum.ROLE_ADMIN);
+		morador.setResidenciaId(morador.getResidenciaId() == null ? 0 : morador.getResidenciaId());
+		morador.setPosicao((long) 1);
+				
+		if(morador.getNome().isEmpty())
+			errors.getErros().add(new ErroRegistro("", TITULO, " O campo Nome é obrigatório"));
+				
+		if(morador.getCpf().isEmpty())
+			errors.getErros().add(new ErroRegistro("", TITULO, " O campo CPF é obrigatório"));
+				
+		if(!ValidaCPF.isCPF(morador.getCpf()))
+			errors.getErros().add(new ErroRegistro("", TITULO, " CPF " + morador.getCpf() + " inválido"));
+				
+		if(morador.getRg().isEmpty())
+			errors.getErros().add(new ErroRegistro("", TITULO, " O campo RG é obrigatório"));
+				
+		if(morador.getEmail().isEmpty())
+			errors.getErros().add(new ErroRegistro("" , TITULO, " O campo e-mail é obrigatório"));
+				
+		if(morador.getTelefone().isEmpty() && morador.getCelular().isEmpty())
+			errors.getErros().add(new ErroRegistro("", TITULO, " Você deve informar um número de telefone ou celular"));
+			
+		this.moradorRepository.findByNome(morador.getNome())
+			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Nome '" + morador.getNome() + "' já existe")));	
+
+		this.moradorRepository.findByCpf(morador.getCpf())
+			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " CPF '" + morador.getCpf() + "' já existe")));
+			
+		this.moradorRepository.findByRg(morador.getRg())
+			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " RG '" + morador.getRg() + "' já existe")));	
+		
+		this.moradorRepository.findByEmail(morador.getEmail())
+			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " E-mail '" + morador.getEmail() + "' já existe")));	
+		
+		if(morador.getResidenciaId() != null && morador.getResidenciaId() != 0) {
+			if (!this.residenciaRepository.findById(morador.getResidenciaId()).isPresent())
+					errors.getErros().add(new ErroRegistro("", TITULO, " A residencia de código '" + morador.getResidenciaId() + "' não existe"));				
+		}
+		
+		if(!errors.getErros().isEmpty())
+			throw errors;
 		
 	}
 

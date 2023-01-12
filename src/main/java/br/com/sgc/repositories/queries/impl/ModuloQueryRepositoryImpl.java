@@ -89,5 +89,21 @@ public class ModuloQueryRepositoryImpl implements QueryRepository<Modulo, Modulo
         typedQuery.setMaxResults(totalRegistrosPorPagina);
 		
 	}
+
+	@Override
+	public List<Modulo> query(ModuloFilter filters) {
+
+		builder = manager.getCriteriaBuilder();
+		query = builder.createQuery(Modulo.class);
+		
+        entity_ = query.from(Modulo.class);
+        
+        this.query.where(this.criarFiltros(entity_, filters, builder));
+        
+        TypedQuery<Modulo> typedQuery = manager.createQuery(query);
+        
+        return typedQuery.getResultList();
+		
+	}
 	
 }

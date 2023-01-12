@@ -148,4 +148,10 @@ public class ValidarCadastroVisita implements Validators<VisitaDto, EncerraVisit
 		
 	}
 
+	@Override
+	public void validarPost(List<VisitaDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

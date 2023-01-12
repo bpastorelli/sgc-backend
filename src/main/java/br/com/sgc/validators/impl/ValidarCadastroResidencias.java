@@ -16,7 +16,7 @@ import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
-public class ValidarCadastroResidencias implements Validators<List<ResidenciaDto>, List<AtualizaResidenciaDto>> {
+public class ValidarCadastroResidencias implements Validators<ResidenciaDto, List<AtualizaResidenciaDto>> {
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
@@ -73,6 +73,12 @@ public class ValidarCadastroResidencias implements Validators<List<ResidenciaDto
 		
 		if(!errors.getErros().isEmpty())
 			throw errors;
+		
+	}
+
+	@Override
+	public void validarPost(ResidenciaDto dto) throws RegistroException {
+		// TODO Auto-generated method stub
 		
 	}
 

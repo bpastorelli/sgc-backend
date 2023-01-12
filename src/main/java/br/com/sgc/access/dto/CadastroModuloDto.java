@@ -12,7 +12,6 @@ public class CadastroModuloDto {
 	@NotEmpty(message = "O campo decrição do módulo é obrigatório")
 	private String descricao;
 	
-	@NotEmpty(message = "O campo path do módulo é obrigatório")
 	private String pathModulo;
 
 }

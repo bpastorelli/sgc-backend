@@ -46,6 +46,7 @@ public class PasswordUtils {
 	public static Boolean IsPasswordDefault(String senha, Morador morador) {
 		
 		String senhaPadrao = morador.getCpf().substring(0, 6);
+		
 		if(senha.equals(senhaPadrao)) {
 			return true;
 		}else {

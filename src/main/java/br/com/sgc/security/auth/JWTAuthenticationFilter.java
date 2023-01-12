@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,18 +19,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import br.com.sgc.entities.Morador;
+import br.com.sgc.repositories.MoradorRepository;
 import br.com.sgc.security.constants.SecurityConstants;
 import br.com.sgc.security.dto.TokenDto;
+import br.com.sgc.utils.PasswordUtils;
+
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
+	
+	@Autowired
+	private Morador creds;
+	
+	@Autowired
+	private MoradorRepository moradorRepository;
+	
 	@Autowired
     private AuthenticationManager authenticationManager;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, MoradorRepository moradorRepository) {
         this.authenticationManager = authenticationManager;
+        this.moradorRepository = moradorRepository;
 
         setFilterProcessesUrl("/sgc/login"); 
     }
@@ -41,7 +50,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            Morador creds = new ObjectMapper()
+            this.creds = new ObjectMapper()
                     .readValue(req.getInputStream(), Morador.class);
 
             return authenticationManager.authenticate(
@@ -64,24 +73,21 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()));
-
-        //String body = ((User) auth.getPrincipal()).getUsername() + " " + token;
+        
+        Morador morador = this.moradorRepository.findByEmail(this.creds.getEmail()).get();
         
         TokenDto dto = TokenDto.builder()
-        				.login(auth.getName())
-        				.token(token)
-        				.build();
-
-        res.getWriter().write(token);
+        		.id(morador.getId())
+        		.nome(morador.getNome())
+        		.primeiroAcesso(PasswordUtils.IsPasswordDefault(this.creds.getSenha() ,morador))
+        		.token(token)
+        		.build();
+        
+        String tokenDtoJsonString = new Gson().toJson(dto);
+        
+        res.getWriter().write(tokenDtoJsonString);
         res.getWriter().flush();
         
-        this.response(dto);
-    }
-    
-    
-    public ResponseEntity<?> response(TokenDto dto){
-    	
-    	return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
     
 

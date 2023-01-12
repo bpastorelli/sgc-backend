@@ -128,4 +128,21 @@ public class VisitaQueryRepositoryImpl implements QueryRepository<Visita, Visita
 		
 	}
 
+	@Override
+	public List<Visita> query(VisitaFilter filters) {
+
+		builder = manager.getCriteriaBuilder();
+		query = builder.createQuery(Visita.class);
+		
+        entity_ = query.from(Visita.class);
+        visitanteJoin_ = entity_.join("visitante", JoinType.INNER);
+        
+        this.query.where(this.criarFiltros(entity_, filters, builder));
+        
+        TypedQuery<Visita> typedQuery = manager.createQuery(query);
+        
+        return typedQuery.getResultList();
+		
+	}
+
 }

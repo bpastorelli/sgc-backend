@@ -1,5 +1,6 @@
 package br.com.sgc.security.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,14 +14,19 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import br.com.sgc.repositories.MoradorRepository;
 import br.com.sgc.security.auth.JWTAuthenticationFilter;
 import br.com.sgc.security.auth.JWTAuthorizationFilter;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 	
-    private UserDetailsService appUserDetailsService;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private MoradorRepository moradorRepository;
+    
+	private UserDetailsService appUserDetailsService;
+    
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public WebSecurity(UserDetailsService appUserDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.appUserDetailsService = appUserDetailsService;
@@ -33,7 +39,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), moradorRepository))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

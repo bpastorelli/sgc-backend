@@ -20,6 +20,8 @@ import br.com.sgc.repositories.MoradorRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     
+	private Morador user;
+	
 	@Autowired
 	private MoradorRepository userRepository;
 	
@@ -31,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Morador user = userRepository.findByEmail(username).get();
+        this.user = userRepository.findByEmail(username).get();
 
         if (user == null)
             throw new UsernameNotFoundException(username);
@@ -41,6 +43,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new User(user.getEmail(), user.getSenha(), roles);
     }
 
+    public Morador getUser() {
+    	
+    	return this.user;
+    }
+    
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 	    return roles;
 	}

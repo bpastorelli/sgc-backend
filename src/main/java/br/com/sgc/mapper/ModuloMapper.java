@@ -1,5 +1,7 @@
 package br.com.sgc.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
 import br.com.sgc.access.dto.CadastroModuloDto;
@@ -14,5 +16,7 @@ public interface ModuloMapper {
 	public abstract Modulo cadastroModuloDtoToModulo(CadastroModuloDto dto);
 	
 	public abstract GETModuloResponseDto moduloToGETModuloResponseDto(Modulo modulo);
+	
+	public abstract List<Modulo> listCadastroModuloDtoToListModulo(List<CadastroModuloDto> dto);
 
 }

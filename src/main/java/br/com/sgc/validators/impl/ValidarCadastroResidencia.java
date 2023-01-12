@@ -47,6 +47,7 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 		
 	}
 	
+	@Override
 	public void validarPost(List<ResidenciaDto> t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
@@ -73,7 +74,7 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 
 			if(r.getTicketMorador() != null) {			
 				if(!this.moradorRepository.findByGuide(r.getTicketMorador()).isPresent())
-						errors.getErros().add(new ErroRegistro("", TITULO, " Morador a ser vinculado não encontrado"));
+					errors.getErros().add(new ErroRegistro("", TITULO, " Morador a ser vinculado não encontrado"));
 			}	
 			
 		});

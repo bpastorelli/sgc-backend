@@ -1,6 +1,7 @@
 package br.com.sgc.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,12 @@ public class ResidenciaServiceImpl implements ServicesCore<GETResidenciaResponse
 		long total = this.queryRepository.totalRegistros(filtros);
 		
 		return new PageImpl<>(response.getData(), pageable, total);
+	}
+
+	@Override
+	public Optional<List<GETResidenciaResponseDto>> buscar(ResidenciaFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

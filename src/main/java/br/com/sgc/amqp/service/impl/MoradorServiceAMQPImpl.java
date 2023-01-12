@@ -33,7 +33,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 	private AmqpProducer<MoradorAvro> amqp;
 	
 	@Autowired
-	private Validators<List<MoradorDto>, List<AtualizaMoradorDto>> validator;
+	private Validators<MoradorDto, AtualizaMoradorDto> validator;
 	
 	@Autowired
 	private MoradorRepository moradorRepository;
@@ -79,21 +79,15 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 		
 		moradorRequestBody.setGuide(this.gerarGuide()); 	
 		
-		List<AtualizaMoradorDto> listMorador = new ArrayList<AtualizaMoradorDto>();
-		
-		listMorador.add(moradorRequestBody);
-		
-		this.validator.validarPut(listMorador, id);
+		this.validator.validarPut(moradorRequestBody, id);
 		
 		//Prepara os dados para enviar para a fila.
 		Morador morador = moradorRepository.findById(moradorRequestBody.getId()).get();
-		MoradorDto moradorDto = this.moradorMapper.moradorToMoradorDto(morador);
-		moradorDto = this.mergeObject(moradorDto, moradorRequestBody);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(moradorMapper.moradorDtoToMoradorAvro(moradorDto));
+		this.amqp.producer(moradorMapper.moradorDtoToMoradorAvro(this.mergeObject(this.moradorMapper.moradorToMoradorDto(morador), moradorRequestBody)));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

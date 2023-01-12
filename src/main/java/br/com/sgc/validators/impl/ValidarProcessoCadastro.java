@@ -8,17 +8,26 @@ import org.springframework.stereotype.Component;
 
 import br.com.sgc.dto.AtualizaMoradorDto;
 import br.com.sgc.dto.AtualizaProcessoCadastroDto;
+import br.com.sgc.dto.AtualizaResidenciaDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ProcessoCadastroDto;
+import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
 public class ValidarProcessoCadastro implements Validators<ProcessoCadastroDto, AtualizaProcessoCadastroDto> {
 
 	@Autowired
-	private Validators<List<MoradorDto>, List<AtualizaMoradorDto>> validarMorador;
+	private ResidenciaRepository residenciaRepository;
+	
+	@Autowired
+	private Validators<MoradorDto, AtualizaMoradorDto> validarMorador;
+	
+	@Autowired
+	private Validators<ResidenciaDto, AtualizaResidenciaDto> validarResidencia;
 	
 	private static final String TITULO = "Processo de cadastro recusado!";
 	
@@ -29,8 +38,6 @@ public class ValidarProcessoCadastro implements Validators<ProcessoCadastroDto, 
 		
 		List<MoradorDto> moradores = new ArrayList<MoradorDto>();
 		moradores.add(t.getMorador());
-		
-		this.validarMorador.validarPost(moradores);
 		
 		if(t.getResidencia().getEndereco().isBlank() || t.getResidencia().getEndereco().isEmpty())
 			errors.getErros().add(new ErroRegistro("", TITULO, " Campo endereço é obrigatório!")); 
@@ -47,6 +54,12 @@ public class ValidarProcessoCadastro implements Validators<ProcessoCadastroDto, 
 		if(t.getResidencia().getUf().isBlank() || t.getResidencia().getUf().isEmpty())
 			errors.getErros().add(new ErroRegistro("", TITULO, " Campo UF é obrigatório!"));
 		
+		this.validarMorador.validarPost(t.getMorador());
+		
+		//Se a residencia não existir, valida...
+		if(!this.residenciaRepository.findByCepAndNumero(t.getResidencia().getCep(), t.getResidencia().getNumero()).isPresent())
+			this.validarResidencia.validarPost(t.getResidencia());
+		
 		if(!errors.getErros().isEmpty())
 			throw errors;
 		
@@ -54,6 +67,12 @@ public class ValidarProcessoCadastro implements Validators<ProcessoCadastroDto, 
 
 	@Override
 	public void validarPut(AtualizaProcessoCadastroDto x, Long id) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void validarPost(List<ProcessoCadastroDto> listDto) throws RegistroException {
 		// TODO Auto-generated method stub
 		
 	}

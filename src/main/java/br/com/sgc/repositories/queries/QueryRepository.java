@@ -13,6 +13,8 @@ public interface QueryRepository<T, Z> {
 	
 	public List<T> query(Z filters, Pageable pageable);
 	
+	public List<T> query(Z filters);
+	
 	public Predicate[] criarFiltros(Root<T> root, Z filters, CriteriaBuilder builder);
 	
 	public long totalRegistros(Z filters);
