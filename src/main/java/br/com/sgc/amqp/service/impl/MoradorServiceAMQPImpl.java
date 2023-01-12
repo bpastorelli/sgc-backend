@@ -1,7 +1,5 @@
 package br.com.sgc.amqp.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import br.com.sgc.dto.AtualizaMoradorDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ResponsePublisherDto;
-import br.com.sgc.entities.Morador;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.mapper.MoradorMapper;
 import br.com.sgc.repositories.MoradorRepository;
@@ -49,11 +46,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 		
 		moradorRequestBody.setGuide(this.gerarGuide()); 	
 		
-		List<MoradorDto> listMorador = new ArrayList<MoradorDto>();
-		
-		listMorador.add(moradorRequestBody);
-		
-		this.validator.validarPost(listMorador);
+		this.validator.validarPost(moradorRequestBody);
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
@@ -81,13 +74,10 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 		
 		this.validator.validarPut(moradorRequestBody, id);
 		
-		//Prepara os dados para enviar para a fila.
-		Morador morador = moradorRepository.findById(moradorRequestBody.getId()).get();
-		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(moradorMapper.moradorDtoToMoradorAvro(this.mergeObject(this.moradorMapper.moradorToMoradorDto(morador), moradorRequestBody)));
+		this.amqp.producer(moradorMapper.moradorDtoToMoradorAvro(this.mergeObject(this.moradorMapper.moradorToMoradorDto(moradorRepository.findById(id).get()), moradorRequestBody)));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
