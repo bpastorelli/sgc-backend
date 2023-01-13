@@ -6,10 +6,10 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
 import br.com.sgc.entities.Morador;
+import br.com.sgc.errorheadling.ErroRegistro;
+import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.security.dto.AlterarSenhaDto;
 
 public class PasswordUtils {
@@ -62,19 +62,25 @@ public class PasswordUtils {
 	 * @param morador
 	 * @param result
 	 * @return
+	 * @throws RegistroException 
 	 */
-	public static Optional<Morador> validarSenha(AlterarSenhaDto dto, Long idUsuario, Morador morador, BindingResult result) {
+	public static Optional<Morador> validarSenha(AlterarSenhaDto dto, Long idUsuario, Morador morador) throws RegistroException {
+		
+		RegistroException errors = new RegistroException();
 		
 		//Valida se a confirmação de senha está igual a nova senha
 		if(!dto.getNovaSenha().equals(dto.getConfirmarSenha()))
-			result.addError(new ObjectError("password", "A confirmação de senha não confere!"));
+			errors.getErros().add(new ErroRegistro("", "", " A confirmação de senha não confere!"));
 		
 		//Valida se a senha nova senha é igual a senha atual
 		if(dto.getNovaSenha().equals(dto.getSenha()))
-			result.addError(new ObjectError("password", "A nova senha não pode ser igual a atual!"));
+			errors.getErros().add(new ErroRegistro("", "", " A nova senha não pode ser igual a atual!"));
 		
-		if(!result.hasErrors())
-			morador.setSenha(PasswordUtils.gerarBCrypt(dto.getNovaSenha()));
+		
+		if(!errors.getErros().isEmpty())
+			throw errors;
+
+		morador.setSenha(PasswordUtils.gerarBCrypt(dto.getNovaSenha()));
 		
 		return Optional.ofNullable(morador);
 		

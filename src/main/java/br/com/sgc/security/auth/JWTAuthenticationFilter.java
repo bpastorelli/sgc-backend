@@ -36,7 +36,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Autowired
 	private MoradorRepository moradorRepository;
 	
-	@Autowired
     private AuthenticationManager authenticationManager;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, MoradorRepository moradorRepository) {

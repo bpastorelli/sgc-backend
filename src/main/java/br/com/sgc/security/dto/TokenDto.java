@@ -13,8 +13,6 @@ public class TokenDto {
 	
 	private String nome;
 	
-	private String login;
-	
 	private String token;
 	
 	private boolean primeiroAcesso;

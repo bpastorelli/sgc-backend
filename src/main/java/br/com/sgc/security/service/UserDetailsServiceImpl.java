@@ -26,10 +26,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private MoradorRepository userRepository;
 	
 	private List<SimpleGrantedAuthority> roles = new ArrayList<SimpleGrantedAuthority>();
-	
-    public UserDetailsServiceImpl(MoradorRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
