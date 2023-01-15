@@ -44,8 +44,9 @@ public class AuthenticationService {
 		RegistroException errors = new RegistroException();
 
      	Optional<Morador> user = this.moradorRepository.findByEmail(authenticationDto.getEmail());
+     	
     	if(!user.isPresent())
-    		errors.getErros().add(new ErroRegistro("", "Autenticação", " Usuário inexistente!"));
+    		errors.getErros().add(new ErroRegistro("", "Autenticação", " Usuário ou senha incorretos!"));
           
     	if(!errors.getErros().isEmpty())
     		throw errors;
@@ -82,25 +83,19 @@ public class AuthenticationService {
 		
 		RegistroException errors = new RegistroException();
 		
-		List<Morador> moradorList = new ArrayList<Morador>();
+		Optional<Morador> morador = this.moradorRepository.findById(idUser);
 		
-		Morador morador = this.moradorRepository.findById(idUser).get();
+		TokenDto tokenDto = this.atenticar(JwtAuthenticationDto.builder()
+				.email(morador.get().getEmail())
+				.senha(request.getSenha())
+				.build());
 		
-		Authentication auth = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(morador.getEmail(), request.getSenha()));
-		SecurityContextHolder.getContext().setAuthentication(auth);
-
-		UserDetails userDetails = userDetailsService.loadUserByUsername(morador.getEmail());
-		String token = jwtTokenUtil.obterToken(userDetails, auth);
-		
-		if(token != null) {
+		if(tokenDto.getToken() != null) {
 		
 			morador = PasswordUtils.validarSenha(
 							request, 
 							idUser, 
-							morador).get();
-
-			moradorList.add(morador);
+							morador.get());
 			
 		}else {
 			errors.getErros().add(new ErroRegistro("", "Autenticação", " A senha atual está incorreta!"));
@@ -110,9 +105,20 @@ public class AuthenticationService {
 			throw errors;
 		
 		return AlterarSenhaResponseDto.builder()
-				.senha(this.moradorRepository.save(morador).getSenha())
+				.senha(this.moradorRepository.save(morador.get()).getSenha())
 				.build();
 		
+	}
+	
+	public String reset(Long idUsuario) {
+		
+		Optional<Morador> morador = this.moradorRepository.findById(idUsuario);
+		String senha = PasswordUtils.gerarNovaSenha(10);
+		
+		morador.get().setSenha(PasswordUtils.gerarBCrypt(senha.toString()));
+		this.moradorRepository.save(morador.get());
+		
+		return senha;
 	}
 	
 }

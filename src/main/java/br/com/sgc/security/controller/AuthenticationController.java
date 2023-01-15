@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.response.Response;
 import br.com.sgc.security.dto.AlterarSenhaDto;
 import br.com.sgc.security.dto.AlterarSenhaResponseDto;
@@ -34,7 +35,7 @@ import br.com.sgc.security.utils.JwtTokenUtil;
 @RestController
 @RequestMapping("/sgc/token")
 @CrossOrigin(origins = "*")
-public class AuthenticationController {
+public class AuthenticationController extends RegistroExceptionHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 	private static final String TOKEN_HEADER = "Authorization";
@@ -110,7 +111,7 @@ public class AuthenticationController {
 		
 		response.setData(this.authenticationService.changePassword(request, id));
 		
-		return ResponseEntity.status(200).body(response.getData());
+		return ResponseEntity.ok(response.getData());
 		
 	}
 	
@@ -118,17 +119,7 @@ public class AuthenticationController {
 	public ResponseEntity<?> resetSenha(
 			 @PathVariable("idUsuario") Long idUsuario) throws NoSuchAlgorithmException{
 		
-		/*List<Morador> moradorList = new ArrayList<Morador>();
-		
-		Optional<Morador> morador = moradorService.buscarPorId(idUsuario);
-		String senha = PasswordUtils.gerarNovaSenha(10);
-		
-		morador.get().setSenha(PasswordUtils.gerarBCrypt(senha.toString()));
-		moradorList.add(morador.get());
-		moradorService.persistir(moradorList);
-		
-		return ResponseEntity.status(200).body(senha);*/
-		return null;
+		return ResponseEntity.status(200).body(this.authenticationService.reset(idUsuario));
 		
 	}
 

@@ -76,6 +76,10 @@ public class PasswordUtils {
 		if(dto.getNovaSenha().equals(dto.getSenha()))
 			errors.getErros().add(new ErroRegistro("", "", " A nova senha não pode ser igual a atual!"));
 		
+		//Valida se a senha nova senha é igual a senha atual
+		if(dto.getNovaSenha().length() < 6)
+			errors.getErros().add(new ErroRegistro("", "", " A nova senha deve conter pelo menos 6 caracteres!"));
+		
 		
 		if(!errors.getErros().isEmpty())
 			throw errors;
