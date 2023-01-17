@@ -14,9 +14,9 @@ import br.com.sgc.access.dto.CadastroModuloDto;
 import br.com.sgc.access.dto.GETModuloResponseDto;
 import br.com.sgc.access.entities.Modulo;
 import br.com.sgc.access.filter.ModuloFilter;
+import br.com.sgc.access.mapper.ModuloMapper;
 import br.com.sgc.access.repositories.ModuloRepository;
 import br.com.sgc.errorheadling.RegistroException;
-import br.com.sgc.mapper.ModuloMapper;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.ServicesAccess;
@@ -109,7 +109,8 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 
 	@Override
 	public GETModuloResponseDto busca(ModuloFilter filter, Pageable pageable) {
-		// TODO Auto-generated method stub
+		
+		
 		return null;
 	}
 

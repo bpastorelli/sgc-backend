@@ -1,4 +1,4 @@
-package br.com.sgc.mapper;
+package br.com.sgc.access.mapper;
 
 import java.util.List;
 
