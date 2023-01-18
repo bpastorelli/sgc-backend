@@ -37,6 +37,7 @@ public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, Mora
         entity_ = query.from(Morador.class);
         
         this.query.where(this.criarFiltros(entity_, filters, builder));
+        this.query.orderBy(builder.asc(entity_.get("nome")));
         
         TypedQuery<Morador> typedQuery = manager.createQuery(query);
         
