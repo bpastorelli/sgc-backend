@@ -66,8 +66,11 @@ public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, Mora
 		if(filters.getPosicao() != null)
 			predicates.add(builder.equal(root.get("posicao"), filters.getPosicao()));
 		
+		if(filters.getEmail() != null)
+			predicates.add(builder.equal(root.get("email"), filters.getEmail()));
+		
 		if(filters.getGuide() != null)
-			predicates.add(builder.equal(root.get("guide"), filters.getGuide()));
+			predicates.add(builder.like(root.get("guide"), filters.getGuide() + '%'));
 		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
