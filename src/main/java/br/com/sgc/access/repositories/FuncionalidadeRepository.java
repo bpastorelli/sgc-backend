@@ -23,6 +23,6 @@ public interface FuncionalidadeRepository extends JpaRepository<Funcionalidade, 
 	
 	Page<Funcionalidade> findByPosicao(Long posicao, Pageable pageable);
 	
-	List<Funcionalidade> findByPosicao(Long posicao);
+	List<Funcionalidade> findByIdModuloAndPosicao(Long idModulo, Long posicao);
 
 }

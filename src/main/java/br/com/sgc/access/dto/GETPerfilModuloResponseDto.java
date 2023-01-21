@@ -1,7 +1,5 @@
 package br.com.sgc.access.dto;
 
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,11 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class GETAcessoModuloResponseDto implements Comparable<GETAcessoModuloResponseDto> {
-	
-	private Long id;
-	
-	private Long idUsuario;
+public class GETPerfilModuloResponseDto implements Comparable<GETPerfilModuloResponseDto> {
 	
 	private Long idModulo;
 	
@@ -23,10 +17,8 @@ public class GETAcessoModuloResponseDto implements Comparable<GETAcessoModuloRes
 	
 	private boolean acesso;
 	
-	private List<GETAcessoFuncionalidadeResponseDto> funcionalidades;
-	
 	@Override
-	public int compareTo(GETAcessoModuloResponseDto o) {
+	public int compareTo(GETPerfilModuloResponseDto o) {
 		return this.nomeModulo.compareTo(o.nomeModulo);
 	}
 
