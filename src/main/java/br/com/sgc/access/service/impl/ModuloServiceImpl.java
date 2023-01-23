@@ -114,5 +114,11 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 		return null;
 	}
 
+	@Override
+	public List<GETModuloResponseDto> atualizaEmLote(List<AtualizaModuloDto> put, Long id) throws RegistroException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

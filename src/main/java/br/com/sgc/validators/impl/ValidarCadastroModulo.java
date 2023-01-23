@@ -65,4 +65,10 @@ public class ValidarCadastroModulo implements Validators<CadastroModuloDto, Atua
 			throw errors;
 		
 	}
+
+	@Override
+	public void validarPut(List<AtualizaModuloDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
 }

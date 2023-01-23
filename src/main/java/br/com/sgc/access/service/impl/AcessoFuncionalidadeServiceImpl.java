@@ -77,4 +77,11 @@ public class AcessoFuncionalidadeServiceImpl implements ServicesAccess<CadastroA
 		return null;
 	}
 
+	@Override
+	public List<GETAcessoFuncionalidadeResponseDto> atualizaEmLote(List<AtualizaAcessoFuncionalidadeDto> put, Long id)
+			throws RegistroException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

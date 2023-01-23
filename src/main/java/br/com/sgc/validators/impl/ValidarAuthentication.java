@@ -47,4 +47,10 @@ public class ValidarAuthentication implements Validators<JwtAuthenticationDto, A
 		
 	}
 
+	@Override
+	public void validarPut(List<AlterarSenhaDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -6,12 +6,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import br.com.sgc.access.dto.AtualizaAcessoModuloDto;
 import br.com.sgc.access.dto.GETAcessoModuloResponseDto;
 import br.com.sgc.access.entities.AcessoModulo;
 import br.com.sgc.access.entities.Modulo;
 
 @Mapper(componentModel = "spring")
 public interface AcessoModuloMapper {
+	
+	@Mapping(target = "modulo", source = "idModulo")
+	public abstract List<AcessoModulo> listAtualizaAcessoModuloToAcessoModulo(List<AtualizaAcessoModuloDto> dto);
 	
 	@Mapping(target = "idModulo", source = "modulo.id")
 	@Mapping(target = "nomeModulo", source = "modulo.descricao")

@@ -85,4 +85,11 @@ public class PerfilFuncionalidadeServiceImpl implements ServicesAccess<List<Cada
 		return null;
 	}
 
+	@Override
+	public List<GETPerfilFuncionalidadeResponseDto> atualizaEmLote(List<List<AtualizaAcessoFuncionalidadeDto>> put, Long id)
+			throws RegistroException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

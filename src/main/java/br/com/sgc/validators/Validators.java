@@ -11,4 +11,6 @@ public interface Validators<T, X> {
 	void validarPost(List<T> listDto) throws RegistroException;
 	
 	void validarPut(X dto, Long id) throws RegistroException;
+	
+	void validarPut(List<X> listDto) throws RegistroException;
 }

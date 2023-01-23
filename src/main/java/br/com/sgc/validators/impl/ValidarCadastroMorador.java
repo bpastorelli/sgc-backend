@@ -212,4 +212,10 @@ public class ValidarCadastroMorador implements Validators<MoradorDto, AtualizaMo
 		
 	}
 
+	@Override
+	public void validarPut(List<AtualizaMoradorDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

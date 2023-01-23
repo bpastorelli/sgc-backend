@@ -82,4 +82,10 @@ public class ValidarCadastroResidencias implements Validators<ResidenciaDto, Lis
 		
 	}
 
+	@Override
+	public void validarPut(List<List<AtualizaResidenciaDto>> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

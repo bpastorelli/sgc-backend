@@ -32,6 +32,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
         		.mvcMatchers(HttpMethod.POST, "/sgc/token").permitAll()
+        		.mvcMatchers(HttpMethod.POST, "/sgc/token/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/morador/**").permitAll()
         		.mvcMatchers(HttpMethod.PUT, "/sgc/morador/**").permitAll()
         		.mvcMatchers(HttpMethod.GET, "/sgc/morador/**").permitAll()
@@ -39,6 +40,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         		.mvcMatchers(HttpMethod.PUT, "/sgc/residencia/**").permitAll()
         		.mvcMatchers(HttpMethod.GET, "/sgc/residencia/**").permitAll()
         		.mvcMatchers(HttpMethod.GET, "/sgc/access/**").permitAll()
+        		.mvcMatchers(HttpMethod.PUT, "/sgc/access/**").permitAll()
+        		.mvcMatchers(HttpMethod.POST, "/sgc/access/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

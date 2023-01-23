@@ -13,12 +13,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Getter
-@Setter
 @Table(name = "acesso_modulo")
 public class AcessoModulo implements Serializable {
 	
@@ -38,10 +42,10 @@ public class AcessoModulo implements Serializable {
 	@Column(name = "acesso", nullable = false)
 	private boolean acesso;
 	
-	@Column(name = "data_cadastro", nullable = false)
+	@Column(name = "data_cadastro")
 	private Date dataCadastro;
 	
-	@Column(name = "posicao", nullable = false)
+	@Column(name = "posicao")
 	private Long posicao;
 	
     @PrePersist

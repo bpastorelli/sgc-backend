@@ -85,4 +85,11 @@ public class PerfilModuloServiceImpl implements ServicesAccess<List<CadastroAces
 		return null;
 	}
 
+	@Override
+	public List<GETPerfilModuloResponseDto> atualizaEmLote(List<List<AtualizaAcessoModuloDto>> put, Long id)
+			throws RegistroException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

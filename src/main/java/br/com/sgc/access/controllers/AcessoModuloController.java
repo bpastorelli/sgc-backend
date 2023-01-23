@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -103,7 +102,6 @@ public class AcessoModuloController {
 		
 	}
 
-	
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarAcessos(			
 			AcessoModuloFilter filters,
@@ -164,27 +162,16 @@ public class AcessoModuloController {
 		
 	}
 	
-	@PutMapping(value = "/idUsuario/{idUsuario}")
+	@PutMapping(value = "/alterar")
 	public ResponseEntity<?> atualizar(	
-									@PathVariable("idUsuario") Long idUsuario,
-									@Valid @RequestBody List<AtualizaAcessoModuloDto> acessoRequestBody,
-									BindingResult result) throws NoSuchAlgorithmException {
+									@RequestParam(value = "idUsuario", defaultValue = "0") Long idUsuario,
+									@Valid @RequestBody List<AtualizaAcessoModuloDto> acessoRequestBody) throws RegistroException {
 		
 		log.info("Aatualização de acessos: {}", acessoRequestBody.toString());
-		Response<List<AcessoModulo>> response = new Response<List<AcessoModulo>>();
+		Response<List<GETAcessoModuloResponseDto>> response = new Response<List<GETAcessoModuloResponseDto>>();
 		
-		/*List<AcessoModulo> acessos = this.acessoModuloService.buscarPorUsuarioId(idUsuario);
-		acessos = validarDadosPut(acessoRequestBody, acessos, idUsuario, result);
+		response.setData(this.service.atualizaEmLote(acessoRequestBody, idUsuario));
 		
-		if(result.hasErrors()) {
-			log.error("Erro validando dados para cadastro de acessos: {}", result.getAllErrors());
-			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
-			return ResponseEntity.status(400).body(response.getErrors());
-		}
-			
-		acessos = this.acessoModuloService.persistir(acessos);
-		
-		response.setData(acessos);*/
 		return ResponseEntity.status(HttpStatus.OK).body(response.getData());
 		
 	}
@@ -218,112 +205,6 @@ public class AcessoModuloController {
 		List<AcessoModuloResponseDto> response = this.montaResponse(modulos, acessos);*/
 		
 		//return ResponseEntity.status(HttpStatus.OK).body(response);
-		
-	}
-	
-	public List<AcessoModulo> validarDadosPost(List<CadastroAcessoModuloDto> listDto, BindingResult result) {
-		return null;
-		
-		/*List<AcessoModulo> listAcesso = new ArrayList<AcessoModulo>();
-		
-		listDto.forEach(d -> {
-			
-			if(!this.moradorService.buscarPorId(d.getIdUsuario()).isPresent()) {
-				result.addError(new ObjectError("morador", "Usuário inexistente para o código " + d.getIdUsuario()));
-			}
-			
-			if(!this.moduloService.buscarPorId(d.getIdModulo()).isPresent()) {
-				result.addError(new ObjectError("módulo", "Módulo inexistente para o código " + d.getIdModulo()));
-			}
-			
-			if(this.acessoModuloService.buscarPorIdUsuarioAndIdModulo(d.getIdUsuario(), d.getIdModulo()).isPresent()) {
-				result.addError(new ObjectError("acesso", "Módulo " + d.getIdModulo() + " já existente para este usuário"));
-			}
-			
-			if(!result.hasErrors()) {
-				Modulo modulo = new Modulo();
-				modulo.setId(d.getIdModulo());
-				AcessoModulo acesso = new AcessoModulo();
-				acesso.setIdUsuario(d.getIdUsuario());	
-				acesso.setModulo(modulo);
-				acesso.setAcesso(d.isAcesso());
-				listAcesso.add(acesso);
-			}
-			
-		});
-		
-		return listAcesso;*/
-		
-	}
-	
-	public List<AcessoModulo> validarDadosPut(List<AtualizaAcessoModuloDto> listDto, List<AcessoModulo> listAcessos, Long idUsuario, BindingResult result) {
-		return listAcessos;
-		
-		/*List<AcessoModulo> listAcessosPut = new ArrayList<AcessoModulo>();
-		
-		listDto.forEach(d -> {
-			
-			if(!this.moradorService.buscarPorId(idUsuario).isPresent()) {
-				result.addError(new ObjectError("morador", "Usuário inexistente para o código " + idUsuario));
-			}
-			
-			if(!this.moduloService.buscarPorId(d.getIdModulo()).isPresent()) {
-				result.addError(new ObjectError("módulo", "Módulo inexistente para o código " + d.getIdModulo()));
-			}
-			
-		});
-		
-		//Se não houverem erros monta a lista de persistencia
-		if(!result.hasErrors()) {
-			listAcessosPut = this.atualizaAcesso(listAcessos, listDto, idUsuario);
-		}
-		
-		return listAcessosPut;*/
-		
-	}
-	
-	public List<AcessoModulo> atualizaAcesso(List<AcessoModulo> acessos, List<AtualizaAcessoModuloDto> acessosDto, Long idUsuario) {
-		return acessos;
-		
-		/*List<AcessoModulo> listAcessos = new ArrayList<AcessoModulo>();
-		
-		acessosDto.forEach(a -> {
-			
-			AcessoModulo acesso = new AcessoModulo();
-			
-			List<AcessoModulo> result = acessos.stream()
-						.filter(item -> item.getModulo().getId().equals(a.getIdModulo()))
-						.collect(Collectors.toList());
-			
-			if(result.size() > 0) {	
-				Modulo modulo = new Modulo();
-				modulo.setId(result.get(0).getModulo().getId());
-				
-				acesso.setId(result.get(0).getId());
-				acesso.setIdUsuario(result.get(0).getIdUsuario());
-				acesso.setModulo(modulo);
-				acesso.setDataCadastro(result.get(0).getDataCadastro());
-				acesso.setPosicao(result.get(0).getPosicao());
-				acesso.setAcesso(a.isAcesso());
-				
-				listAcessos.add(acesso);
-				
-			}else {
-				Modulo modulo = new Modulo();
-				modulo.setId(a.getIdModulo());
-				
-				acesso.setIdUsuario(idUsuario);
-				acesso.setModulo(modulo);
-				acesso.setAcesso(a.isAcesso());
-				acesso.setDataCadastro(new Date());
-				
-				listAcessos.add(acesso);
-				
-			}			
-			
-		});
-		
-		return listAcessos;*/
 		
 	}
 	

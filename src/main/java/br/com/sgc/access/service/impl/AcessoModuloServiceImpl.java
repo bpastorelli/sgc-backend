@@ -2,6 +2,7 @@ package br.com.sgc.access.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,19 +15,25 @@ import br.com.sgc.access.dto.CadastroAcessoModuloDto;
 import br.com.sgc.access.dto.GETAcessoModuloResponseDto;
 import br.com.sgc.access.entities.AcessoFuncionalidade;
 import br.com.sgc.access.entities.AcessoModulo;
+import br.com.sgc.access.entities.Modulo;
 import br.com.sgc.access.filter.AcessoFuncionalidadeFilter;
 import br.com.sgc.access.filter.AcessoModuloFilter;
 import br.com.sgc.access.mapper.AcessoFuncionalidadeMapper;
 import br.com.sgc.access.mapper.AcessoModuloMapper;
+import br.com.sgc.access.repositories.AcessoModuloRepository;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.ServicesAccess;
+import br.com.sgc.validators.Validators;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class AcessoModuloServiceImpl implements ServicesAccess<CadastroAcessoModuloDto, AtualizaAcessoModuloDto, GETAcessoModuloResponseDto, AcessoModuloFilter> {
+	
+	@Autowired
+	private Validators<CadastroAcessoModuloDto, AtualizaAcessoModuloDto> validar;
 	
 	@Autowired
 	private AcessoModuloMapper mapperModulo;
@@ -36,6 +43,9 @@ public class AcessoModuloServiceImpl implements ServicesAccess<CadastroAcessoMod
 	
 	@Autowired
 	private QueryRepository<AcessoModulo, AcessoModuloFilter> queryModulo;
+	
+	@Autowired
+	private AcessoModuloRepository acessoModuloRepository;
 	
 	@Autowired
 	private QueryRepository<AcessoFuncionalidade, AcessoFuncionalidadeFilter> queryFuncionalidade;
@@ -91,6 +101,47 @@ public class AcessoModuloServiceImpl implements ServicesAccess<CadastroAcessoMod
 	public GETAcessoModuloResponseDto busca(AcessoModuloFilter filter, Pageable pageable) throws RegistroException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<GETAcessoModuloResponseDto> atualizaEmLote(List<AtualizaAcessoModuloDto> put, Long id)
+			throws RegistroException {
+		
+		put.forEach(p -> {
+			p.setIdUsuario(id);
+		});
+		
+		this.validar.validarPut(put);
+		
+		return this.mapperModulo.listAcessoModuloToListGETAcessoModuloResponseDto(
+				this.acessoModuloRepository.saveAll(this.convertToListAcessoModulo(put)));
+		
+	}
+	
+	private List<AcessoModulo> convertToListAcessoModulo(List<AtualizaAcessoModuloDto> dto){
+		
+		List<AcessoModulo> acessos = new ArrayList<AcessoModulo>();
+		
+		dto.forEach(a -> {
+			
+			Optional<AcessoModulo> acessoOld = this.acessoModuloRepository.findByIdUsuarioAndModuloId(a.getIdUsuario(), a.getIdModulo());
+			
+			if(acessoOld.isPresent()) {
+				acessoOld.get().setAcesso(a.isAcesso());
+			}else {
+				AcessoModulo acesso = AcessoModulo.builder()
+						.id(acessoOld.isPresent() ? acessoOld.get().getId() : null)
+						.idUsuario(a.getIdUsuario())
+						.modulo(Modulo.builder().id(a.getIdModulo()).build())
+						.acesso(a.isAcesso())
+						.build();
+				acessos.add(acesso);	
+			}
+			
+		});
+		
+		return acessos;
+		
 	}
 
 

@@ -108,4 +108,10 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto, Atuali
 		
 	}
 
+	@Override
+	public void validarPut(List<AtualizaVisitanteDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -77,4 +77,10 @@ public class ValidarProcessoCadastro implements Validators<ProcessoCadastroDto, 
 		
 	}
 
+	@Override
+	public void validarPut(List<AtualizaProcessoCadastroDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

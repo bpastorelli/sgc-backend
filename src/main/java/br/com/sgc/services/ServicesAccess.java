@@ -23,6 +23,8 @@ public interface ServicesAccess<POST, PUT, GET, Filter> {
 	
 	abstract GET atualiza(PUT put, Long id) throws RegistroException;
 	
+	abstract List<GET> atualizaEmLote(List<PUT> put, Long id) throws RegistroException;
+	
 	abstract Page<GET> buscaPaginado(Filter filter, Pageable pageable) throws RegistroException;
 	
 	abstract GET busca(Filter filter, Pageable pageable) throws RegistroException;

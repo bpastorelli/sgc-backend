@@ -85,4 +85,10 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto, AtualizaVe
 		
 	}
 
+	@Override
+	public void validarPut(List<AtualizaVeiculoDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
