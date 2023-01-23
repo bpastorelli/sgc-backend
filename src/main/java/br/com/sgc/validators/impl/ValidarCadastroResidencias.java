@@ -33,7 +33,7 @@ public class ValidarCadastroResidencias implements Validators<ResidenciaDto, Lis
 
 		t.forEach(r -> {
 			
-			this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento())
+			this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento().toUpperCase())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));
 
 			if(r.getTicketMorador() != null) {			
@@ -62,7 +62,7 @@ public class ValidarCadastroResidencias implements Validators<ResidenciaDto, Lis
 			
 			if(residencia.isPresent()) {
 				if(!r.getCep().equals(residencia.get().getCep()) && !r.getNumero().equals(residencia.get().getNumero())) {
-					if(this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento()).isPresent())
+					if(this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento().toUpperCase()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " Não é possível realizar uma alteração de endereço para um endereço já existente!"));
 				}	
 			}else {
