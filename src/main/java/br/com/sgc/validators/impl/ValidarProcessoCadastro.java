@@ -57,7 +57,7 @@ public class ValidarProcessoCadastro implements Validators<ProcessoCadastroDto, 
 		this.validarMorador.validarPost(t.getMorador());
 		
 		//Se a residencia não existir, valida...
-		if(!this.residenciaRepository.findByCepAndNumero(t.getResidencia().getCep(), t.getResidencia().getNumero()).isPresent())
+		if(!this.residenciaRepository.findByCepAndNumeroAndComplemento(t.getResidencia().getCep(), t.getResidencia().getNumero(), t.getResidencia().getComplemento()).isPresent())
 			this.validarResidencia.validarPost(t.getResidencia());
 		
 		if(!errors.getErros().isEmpty())

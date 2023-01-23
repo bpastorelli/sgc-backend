@@ -33,7 +33,7 @@ public class ValidarCadastroResidencias implements Validators<ResidenciaDto, Lis
 
 		t.forEach(r -> {
 			
-			this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero())
+			this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));
 
 			if(r.getTicketMorador() != null) {			
@@ -55,14 +55,14 @@ public class ValidarCadastroResidencias implements Validators<ResidenciaDto, Lis
 
 		t.forEach(r -> {
 			
-			Optional<Residencia> residencia = this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero());
+			Optional<Residencia> residencia = this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento());
 			
 			if(!residencia.isPresent())
 				errors.getErros().add(new ErroRegistro("", TITULO, " Endereço não encontrado!"));
 			
 			if(residencia.isPresent()) {
 				if(!r.getCep().equals(residencia.get().getCep()) && !r.getNumero().equals(residencia.get().getNumero())) {
-					if(this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero()).isPresent())
+					if(this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " Não é possível realizar uma alteração de endereço para um endereço já existente!"));
 				}	
 			}else {
