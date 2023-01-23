@@ -79,29 +79,6 @@ public class AcessoModuloController {
 		
 	}
 
-	@PostMapping(value = "/incluir")
-	public ResponseEntity<?> cadastrar(@Valid @RequestBody List<CadastroAcessoModuloDto> cadastroAcessoDto, 
-									BindingResult result) throws NoSuchAlgorithmException {
-		
-		log.info("Cadastro de acessos: {}", cadastroAcessoDto.toString());
-		Response<List<GETAcessoModuloResponseDto>> response = new Response<List<GETAcessoModuloResponseDto>>();
-		
-		/*List<AcessoModulo> acessosModulo = validarDadosPost(cadastroAcessoDto, result);
-		
-		if(result.hasErrors()) {
-			log.error("Erro validando dados para cadastro de acessos: {}", result.getAllErrors());
-			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
-			return ResponseEntity.status(400).body(response.getErrors());
-		}
-		
-		acessosModulo = this.acessoModuloService.persistir(acessosModulo);		
-		List<AcessoModuloResponseDto> listResponse = this.montaResponse(acessosModulo);
-		
-		response.setData(listResponse);*/
-		return ResponseEntity.status(HttpStatus.CREATED).body(response.getData());
-		
-	}
-
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarAcessos(			
 			AcessoModuloFilter filters,
@@ -116,52 +93,6 @@ public class AcessoModuloController {
 		
 	}
 	
-	@GetMapping(value = "/buscaModulos")
-	public ResponseEntity<?> buscarAcessosPorUsuario(			
-			@RequestParam(value = "idUsuario", defaultValue = "0") Long idUsuario,
-			@RequestParam(value = "acesso", defaultValue = "true") boolean acesso) throws NoSuchAlgorithmException {
-		
-		log.info("Buscando acessos de módulos do usuário {} e acesso tipo {}", idUsuario, acesso);
-		return null;
-		
-		/*List<AcessoModulo> modulos = new ArrayList<AcessoModulo>();
-		
-		if(idUsuario != 0 && idUsuario != null) {
-			modulos =  acessoModuloService.buscarPorUsuarioIdAndAcesso(idUsuario, acesso);
-		}
-		
-		if (modulos.size() == 0) {
-			log.info("A consulta não retornou dados");
-			return ResponseEntity.status(404).body("A consulta não retornou dados!");
-		}
-		
-		List<AcessoModuloResponseDto> list = this.montaResponseModuloFuncionalidade(modulos, acessoFuncionalidadeService.buscarPorUsuarioIdAndAcesso(idUsuario, acesso));
-		
-		return ResponseEntity.status(HttpStatus.OK).body(list);*/
-		
-	}
-	
-	@GetMapping(value = "/busca")
-	public ResponseEntity<?> buscarAcessosPorUsuarioDescricao(			
-			@RequestParam(value = "idUsuario", defaultValue = "0") Long idUsuario,
-			@RequestParam(value = "idModulo", defaultValue = "0") Long idModulo) throws NoSuchAlgorithmException {
-		
-		log.info("Buscando acessos do usuário {} e módulo {}", idUsuario, idModulo);
-		return null;
-		
-		/*Optional<AcessoModulo> acesso =  acessoModuloService.buscarPorIdUsuarioAndIdModulo(idUsuario, idModulo);
-		
-		if (!acesso.isPresent()) {
-			log.info("A consulta não retornou dados");
-			return ResponseEntity.status(404).body("A consulta não retornou dados!");
-		}
-		
-		Optional<AcessoModuloResponseDto> response = this.montaResponse(acesso.get());*/
-		
-		//return ResponseEntity.status(HttpStatus.OK).body(response);
-		
-	}
-	
 	@PutMapping(value = "/alterar")
 	public ResponseEntity<?> atualizar(	
 									@RequestParam(value = "idUsuario", defaultValue = "0") Long idUsuario,
@@ -173,80 +104,6 @@ public class AcessoModuloController {
 		response.setData(this.service.atualizaEmLote(acessoRequestBody, idUsuario));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response.getData());
-		
-	}
-	
-	@GetMapping(value = "/filtroPorUsuario")
-	public ResponseEntity<?> buscarAcessosModuloUsuario(			
-			@RequestParam(value = "idUsuario", defaultValue = "0") Long idUsuario,
-			@RequestParam(value = "posicao", defaultValue = "1") Long posicao,
-			@RequestParam(value = "pag", defaultValue = "0") int pag,
-			@RequestParam(value = "ord", defaultValue = "descricao") String ord,
-			@RequestParam(value = "dir", defaultValue = "DESC") String dir,
-			@RequestParam(value = "size", defaultValue = "10") int size) throws NoSuchAlgorithmException {
-		
-		log.info("Buscando acessos a funcionalidades por usuário e módulo...");
-		return null;
-		
-		/*PageRequest pageRequest = PageRequest.of(pag, size, Direction.valueOf(dir), ord);
-		Page<Modulo> modulos = null;
-		List<AcessoModulo> acessos = null;
-		
-		if(idUsuario != 0 && idUsuario != null) {
-			modulos = moduloService.buscarPorPosicao(posicao, pageRequest);
-			acessos = acessoModuloService.buscarPorUsuarioId(idUsuario);
-		}
-		
-		if (modulos.getSize() == 0) {
-			log.info("A consulta não retornou dados");
-			return ResponseEntity.status(404).body("A consulta não retornou dados!");
-		}
-		
-		List<AcessoModuloResponseDto> response = this.montaResponse(modulos, acessos);*/
-		
-		//return ResponseEntity.status(HttpStatus.OK).body(response);
-		
-	}
-	
-	public List<AcessoFuncionalidade> validarDadosFuncionalidadePost(List<CadastroAcessoModuloDto> listDto, BindingResult result) {
-		return null;
-		
-		/*List<AcessoFuncionalidade> listAcesso = new ArrayList<AcessoFuncionalidade>();
-		
-		listDto.forEach(m -> {
-			
-			m.getFuncionalidades().forEach(f -> {
-				
-				if(!this.moradorService.buscarPorId(m.getIdUsuario()).isPresent()) {
-					result.addError(new ObjectError("morador", "Usuário inexistente para o código " + f.getIdUsuario()));
-				}
-				
-				if(!this.moduloService.buscarPorId(m.getIdModulo()).isPresent()) {
-					result.addError(new ObjectError("módulo", "Módulo inexistente para o código " + f.getIdModulo()));
-				}
-				
-				if(!this.funcionalidadeService.buscarPorId(f.getIdFuncionalidade()).isPresent()) {
-					result.addError(new ObjectError("funcionalidade", "Funcionalidade inexistente para o código " + f.getIdFuncionalidade()));
-				}
-				
-				if(this.acessoFuncionalidadeService.buscarPorIdUsuarioAndIdModuloAndIdFuncionalidade(f.getIdUsuario(), f.getIdModulo(), f.getIdFuncionalidade()).isPresent()) {
-					result.addError(new ObjectError("acesso", "Funcionalidade " + f.getIdFuncionalidade() + " e módulo já existente para este usuário"));
-				}
-				
-				if(!result.hasErrors()) {
-					AcessoFuncionalidade acesso = new AcessoFuncionalidade();
-					acesso.setIdUsuario(m.getIdUsuario());	
-					acesso.setIdModulo(m.getIdModulo());
-					acesso.setIdFuncionalidade(f.getIdFuncionalidade());
-					acesso.setAcesso(f.isAcesso());
-					listAcesso.add(acesso);
-				}
-				
-			});
-			
-		});
-		
-		return listAcesso;*/
 		
 	}
 	
