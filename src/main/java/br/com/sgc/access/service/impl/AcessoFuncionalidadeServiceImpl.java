@@ -2,6 +2,7 @@ package br.com.sgc.access.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,12 +14,16 @@ import br.com.sgc.access.dto.AtualizaAcessoFuncionalidadeDto;
 import br.com.sgc.access.dto.CadastroAcessoFuncionalidadeDto;
 import br.com.sgc.access.dto.GETAcessoFuncionalidadeResponseDto;
 import br.com.sgc.access.entities.AcessoFuncionalidade;
+import br.com.sgc.access.entities.Funcionalidade;
+import br.com.sgc.access.entities.Modulo;
 import br.com.sgc.access.filter.AcessoFuncionalidadeFilter;
 import br.com.sgc.access.mapper.AcessoFuncionalidadeMapper;
+import br.com.sgc.access.repositories.AcessoFuncionalidadeRepository;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.ServicesAccess;
+import br.com.sgc.validators.Validators;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -29,7 +34,13 @@ public class AcessoFuncionalidadeServiceImpl implements ServicesAccess<CadastroA
 	private AcessoFuncionalidadeMapper mapper;
 	
 	@Autowired
+	private AcessoFuncionalidadeRepository acessoFuncionalidadeRepository;
+	
+	@Autowired
 	private QueryRepository<AcessoFuncionalidade, AcessoFuncionalidadeFilter> query;
+	
+	@Autowired
+	private Validators<CadastroAcessoFuncionalidadeDto, AtualizaAcessoFuncionalidadeDto> validar;
 	
 	@Override
 	public GETAcessoFuncionalidadeResponseDto cadastra(CadastroAcessoFuncionalidadeDto post) throws RegistroException {
@@ -80,8 +91,43 @@ public class AcessoFuncionalidadeServiceImpl implements ServicesAccess<CadastroA
 	@Override
 	public List<GETAcessoFuncionalidadeResponseDto> atualizaEmLote(List<AtualizaAcessoFuncionalidadeDto> put, Long id)
 			throws RegistroException {
-		// TODO Auto-generated method stub
-		return null;
+
+		put.forEach(p -> {
+			p.setIdUsuario(id);
+		});
+		
+		this.validar.validarPut(put);
+		
+		return this.mapper.listAcessoFuncionalidadeToListGETAcessoFuncionalidadeResponseDto(
+				this.acessoFuncionalidadeRepository.saveAll(this.convertToListAcessoFuncionalidade(put)));
+		
+	}
+	
+	private List<AcessoFuncionalidade> convertToListAcessoFuncionalidade(List<AtualizaAcessoFuncionalidadeDto> dto){
+		
+		List<AcessoFuncionalidade> acessos = new ArrayList<AcessoFuncionalidade>();
+		
+		dto.forEach(a -> {
+			
+			Optional<AcessoFuncionalidade> acessoOld = this.acessoFuncionalidadeRepository.findByIdUsuarioAndFuncionalidadeIdAndModuloId(a.getIdUsuario(), a.getIdFuncionalidade(), a.getIdModulo());
+			
+			if(acessoOld.isPresent()) {
+				acessoOld.get().setAcesso(a.isAcesso());
+			}else {
+				AcessoFuncionalidade acesso = AcessoFuncionalidade.builder()
+						.id(acessoOld.isPresent() ? acessoOld.get().getId() : null)
+						.idUsuario(a.getIdUsuario())
+						.funcionalidade(Funcionalidade.builder().id(a.getIdFuncionalidade()).build())
+						.modulo(Modulo.builder().id(a.getIdModulo()).build())
+						.acesso(a.isAcesso())
+						.build();
+				acessos.add(acesso);	
+			}
+			
+		});
+		
+		return acessos;
+		
 	}
 
 }

@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 public class AtualizaAcessoFuncionalidadeDto {
 	
+	@NotEmpty(message = "O campo id do usuário é obrigatório")
+	private Long idUsuario;
+	
 	@NotEmpty(message = "O campo id do módulo é obrigatório")
 	private Long idModulo;
 	
