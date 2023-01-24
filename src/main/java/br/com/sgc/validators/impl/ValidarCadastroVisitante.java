@@ -1,5 +1,6 @@
 package br.com.sgc.validators.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,18 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto, Atuali
 		
 		if(!errors.getErros().isEmpty())
 			throw errors;
+		
+	}
+
+	@Override
+	public void validarPost(List<VisitanteDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void validarPut(List<AtualizaVisitanteDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
 		
 	}
 

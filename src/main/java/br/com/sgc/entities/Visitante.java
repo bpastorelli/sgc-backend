@@ -110,13 +110,4 @@ public class Visitante implements Serializable {
         
 	}
 	
-	
-	@Override
-	public String toString() {
-		return "Morador [id=" + id + ", nome=" + nome + ", cpf=" + cpf
-				+ ", rg=" + rg + ", telefone=" + telefone + ", celular=" + celular + ", cep=" + cep + ", endereco=" + endereco + ""
-				+ ", numero=" + numero + ", bairro=" + bairro + ", complemento=" + complemento + ", cidade=" + cidade + ", uf=" + uf + ", dataCriacao="
-				+ dataCriacao + ", dataAtualizacao=" + dataAtualizacao + ", posicao=" + posicao + ", guide=" + guide + "]";
-	}
-	
 }

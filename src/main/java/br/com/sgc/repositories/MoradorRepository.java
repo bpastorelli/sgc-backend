@@ -26,6 +26,8 @@ public interface MoradorRepository extends JpaRepository<Morador, Long> {
 	
 	Optional<Morador> findByGuide(String guide);
 	
+	Optional<Morador> findByEmailAndSenha(String username, String senha);
+	
 	@Transactional(readOnly = true)
 	Page<Morador> findByIdOrCpfOrRgOrNomeContainsOrEmailOrPosicao(Long id, String cpf, String rg, String nome, String email, Long posicao, Pageable pageable);
 	

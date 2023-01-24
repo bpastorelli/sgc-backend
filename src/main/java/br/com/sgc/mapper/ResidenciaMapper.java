@@ -12,7 +12,7 @@ import br.com.sgc.dto.ResidenciaDto;
 import br.com.sgc.entities.Residencia;
 
 @Mapper(componentModel = "spring")
-public abstract class ResidenciaMapper {
+public interface ResidenciaMapper {
 	
 	public abstract Residencia residenciaDtoToResiencia(ResidenciaDto dto);
 	
@@ -22,7 +22,7 @@ public abstract class ResidenciaMapper {
 	
 	public abstract GETResidenciaResponseDto residenciaToGETResidenciaResponseDto(Residencia residencia);
 	
-	public abstract GETResidenciaSemMoradoresResponseDto residenciaToGETResidenciaSemMoradoresResponseDto(Residencia residencisa);
+	public abstract GETResidenciaSemMoradoresResponseDto residenciaToGETResidenciaSemMoradoresResponseDto(Residencia residencia);
 	
 	public abstract ResidenciaAvro residenciaDtoToResidenciaAvro(ResidenciaDto dto);
 	

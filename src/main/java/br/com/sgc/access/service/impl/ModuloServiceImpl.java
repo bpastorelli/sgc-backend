@@ -14,9 +14,9 @@ import br.com.sgc.access.dto.CadastroModuloDto;
 import br.com.sgc.access.dto.GETModuloResponseDto;
 import br.com.sgc.access.entities.Modulo;
 import br.com.sgc.access.filter.ModuloFilter;
+import br.com.sgc.access.mapper.ModuloMapper;
 import br.com.sgc.access.repositories.ModuloRepository;
 import br.com.sgc.errorheadling.RegistroException;
-import br.com.sgc.mapper.ModuloMapper;
 import br.com.sgc.repositories.queries.QueryRepository;
 import br.com.sgc.response.Response;
 import br.com.sgc.services.ServicesAccess;
@@ -43,6 +43,7 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 	public GETModuloResponseDto cadastra(CadastroModuloDto post) throws RegistroException {
 		
 		log.info("Cadastrando módulo...");
+		
 		Modulo modulo = this.mapper.cadastroModuloDtoToModulo(post);
 		
 		//Validação
@@ -54,23 +55,15 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 	}
 	
 	@Override
-	public List<GETModuloResponseDto> cadastraEmLote(List<CadastroModuloDto> post) {
+	public List<GETModuloResponseDto> cadastraEmLote(List<CadastroModuloDto> post) throws RegistroException {
 
 		log.info("Cadastrando módulos...");
-		List<Modulo> listSalvar = new ArrayList<Modulo>();
+		
 		List<GETModuloResponseDto> response = new ArrayList<GETModuloResponseDto>();
+
+		this.validar.validarPost(post);	
 		
-		post.forEach(p -> {
-			try {
-				this.validar.validarPost(p);
-			} catch (RegistroException e) {
-				e.printStackTrace();
-			}
-			
-			listSalvar.add(this.mapper.cadastroModuloDtoToModulo(p));
-		});		
-		
-		this.moduloRepository.saveAll(listSalvar).forEach(m -> {
+		this.moduloRepository.saveAll(this.mapper.listCadastroModuloDtoToListModulo(post)).forEach(m -> {
 			response.add(this.mapper.moduloToGETModuloResponseDto(m));
 		});
 		
@@ -116,6 +109,13 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 
 	@Override
 	public GETModuloResponseDto busca(ModuloFilter filter, Pageable pageable) {
+		
+		
+		return null;
+	}
+
+	@Override
+	public List<GETModuloResponseDto> atualizaEmLote(List<AtualizaModuloDto> put, Long id) throws RegistroException {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -40,6 +40,8 @@ public interface MoradorMapper {
 	
 	public abstract MoradorDto atualizaMoradorDtoToMoradorDto(AtualizaMoradorDto dto);
 	
+	public abstract Morador getMoradorResponseDtoToMorador(GETMoradorResponseDto dto);
+	
 	@Named("ToUpperCase")
 	default String toUpperCase(String value) {
 		

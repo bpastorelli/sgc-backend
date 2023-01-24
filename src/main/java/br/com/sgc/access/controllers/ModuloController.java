@@ -13,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ import br.com.sgc.services.ServicesAccess;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/sgc/access/modulo")
 @CrossOrigin(origins = "*")
@@ -49,14 +51,16 @@ public class ModuloController extends RegistroExceptionHandler {
 	@PostMapping(value = "/incluirEmMassa")
 	public ResponseEntity<?> cadastrarEmMassa(
 			@Valid @RequestBody List<CadastroModuloDto> requestBody, 
-			BindingResult result) throws NoSuchAlgorithmException, RegistroException{
+			BindingResult result) throws RegistroException{
 		
 		log.info("Cadastro de módulos: {}", requestBody.toString());
 		Response<List<GETModuloResponseDto>> response = new Response<List<GETModuloResponseDto>>();
 		
 		response.setData(this.service.cadastraEmLote(requestBody));
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(response.getData());
+		return response.getErrors().size() == 0 ? 
+				ResponseEntity.status(HttpStatus.OK).body(response.getData()) :
+				ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.getErrors());
 		
 	}
 	

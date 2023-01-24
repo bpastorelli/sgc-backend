@@ -1,6 +1,5 @@
 package br.com.sgc.dto;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
@@ -15,9 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GETMoradorResponseDto implements Serializable {
-
-	private static final long serialVersionUID = -5754246207015712518L;
+public class GETMoradorResponseDto implements Comparable<GETMoradorResponseDto> {
 	
 	private Long id;
 	
@@ -45,5 +42,10 @@ public class GETMoradorResponseDto implements Serializable {
 	private List<GETResidenciaSemMoradoresResponseDto> residencias;
 	
 	private String guide;
+	
+	@Override
+	public int compareTo(GETMoradorResponseDto o) {
+		return this.nome.compareTo(o.nome);
+	}
 
 }

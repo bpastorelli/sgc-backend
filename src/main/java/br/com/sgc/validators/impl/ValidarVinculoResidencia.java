@@ -75,4 +75,16 @@ public class ValidarVinculoResidencia implements Validators<VinculoResidenciaDto
 		
 	}
 
+	@Override
+	public void validarPost(List<VinculoResidenciaDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void validarPut(List<AtualizaVinculoResidenciaDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -22,6 +22,8 @@ public class GETResidenciaSemMoradoresResponseDto {
 	private String cidade;
 	
 	private String uf;
+	
+	private String dataVinculo;
 
 	private String guide;
 }

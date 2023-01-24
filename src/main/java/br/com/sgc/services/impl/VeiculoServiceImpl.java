@@ -1,6 +1,7 @@
 package br.com.sgc.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,12 @@ public class VeiculoServiceImpl implements ServicesCore<GETVeiculoResponseDto, V
 		
 		return new PageImpl<>(response.getData(), pageable, this.queryRepository.totalRegistros(filtros));
 		
+	}
+
+	@Override
+	public Optional<List<GETVeiculoResponseDto>> buscar(VeiculoFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

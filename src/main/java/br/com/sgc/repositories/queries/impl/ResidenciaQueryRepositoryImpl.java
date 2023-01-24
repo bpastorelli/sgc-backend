@@ -98,5 +98,21 @@ public class ResidenciaQueryRepositoryImpl implements QueryRepository<Residencia
         typedQuery.setMaxResults(totalRegistrosPorPagina);
 		
 	}
+
+	@Override
+	public List<Residencia> query(ResidenciaFilter filters) {
+
+		builder = manager.getCriteriaBuilder();
+		query = builder.createQuery(Residencia.class);
+		
+        entity_ = query.from(Residencia.class);
+        
+        this.query.where(this.criarFiltros(entity_, filters, builder));
+        
+        TypedQuery<Residencia> typedQuery = manager.createQuery(query);
+        
+        return typedQuery.getResultList();
+		
+	}
 	
 }

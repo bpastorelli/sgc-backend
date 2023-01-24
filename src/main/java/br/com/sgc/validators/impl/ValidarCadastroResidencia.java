@@ -14,6 +14,7 @@ import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.repositories.MoradorRepository;
 import br.com.sgc.repositories.ResidenciaRepository;
+import br.com.sgc.repositories.VinculoResidenciaRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
@@ -24,6 +25,9 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 	
 	@Autowired
 	private MoradorRepository moradorRepository;
+	
+	@Autowired
+	private VinculoResidenciaRepository vinculoRepository;
 	
 	private static final String TITULO = "Cadastro de residência recusado!";
 	
@@ -47,6 +51,7 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 		
 	}
 	
+	@Override
 	public void validarPost(List<ResidenciaDto> t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
@@ -68,13 +73,24 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 			if(r.getUf().isBlank() || r.getUf().isEmpty())
 				errors.getErros().add(new ErroRegistro("", TITULO, " Campo UF é obrigatório!"));
 				
-			this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero())
-				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));
+			if(r.getTicketMorador() == null) {
+				this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento().toUpperCase())
+				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));	
+			}
 
 			if(r.getTicketMorador() != null) {			
 				if(!this.moradorRepository.findByGuide(r.getTicketMorador()).isPresent())
-						errors.getErros().add(new ErroRegistro("", TITULO, " Morador a ser vinculado não encontrado"));
-			}	
+					errors.getErros().add(new ErroRegistro("", TITULO, " Morador a ser vinculado não encontrado"));
+			}
+			
+			Optional<Residencia> residencia = this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento().toUpperCase());
+			
+			if(residencia.isPresent() && r.getTicketMorador() != null) {
+				if(this.vinculoRepository.findByResidenciaIdAndMoradorId(residencia.get().getId(), 
+						this.moradorRepository.findByGuide(r.getTicketMorador()).get().getId()).isPresent()) {
+					errors.getErros().add(new ErroRegistro("", TITULO, " O morador informado já está vinculado a esta residência"));
+				}
+			}
 			
 		});
 		
@@ -93,7 +109,7 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 				
 			if(residenciaSource.isPresent()) {
 				if(!r.getCep().equals(residenciaSource.get().getCep()) && !r.getNumero().equals(residenciaSource.get().getNumero())) {
-					if(this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero()).isPresent())
+					if(this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " Não é possível realizar uma alteração de endereço para um endereço já existente!"));
 				}	
 			}else {
@@ -105,6 +121,12 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 		
 		if(!errors.getErros().isEmpty())
 			throw errors;
+		
+	}
+
+	@Override
+	public void validarPut(List<AtualizaResidenciaDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
 		
 	}
 

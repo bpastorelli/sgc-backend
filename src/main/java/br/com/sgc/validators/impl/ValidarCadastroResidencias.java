@@ -16,7 +16,7 @@ import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.validators.Validators;
 
 @Component
-public class ValidarCadastroResidencias implements Validators<List<ResidenciaDto>, List<AtualizaResidenciaDto>> {
+public class ValidarCadastroResidencias implements Validators<ResidenciaDto, List<AtualizaResidenciaDto>> {
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
@@ -33,7 +33,7 @@ public class ValidarCadastroResidencias implements Validators<List<ResidenciaDto
 
 		t.forEach(r -> {
 			
-			this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero())
+			this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento().toUpperCase())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));
 
 			if(r.getTicketMorador() != null) {			
@@ -55,14 +55,14 @@ public class ValidarCadastroResidencias implements Validators<List<ResidenciaDto
 
 		t.forEach(r -> {
 			
-			Optional<Residencia> residencia = this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero());
+			Optional<Residencia> residencia = this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento());
 			
 			if(!residencia.isPresent())
 				errors.getErros().add(new ErroRegistro("", TITULO, " Endereço não encontrado!"));
 			
 			if(residencia.isPresent()) {
 				if(!r.getCep().equals(residencia.get().getCep()) && !r.getNumero().equals(residencia.get().getNumero())) {
-					if(this.residenciaRepository.findByCepAndNumero(r.getCep(), r.getNumero()).isPresent())
+					if(this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento().toUpperCase()).isPresent())
 						errors.getErros().add(new ErroRegistro("", TITULO, " Não é possível realizar uma alteração de endereço para um endereço já existente!"));
 				}	
 			}else {
@@ -73,6 +73,18 @@ public class ValidarCadastroResidencias implements Validators<List<ResidenciaDto
 		
 		if(!errors.getErros().isEmpty())
 			throw errors;
+		
+	}
+
+	@Override
+	public void validarPost(ResidenciaDto dto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void validarPut(List<List<AtualizaResidenciaDto>> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
 		
 	}
 

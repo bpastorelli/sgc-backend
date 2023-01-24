@@ -95,5 +95,21 @@ public class VisitanteQueryRepositoryImpl implements QueryRepository<Visitante, 
         typedQuery.setMaxResults(totalRegistrosPorPagina);
 		
 	}
+
+	@Override
+	public List<Visitante> query(VisitanteFilter filters) {
+
+		builder = manager.getCriteriaBuilder();
+		query = builder.createQuery(Visitante.class);
+		
+        entity_ = query.from(Visitante.class);
+        
+        this.query.where(this.criarFiltros(entity_, filters, builder));
+        
+        TypedQuery<Visitante> typedQuery = manager.createQuery(query);
+        
+        return typedQuery.getResultList();
+		
+	}
 	
 }

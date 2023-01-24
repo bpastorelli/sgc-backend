@@ -1,6 +1,7 @@
 package br.com.sgc.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,10 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 public class MoradorServiceImpl implements ServicesCore<GETMoradorResponseDto, MoradorFilter> {
 	
 	@Autowired
-	private QueryRepository<Morador, MoradorFilter> queryRepository;
+	private Converter<List<GETMoradorResponseDto>, List<Morador>> converter;
 	
 	@Autowired
-	private Converter<List<GETMoradorResponseDto>, List<Morador>> converter;
+	private QueryRepository<Morador, MoradorFilter> queryRepository;
 
 	@Override
 	public Page<GETMoradorResponseDto> buscar(MoradorFilter filtros, Pageable pageable) {
@@ -38,6 +39,14 @@ public class MoradorServiceImpl implements ServicesCore<GETMoradorResponseDto, M
 				this.queryRepository.query(filtros, pageable)));
 		
 		return new PageImpl<>(response.getData(), pageable, this.queryRepository.totalRegistros(filtros));
+	}
+
+	@Override
+	public Optional<List<GETMoradorResponseDto>> buscar(MoradorFilter filter) {
+		
+		log.info("Buscando morador(es)..."); 
+		
+		return Optional.ofNullable(this.converter.convert(this.queryRepository.query(filter)));
 	}
 
 }

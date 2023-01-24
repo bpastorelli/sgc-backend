@@ -103,4 +103,20 @@ public class VeiculoQueryRepositoryImpl implements QueryRepository<Veiculo, Veic
 		
 	}
 
+	@Override
+	public List<Veiculo> query(VeiculoFilter filters) {
+
+		builder = manager.getCriteriaBuilder();
+		query = builder.createQuery(Veiculo.class);
+		
+        entity_ = query.from(Veiculo.class);
+        
+        this.query.where(this.criarFiltros(entity_, filters, builder));
+        
+        TypedQuery<Veiculo> typedQuery = manager.createQuery(query);
+        
+        return typedQuery.getResultList();
+		
+	}
+
 }

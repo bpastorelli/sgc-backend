@@ -13,6 +13,7 @@ import br.com.sgc.entities.Morador;
 import br.com.sgc.entities.VinculoResidencia;
 import br.com.sgc.mapper.MoradorMapper;
 import br.com.sgc.mapper.ResidenciaMapper;
+import br.com.sgc.utils.Utils;
 
 @Component
 public class ConvertListMoradorToGETListMoradorResponseDto implements Converter<List<GETMoradorResponseDto>, List<Morador>> {
@@ -33,8 +34,10 @@ public class ConvertListMoradorToGETListMoradorResponseDto implements Converter<
 			List<GETResidenciaSemMoradoresResponseDto> residencias = new ArrayList<GETResidenciaSemMoradoresResponseDto>();
 			List<VinculoResidencia> vinculos = m.getResidencias();
 			
-			vinculos.forEach(v -> {
-				residencias.add(this.residenciaMapper.residenciaToGETResidenciaSemMoradoresResponseDto(v.getResidencia()));
+			vinculos.forEach(v -> {	
+				GETResidenciaSemMoradoresResponseDto item = this.residenciaMapper.residenciaToGETResidenciaSemMoradoresResponseDto(v.getResidencia());
+				item.setDataVinculo(Utils.dateFormat(v.getDataVinculo(), "dd/MM/yyyy"));
+				residencias.add(item);
 			});
 			
 			GETMoradorResponseDto morador = new GETMoradorResponseDto();

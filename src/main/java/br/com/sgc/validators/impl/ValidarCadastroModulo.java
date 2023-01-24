@@ -1,5 +1,7 @@
 package br.com.sgc.validators.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +25,7 @@ public class ValidarCadastroModulo implements Validators<CadastroModuloDto, Atua
 	public void validarPost(CadastroModuloDto t) throws RegistroException {
 		
 		RegistroException errors = new RegistroException();
-		
+			
 		if(this.moduloRepository.findByDescricao(t.getDescricao()).isPresent()) {
 			errors.getErros().add(new ErroRegistro("", TITULO, " Módulo '" + t.getDescricao() + "' já existe"));
 		}
@@ -47,5 +49,26 @@ public class ValidarCadastroModulo implements Validators<CadastroModuloDto, Atua
 		
 		if(!errors.getErros().isEmpty())
 			throw errors;
+	}
+
+	@Override
+	public void validarPost(List<CadastroModuloDto> listDto) throws RegistroException {
+		
+		RegistroException errors = new RegistroException();
+		
+		listDto.forEach(t -> {
+			if(this.moduloRepository.findByDescricao(t.getDescricao()).isPresent())
+				errors.getErros().add(new ErroRegistro("", TITULO, " Módulo '" + t.getDescricao() + "' já existe"));
+		});
+		
+		if(!errors.getErros().isEmpty())
+			throw errors;
+		
+	}
+
+	@Override
+	public void validarPut(List<AtualizaModuloDto> listDto) throws RegistroException {
+		// TODO Auto-generated method stub
+		
 	}
 }

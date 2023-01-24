@@ -37,6 +37,7 @@ public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, Mora
         entity_ = query.from(Morador.class);
         
         this.query.where(this.criarFiltros(entity_, filters, builder));
+        this.query.orderBy(builder.asc(entity_.get("nome")));
         
         TypedQuery<Morador> typedQuery = manager.createQuery(query);
         
@@ -65,8 +66,11 @@ public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, Mora
 		if(filters.getPosicao() != null)
 			predicates.add(builder.equal(root.get("posicao"), filters.getPosicao()));
 		
+		if(filters.getEmail() != null)
+			predicates.add(builder.equal(root.get("email"), filters.getEmail()));
+		
 		if(filters.getGuide() != null)
-			predicates.add(builder.equal(root.get("guide"), filters.getGuide()));
+			predicates.add(builder.like(root.get("guide"), filters.getGuide() + '%'));
 		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
@@ -93,6 +97,22 @@ public class MoradorQueryRepositoryImpl implements QueryRepository<Morador, Mora
         
         typedQuery.setFirstResult(primeiroRegistro);
         typedQuery.setMaxResults(totalRegistrosPorPagina);
+		
+	}
+
+	@Override
+	public List<Morador> query(MoradorFilter filters) {
+
+		builder = manager.getCriteriaBuilder();
+		query = builder.createQuery(Morador.class);
+		
+        entity_ = query.from(Morador.class);
+        
+        this.query.where(this.criarFiltros(entity_, filters, builder));
+        
+        TypedQuery<Morador> typedQuery = manager.createQuery(query);
+        
+        return typedQuery.getResultList();
 		
 	}
 	
