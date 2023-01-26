@@ -85,7 +85,7 @@ public class FuncionalidadeController extends RegistroExceptionHandler {
 			@RequestParam(value = "id", defaultValue = "null") Long id,
 			@Valid @RequestBody AtualizaFuncionalidadeDto requestBody) throws NoSuchAlgorithmException, RegistroException{
 		
-		log.info("Atualização de módulo: {}", requestBody.toString());
+		log.info("Atualização de funcionalidade: {}", requestBody.toString());
 		Response<GETFuncionalidadeResponseDto> response = new Response<GETFuncionalidadeResponseDto>();
 		
 		response.setData(this.service.atualiza(requestBody, id));
