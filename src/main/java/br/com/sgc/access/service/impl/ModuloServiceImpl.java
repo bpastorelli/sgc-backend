@@ -81,7 +81,7 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 		
 		Modulo modulo = this.moduloRepository.findById(id).get();
 		
-		modulo.setDescricao(put.getDescricao().toUpperCase());
+		modulo.setDescricao(put.getDescricao());
 		modulo.setPathModulo(put.getPathModulo().toLowerCase());
 		modulo.setPosicao(put.getPosicao());
 		
