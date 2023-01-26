@@ -18,6 +18,8 @@ public interface FuncionalidadeRepository extends JpaRepository<Funcionalidade, 
 	Optional<Funcionalidade> findById(Long id);
 	
 	Optional<Funcionalidade> findByDescricao(String descricao);
+	
+	Optional<Funcionalidade> findByDescricaoAndIdModulo(String descricao, Long idModulo);
 		
 	Page<Funcionalidade> findAll(Pageable pageable);
 	
