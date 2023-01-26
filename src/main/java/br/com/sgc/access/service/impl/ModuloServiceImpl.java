@@ -75,14 +75,15 @@ public class ModuloServiceImpl implements ServicesAccess<CadastroModuloDto, Atua
 	public GETModuloResponseDto atualiza(AtualizaModuloDto put, Long id) throws RegistroException {
 		
 		log.info("Atualizando módulo...");		
-		Modulo modulo = this.moduloRepository.findById(id).get();
-		
-		modulo.setDescricao(put.getDescricao());
-		modulo.setPathModulo(put.getPathModulo());
-		modulo.setPosicao(put.getPosicao());
 		
 		//Validação
 		this.validar.validarPut(put, id);
+		
+		Modulo modulo = this.moduloRepository.findById(id).get();
+		
+		modulo.setDescricao(put.getDescricao().toUpperCase());
+		modulo.setPathModulo(put.getPathModulo().toLowerCase());
+		modulo.setPosicao(put.getPosicao());
 		
 		GETModuloResponseDto response = this.mapper.moduloToGETModuloResponseDto(this.moduloRepository.save(modulo));
 		

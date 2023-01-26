@@ -16,11 +16,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sgc.access.dto.AtualizaModuloDto;
@@ -80,11 +80,10 @@ public class ModuloController extends RegistroExceptionHandler {
 		
 	}
 	
-	@PutMapping(value = "/id/{id}")
+	@PutMapping(value = "/alterar")
 	public ResponseEntity<?> atualizar(
-			@PathVariable("id") Long id,
-			@Valid @RequestBody AtualizaModuloDto requestBody, 
-			BindingResult result) throws NoSuchAlgorithmException, RegistroException{
+			@RequestParam(value = "id", defaultValue = "null") Long id,
+			@Valid @RequestBody AtualizaModuloDto requestBody) throws NoSuchAlgorithmException, RegistroException{
 		
 		log.info("Atualização de módulo: {}", requestBody.toString());
 		Response<GETModuloResponseDto> response = new Response<GETModuloResponseDto>();
