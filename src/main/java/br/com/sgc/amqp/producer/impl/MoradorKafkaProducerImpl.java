@@ -5,18 +5,16 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.sgc.MoradorAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.KafkaTemplateAbstract;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class MoradorKafkaProducerImpl implements AmqpProducer<MoradorAvro> {
+public class MoradorKafkaProducerImpl extends KafkaTemplateAbstract<MoradorAvro> {
 	
 	private final String topic;
-	
-	private final KafkaTemplate<String, MoradorAvro> kafkaTemplate;
 
-	public MoradorKafkaProducerImpl(@Value("${morador.topic.name}") String topic, KafkaTemplate<String, MoradorAvro> kafkaTemplate) {
+	public MoradorKafkaProducerImpl(@Value("${morador.topic.name}")String topic, KafkaTemplate<String, MoradorAvro> kafkaTemplate) {
 		
 		this.topic = topic;
 		this.kafkaTemplate = kafkaTemplate;

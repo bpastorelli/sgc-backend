@@ -5,16 +5,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.sgc.VinculoResidenciaAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.KafkaTemplateAbstract;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class VinculoResidenciaKafkaProducerImpl implements AmqpProducer<VinculoResidenciaAvro> {
+public class VinculoResidenciaKafkaProducerImpl extends KafkaTemplateAbstract<VinculoResidenciaAvro> {
 	
 	private final String topic;
-	
-	private final KafkaTemplate<String, VinculoResidenciaAvro> kafkaTemplate;
 
 	public VinculoResidenciaKafkaProducerImpl(@Value("${vinculo.topic.name}") String topic, KafkaTemplate<String, VinculoResidenciaAvro> kafkaTemplate) {
 		
