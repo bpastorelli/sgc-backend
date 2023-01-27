@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.sgc.access.dto.AtualizaModuloDto;
-import br.com.sgc.access.dto.CadastroModuloDto;
-import br.com.sgc.access.dto.GETModuloResponseDto;
-import br.com.sgc.access.filter.ModuloFilter;
+import br.com.sgc.access.dto.AtualizaFuncionalidadeDto;
+import br.com.sgc.access.dto.CadastroFuncionalidadeDto;
+import br.com.sgc.access.dto.GETFuncionalidadeResponseDto;
+import br.com.sgc.access.filter.FuncionalidadeFilter;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.response.Response;
@@ -36,25 +36,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/sgc/access/modulo")
+@RequestMapping("/sgc/access/funcionalidade")
 @CrossOrigin(origins = "*")
-public class ModuloController extends RegistroExceptionHandler {
+public class FuncionalidadeController extends RegistroExceptionHandler {
 	
 	@Autowired
-	private ServicesAccess<CadastroModuloDto, AtualizaModuloDto, GETModuloResponseDto, ModuloFilter> service;
+	private ServicesAccess<CadastroFuncionalidadeDto, AtualizaFuncionalidadeDto, GETFuncionalidadeResponseDto, FuncionalidadeFilter> service;
 	
-	public ModuloController() {
+	public FuncionalidadeController() {
 		
 		
 	}
 	
 	@PostMapping(value = "/incluirEmMassa")
 	public ResponseEntity<?> cadastrarEmMassa(
-			@Valid @RequestBody List<CadastroModuloDto> requestBody, 
+			@Valid @RequestBody List<CadastroFuncionalidadeDto> requestBody, 
 			BindingResult result) throws RegistroException{
 		
-		log.info("Cadastro de módulos: {}", requestBody.toString());
-		Response<List<GETModuloResponseDto>> response = new Response<List<GETModuloResponseDto>>();
+		log.info("Cadastro de funcionalidades: {}", requestBody.toString());
+		Response<List<GETFuncionalidadeResponseDto>> response = new Response<List<GETFuncionalidadeResponseDto>>();
 		
 		response.setData(this.service.cadastraEmLote(requestBody));
 		
@@ -66,11 +66,11 @@ public class ModuloController extends RegistroExceptionHandler {
 	
 	@PostMapping(value = "/incluir")
 	public ResponseEntity<?> cadastrar(
-			@Valid @RequestBody CadastroModuloDto requestBody, 
+			@Valid @RequestBody CadastroFuncionalidadeDto requestBody, 
 			BindingResult result) throws RegistroException{
 		
-		log.info("Cadastro de módulos: {}", requestBody.toString());
-		Response<GETModuloResponseDto> response = new Response<GETModuloResponseDto>();
+		log.info("Cadastro de funcionalidades: {}", requestBody.toString());
+		Response<GETFuncionalidadeResponseDto> response = new Response<GETFuncionalidadeResponseDto>();
 		
 		response.setData(this.service.cadastra(requestBody));
 		
@@ -83,10 +83,10 @@ public class ModuloController extends RegistroExceptionHandler {
 	@PutMapping(value = "/alterar")
 	public ResponseEntity<?> atualizar(
 			@RequestParam(value = "id", defaultValue = "null") Long id,
-			@Valid @RequestBody AtualizaModuloDto requestBody) throws NoSuchAlgorithmException, RegistroException{
+			@Valid @RequestBody AtualizaFuncionalidadeDto requestBody) throws NoSuchAlgorithmException, RegistroException{
 		
-		log.info("Atualização de módulo: {}", requestBody.toString());
-		Response<GETModuloResponseDto> response = new Response<GETModuloResponseDto>();
+		log.info("Atualização de funcionalidade: {}", requestBody.toString());
+		Response<GETFuncionalidadeResponseDto> response = new Response<GETFuncionalidadeResponseDto>();
 		
 		response.setData(this.service.atualiza(requestBody, id));
 		
@@ -96,10 +96,10 @@ public class ModuloController extends RegistroExceptionHandler {
 	
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarModuloFiltro(
-			ModuloFilter filters,
+			FuncionalidadeFilter filters,
 			@PageableDefault(sort = "descricao", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException, RegistroException {
 		
-		Page<GETModuloResponseDto> modulos = this.service.buscaPaginado(filters, paginacao);
+		Page<GETFuncionalidadeResponseDto> modulos = this.service.buscaPaginado(filters, paginacao);
 		
 		return filters.isContent() ? new ResponseEntity<>(modulos.getContent(), HttpStatus.OK) :
 					new ResponseEntity<>(modulos, HttpStatus.OK);

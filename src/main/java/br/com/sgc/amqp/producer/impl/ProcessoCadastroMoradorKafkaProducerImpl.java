@@ -5,16 +5,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.sgc.ProcessoCadastroAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.KafkaTemplateAbstract;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ProcessoCadastroMoradorKafkaProducerImpl implements AmqpProducer<ProcessoCadastroAvro> {
+public class ProcessoCadastroMoradorKafkaProducerImpl extends KafkaTemplateAbstract<ProcessoCadastroAvro> {
 	
 	private final String topic;
-	
-	private final KafkaTemplate<String, ProcessoCadastroAvro> kafkaTemplate;
 
 	public ProcessoCadastroMoradorKafkaProducerImpl(@Value("${processo.topic.name}") String topic, KafkaTemplate<String, ProcessoCadastroAvro> kafkaTemplate) {
 		

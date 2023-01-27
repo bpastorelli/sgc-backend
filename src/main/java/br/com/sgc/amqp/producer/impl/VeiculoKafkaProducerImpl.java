@@ -5,16 +5,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.sgc.VeiculoAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.KafkaTemplateAbstract;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class VeiculoKafkaProducerImpl implements AmqpProducer<VeiculoAvro> {
+public class VeiculoKafkaProducerImpl extends KafkaTemplateAbstract<VeiculoAvro> {
 	
 	private final String topic;
-	
-	private final KafkaTemplate<String, VeiculoAvro> kafkaTemplate;
 
 	public VeiculoKafkaProducerImpl(@Value("${veiculo.topic.name}") String topic, KafkaTemplate<String, VeiculoAvro> kafkaTemplate) {
 		

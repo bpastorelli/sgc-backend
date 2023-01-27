@@ -72,7 +72,10 @@ public class ValidarCadastroResidencia implements Validators<ResidenciaDto, Atua
 				
 			if(r.getUf().isBlank() || r.getUf().isEmpty())
 				errors.getErros().add(new ErroRegistro("", TITULO, " Campo UF é obrigatório!"));
-				
+
+			this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento().toUpperCase())
+				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));
+			
 			if(r.getTicketMorador() == null) {
 				this.residenciaRepository.findByCepAndNumeroAndComplemento(r.getCep(), r.getNumero(), r.getComplemento().toUpperCase())
 				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Endereço já existente")));	

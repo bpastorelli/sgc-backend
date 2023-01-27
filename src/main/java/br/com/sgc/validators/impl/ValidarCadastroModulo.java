@@ -1,6 +1,7 @@
 package br.com.sgc.validators.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,11 +41,13 @@ public class ValidarCadastroModulo implements Validators<CadastroModuloDto, Atua
 		
 		RegistroException errors = new RegistroException();
 		
-		Modulo modulo = moduloRepository.findByDescricao(x.getDescricao()).get();
+		if(!moduloRepository.findById(id).isPresent())
+			errors.getErros().add(new ErroRegistro("", TITULO, " O módulo não existe"));
 		
-		if(x.getDescricao().toLowerCase().trim().equals(modulo.getDescricao().toLowerCase().trim()) 
-				&& !modulo.getId().equals(id)) {				
-			errors.getErros().add(new ErroRegistro("", TITULO, "Módulo '" + x.getDescricao() + "' já existente para o código " + modulo.getId()));
+		Optional<Modulo> modulo = moduloRepository.findByDescricao(x.getDescricao());
+		if(x.getDescricao().toLowerCase().trim().equals(modulo.get().getDescricao().toLowerCase().trim()) 
+				&& !modulo.get().getId().equals(id)) {				
+			errors.getErros().add(new ErroRegistro("", TITULO, "Módulo '" + x.getDescricao() + "' já existente para o código " + modulo.get().getId()));
 		}
 		
 		if(!errors.getErros().isEmpty())
