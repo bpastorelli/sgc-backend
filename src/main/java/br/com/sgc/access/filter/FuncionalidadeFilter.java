@@ -9,6 +9,8 @@ public class FuncionalidadeFilter {
 
 	private Long id;
 	
+	private Long idModulo;
+	
 	private String descricao;
 	
 	private String pathFuncionalidade;
