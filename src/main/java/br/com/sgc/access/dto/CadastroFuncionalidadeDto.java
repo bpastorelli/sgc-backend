@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class CadastroFuncionalidadeDto {
 	
-	@NotEmpty(message = "O campo id módulo da funcionalidade é obrigatório")
+	@NotNull(message = "O campo id módulo da funcionalidade é obrigatório")
 	private Long idModulo;
 	
 	@NotEmpty(message = "O campo decrição da funcionalidade é obrigatório")

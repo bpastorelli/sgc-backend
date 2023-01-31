@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,8 +49,7 @@ public class FuncionalidadeController extends RegistroExceptionHandler {
 	
 	@PostMapping(value = "/incluirEmMassa")
 	public ResponseEntity<?> cadastrarEmMassa(
-			@Valid @RequestBody List<CadastroFuncionalidadeDto> requestBody, 
-			BindingResult result) throws RegistroException{
+			@Valid @RequestBody List<CadastroFuncionalidadeDto> requestBody) throws RegistroException{
 		
 		log.info("Cadastro de funcionalidades: {}", requestBody.toString());
 		Response<List<GETFuncionalidadeResponseDto>> response = new Response<List<GETFuncionalidadeResponseDto>>();
@@ -66,8 +64,7 @@ public class FuncionalidadeController extends RegistroExceptionHandler {
 	
 	@PostMapping(value = "/incluir")
 	public ResponseEntity<?> cadastrar(
-			@Valid @RequestBody CadastroFuncionalidadeDto requestBody, 
-			BindingResult result) throws RegistroException{
+			@Valid @RequestBody CadastroFuncionalidadeDto requestBody) throws RegistroException{
 		
 		log.info("Cadastro de funcionalidades: {}", requestBody.toString());
 		Response<GETFuncionalidadeResponseDto> response = new Response<GETFuncionalidadeResponseDto>();
