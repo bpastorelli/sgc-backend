@@ -1,7 +1,6 @@
 package br.com.sgc.amqp.producer.impl;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.sgc.VinculoResidenciaAvro;
@@ -12,14 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class VinculoResidenciaKafkaProducerImpl extends KafkaTemplateAbstract<VinculoResidenciaAvro> {
 	
-	private final String topic;
-
-	public VinculoResidenciaKafkaProducerImpl(@Value("${vinculo.topic.name}") String topic, KafkaTemplate<String, VinculoResidenciaAvro> kafkaTemplate) {
-		
-		this.topic = topic;
-		this.kafkaTemplate = kafkaTemplate;
-		
-	}
+	@Value("${vinculo.topic.name}")
+	private String topic;
 	
 	@Override
 	public void producer(VinculoResidenciaAvro dto) {

@@ -1,7 +1,6 @@
 package br.com.sgc.amqp.producer.impl;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.sgc.ProcessoCadastroAvro;
@@ -12,14 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ProcessoCadastroMoradorKafkaProducerImpl extends KafkaTemplateAbstract<ProcessoCadastroAvro> {
 	
-	private final String topic;
-
-	public ProcessoCadastroMoradorKafkaProducerImpl(@Value("${processo.topic.name}") String topic, KafkaTemplate<String, ProcessoCadastroAvro> kafkaTemplate) {
-		
-		this.topic = topic;
-		this.kafkaTemplate = kafkaTemplate;
-		
-	}
+	@Value("${processo.topic.name}")
+	private String topic;
 	
 	@Override
 	public void producer(ProcessoCadastroAvro dto) {
