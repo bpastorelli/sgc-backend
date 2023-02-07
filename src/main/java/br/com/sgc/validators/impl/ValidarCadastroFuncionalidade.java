@@ -53,9 +53,11 @@ public class ValidarCadastroFuncionalidade implements Validators<CadastroFuncion
 			errors.getErros().add(new ErroRegistro("", TITULO, " O funcionalidade não existe"));
 		
 		Optional<Funcionalidade> funcionalidade = funcionalidadeRepository.findByDescricao(x.getDescricao());
-		if(x.getDescricao().toLowerCase().trim().equals(funcionalidade.get().getDescricao().toLowerCase().trim()) 
-				&& !funcionalidade.get().getId().equals(id)) {				
-			errors.getErros().add(new ErroRegistro("", TITULO, "Funcionalidade '" + x.getDescricao() + "' já existente para o código " + funcionalidade.get().getId()));
+		if(!funcionalidade.isEmpty()) {
+			if(x.getDescricao().toLowerCase().trim().equals(funcionalidade.get().getDescricao().toLowerCase().trim()) 
+					&& !funcionalidade.get().getId().equals(id)) {				
+				errors.getErros().add(new ErroRegistro("", TITULO, "Funcionalidade '" + x.getDescricao() + "' já existente para o código " + funcionalidade.get().getId()));
+			}	
 		}
 		
 		if(!errors.getErros().isEmpty())
