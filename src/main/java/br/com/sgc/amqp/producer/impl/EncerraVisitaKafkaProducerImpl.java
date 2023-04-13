@@ -24,4 +24,10 @@ public class EncerraVisitaKafkaProducerImpl extends KafkaTemplateAbstract<Encerr
 		
 	}
 
+	@Override
+	public void producerAsync(EncerraVisitaAvro t) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
