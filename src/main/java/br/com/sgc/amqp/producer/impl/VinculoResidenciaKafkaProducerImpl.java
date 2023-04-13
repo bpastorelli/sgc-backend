@@ -23,6 +23,12 @@ public class VinculoResidenciaKafkaProducerImpl extends KafkaTemplateAbstract<Vi
 		);	
 		
 	}
+
+	@Override
+	public void producerAsync(VinculoResidenciaAvro t) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 

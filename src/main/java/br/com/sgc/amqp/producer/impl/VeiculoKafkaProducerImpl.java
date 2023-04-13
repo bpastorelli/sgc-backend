@@ -23,6 +23,12 @@ public class VeiculoKafkaProducerImpl extends KafkaTemplateAbstract<VeiculoAvro>
 		);	
 		
 	}
+
+	@Override
+	public void producerAsync(VeiculoAvro t) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 

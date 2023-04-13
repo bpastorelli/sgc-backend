@@ -23,6 +23,12 @@ public class ResidenciaKafkaProducerImpl extends KafkaTemplateAbstract<Residenci
 		);	
 		
 	}
+
+	@Override
+	public void producerAsync(ResidenciaAvro t) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 

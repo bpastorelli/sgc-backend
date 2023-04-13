@@ -23,6 +23,12 @@ public class VisitaKafkaProducerImpl extends KafkaTemplateAbstract<VisitaAvro> {
 		);	
 		
 	}
+
+	@Override
+	public void producerAsync(VisitaAvro t) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 

@@ -23,6 +23,12 @@ public class VisitanteKafkaProducerImpl extends KafkaTemplateAbstract<VisitanteA
 		);	
 		
 	}
+
+	@Override
+	public void producerAsync(VisitanteAvro t) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 

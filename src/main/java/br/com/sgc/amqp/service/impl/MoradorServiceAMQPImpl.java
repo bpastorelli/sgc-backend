@@ -51,7 +51,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(moradorMapper.moradorDtoToMoradorAvro(moradorRequestBody));
+		this.amqp.producerAsync(moradorMapper.moradorDtoToMoradorAvro(moradorRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

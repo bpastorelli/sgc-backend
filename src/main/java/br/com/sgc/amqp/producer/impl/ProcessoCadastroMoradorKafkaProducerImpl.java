@@ -23,6 +23,12 @@ public class ProcessoCadastroMoradorKafkaProducerImpl extends KafkaTemplateAbstr
 		);	
 		
 	}
+
+	@Override
+	public void producerAsync(ProcessoCadastroAvro t) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 
