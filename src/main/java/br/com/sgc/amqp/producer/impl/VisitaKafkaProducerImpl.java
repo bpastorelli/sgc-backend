@@ -1,7 +1,10 @@
 package br.com.sgc.amqp.producer.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import br.com.sgc.VisitaAvro;
 import br.com.sgc.amqp.producer.KafkaTemplateAbstract;
@@ -24,9 +27,29 @@ public class VisitaKafkaProducerImpl extends KafkaTemplateAbstract<VisitaAvro> {
 		
 	}
 
+	@Async
 	@Override
-	public void producerAsync(VisitaAvro t) {
-		// TODO Auto-generated method stub
+	public void producerAsync(VisitaAvro dto) {
+		
+		Runnable runnable = () -> kafkaTemplate.send(topic, dto).addCallback(new ListenableFutureCallback<>() {
+
+			@Override
+			public void onSuccess(SendResult<String, VisitaAvro> result) {
+				
+				log.info("Mensagem enviada: " + result.getProducerRecord().value());
+				
+			}
+
+			@Override
+			public void onFailure(Throwable ex) {
+				
+				if(ex != null)
+					log.error(ex.getMessage());
+				
+			}
+
+        });
+	    new Thread(runnable).start();
 		
 	}
 	

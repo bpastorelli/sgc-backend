@@ -52,7 +52,7 @@ public class VisitanteAMQPImpl implements AmqpService<VisitanteDto, AtualizaVisi
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  visitanteRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.visitanteMapper.visitanteDtoToVisitanteAvro(visitanteRequestBody));
+		this.amqp.producerAsync(this.visitanteMapper.visitanteDtoToVisitanteAvro(visitanteRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -83,7 +83,7 @@ public class VisitanteAMQPImpl implements AmqpService<VisitanteDto, AtualizaVisi
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  visitanteRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.visitanteMapper.visitanteDtoToVisitanteAvro(visitanteDto));
+		this.amqp.producerAsync(this.visitanteMapper.visitanteDtoToVisitanteAvro(visitanteDto));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

@@ -52,7 +52,7 @@ public class VeiculoAMQPImpl implements AmqpService<VeiculoDto, AtualizaVeiculoD
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  veiculoRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.veiculoMapper.veiculoDtoToVeiculoAvro(veiculoRequestBody));
+		this.amqp.producerAsync(this.veiculoMapper.veiculoDtoToVeiculoAvro(veiculoRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -81,7 +81,7 @@ public class VeiculoAMQPImpl implements AmqpService<VeiculoDto, AtualizaVeiculoD
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  veiculoRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.veiculoMapper.veiculoDtoToVeiculoAvro(veiculoDto));
+		this.amqp.producerAsync(this.veiculoMapper.veiculoDtoToVeiculoAvro(veiculoDto));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

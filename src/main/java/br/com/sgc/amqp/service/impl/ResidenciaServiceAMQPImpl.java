@@ -52,7 +52,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, Atu
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaRequestBody));
+		this.amqp.producerAsync(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -83,7 +83,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, Atu
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaDto));
+		this.amqp.producerAsync(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaDto));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
