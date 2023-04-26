@@ -9,5 +9,6 @@ public interface AmqpProducer<T> {
 	default void stopThread() {
 		
 		Thread.currentThread().isInterrupted();
+		
 	}
 }		

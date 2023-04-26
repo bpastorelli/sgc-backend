@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,17 +49,25 @@ public class AuthenticationService {
 	
 	public TokenDto atenticar(JwtAuthenticationDto authenticationDto) throws RegistroException {
 		
+		String token = null;
+		
 		this.validar.validarPost(authenticationDto);
-    		
-        Authentication auth = authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(
-                 	authenticationDto.getEmail(),
-                    authenticationDto.getSenha(),
-                    new ArrayList<>()));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-            
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationDto.getEmail());
-        String token = jwtTokenUtil.obterToken(userDetails, auth);
+    	
+		try {
+	        Authentication auth = authenticationManager.authenticate(
+	                new UsernamePasswordAuthenticationToken(
+	                   	authenticationDto.getEmail(),
+	                      authenticationDto.getSenha(),
+	                      new ArrayList<>()));
+	          SecurityContextHolder.getContext().setAuthentication(auth);
+	              
+	          UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationDto.getEmail());
+	          token = jwtTokenUtil.obterToken(userDetails, auth);
+		}catch(AuthenticationException ex) {
+			RegistroException errors = new RegistroException();
+			errors.getErros().add(new ErroRegistro("",TITULO, " Senha inválida!"));
+			throw errors;
+		}
              
      	Optional<Morador> user = this.moradorRepository.findByEmail(authenticationDto.getEmail());
              
@@ -121,7 +130,7 @@ public class AuthenticationService {
 							morador.get());
 			
 		}else {
-			errors.getErros().add(new ErroRegistro("", "Autenticação", " A senha atual está incorreta!"));
+			errors.getErros().add(new ErroRegistro("", TITULO, " A senha atual está incorreta!"));
 		}
 		
 		if(!errors.getErros().isEmpty())

@@ -43,7 +43,7 @@ public class VisitaKafkaProducerImpl extends KafkaTemplateAbstract<VisitaAvro> {
 		
 	}
 
-	@Async("KafkaMsgExecutor")
+	@Async
 	@Override
 	public void producerAsync(VisitaAvro dto) {
 		
@@ -62,7 +62,7 @@ public class VisitaKafkaProducerImpl extends KafkaTemplateAbstract<VisitaAvro> {
 				public void onFailure(Throwable ex) {
 					
 					if(ex != null)
-						log.error(ex.getMessage());
+						log.error("Erro: " + ex.getMessage());
 					
 				}
 
@@ -71,7 +71,7 @@ public class VisitaKafkaProducerImpl extends KafkaTemplateAbstract<VisitaAvro> {
 			
 		}catch(Exception ex) {
 			
-			log.error(ex.getMessage());
+			log.error("Catch Erro: " + ex.getMessage());
 			
 		}finally{
 			log.info("Finalizando a Thread...");
