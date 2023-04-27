@@ -1,7 +1,6 @@
 package br.com.sgc.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GETVeiculoResponseDto implements Serializable {
+public class GETVeiculoSemVisitantesResponseDto implements Serializable {
 	
 
 	private static final long serialVersionUID = 1423232434532327L;
@@ -37,7 +36,5 @@ public class GETVeiculoResponseDto implements Serializable {
 	private Long   ano;
 	
 	private String guide;
-	
-	private List<GETVisitanteSemVeiculosResponseDto> visitantes;
 
 }

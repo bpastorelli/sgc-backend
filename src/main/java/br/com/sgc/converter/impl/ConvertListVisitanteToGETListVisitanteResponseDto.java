@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.sgc.converter.Converter;
-import br.com.sgc.dto.GETVeiculoResponseDto;
+import br.com.sgc.dto.GETVeiculoSemVisitantesResponseDto;
 import br.com.sgc.dto.GETVisitanteResponseDto;
 import br.com.sgc.entities.VinculoVeiculo;
 import br.com.sgc.entities.Visitante;
@@ -26,11 +26,11 @@ public class ConvertListVisitanteToGETListVisitanteResponseDto implements Conver
 		
 		visitantes.forEach(m -> {
 			
-			List<GETVeiculoResponseDto> veiculos = new ArrayList<GETVeiculoResponseDto>();
+			List<GETVeiculoSemVisitantesResponseDto> veiculos = new ArrayList<GETVeiculoSemVisitantesResponseDto>();
 			List<VinculoVeiculo> vinculos = m.getVeiculos();
 			
 			vinculos.forEach(v -> {
-				veiculos.add(this.veiculoMapper.veiculoToGETVeiculoResponseDto(v.getVeiculo()));
+				veiculos.add(this.veiculoMapper.veiculoToGETVeiculoSemVisitantesResponseDto(v.getVeiculo()));
 			});
 			
 			GETVisitanteResponseDto visitante = GETVisitanteResponseDto.builder()
