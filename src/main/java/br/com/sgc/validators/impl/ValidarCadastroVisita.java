@@ -81,7 +81,7 @@ public class ValidarCadastroVisita implements Validators<VisitaDto, EncerraVisit
 		
 		veiculo = veiculoRepository.findByPlaca(t.getPlaca().replace("-", ""));
 		
-		if(!t.getPlaca().equals("") && t.getVeiculoVisita() == null) {
+		if(!t.getPlaca().equals("") && !Optional.ofNullable(t.getVeiculoVisita()).isPresent()) {
 			if(!veiculo.isPresent())
 				errors.getErros().add(new ErroRegistro("", TITULO, " Veiculo não cadastrado. É necessário informar os dados cadastrais do veículo!" ));
 		}
