@@ -45,6 +45,7 @@ public class VisitaQueryRepositoryImpl implements QueryRepository<Visita, Visita
         visitanteJoin_ = entity_.join("visitante", JoinType.INNER);
         
         this.query.where(this.criarFiltros(entity_, filters, builder));
+        this.query.orderBy(builder.asc(visitanteJoin_.get("nome")));
         
         TypedQuery<Visita> typedQuery = manager.createQuery(query);
         

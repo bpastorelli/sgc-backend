@@ -49,10 +49,14 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, Atu
 		
 		this.validator.validarPost(residenciaRequestBody);
 		
+		//Preenche o id da residencia se ela já existir, para fazer apenas vinculo do morador.
+		residenciaRepository.findByCepAndNumeroAndComplemento(residenciaRequestBody.getCep(), residenciaRequestBody.getNumero(), residenciaRequestBody.getComplemento())
+			.ifPresent(r -> residenciaRequestBody.setId(r.getId()));
+		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaRequestBody));
+		this.amqp.producerAsync(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -83,7 +87,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, Atu
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaDto));
+		this.amqp.producerAsync(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaDto));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

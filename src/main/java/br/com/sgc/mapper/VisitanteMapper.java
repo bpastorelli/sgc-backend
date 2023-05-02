@@ -5,6 +5,7 @@ import org.mapstruct.Mapper;
 import br.com.sgc.VisitanteAvro;
 import br.com.sgc.dto.AtualizaVisitanteDto;
 import br.com.sgc.dto.GETVisitanteResponseDto;
+import br.com.sgc.dto.GETVisitanteSemVeiculosResponseDto;
 import br.com.sgc.dto.VisitanteDto;
 import br.com.sgc.entities.Visitante;
 
@@ -18,4 +19,7 @@ public abstract class VisitanteMapper {
 	public abstract VisitanteDto atualizaVisitanteDtoToVisitanteDto(AtualizaVisitanteDto dto);
 	
 	public abstract GETVisitanteResponseDto visitanteToGETVisitanteResponseDto(Visitante visitante);
+	
+	public abstract GETVisitanteSemVeiculosResponseDto visitanteToGETVisitanteSemVeiculosResponseDto(Visitante visitante);
+	
 }

@@ -51,7 +51,7 @@ public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCada
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  processoRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(moradorMapper.processoDtoToProcessoAvro(processoRequestBody));
+		this.amqp.producerAsync(moradorMapper.processoDtoToProcessoAvro(processoRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

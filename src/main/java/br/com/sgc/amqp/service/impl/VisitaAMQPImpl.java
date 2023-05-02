@@ -52,7 +52,7 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto, EncerraVisitaDto> 
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  visitaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.visitaMapper.visitaDtoToVisitaAvro(visitaRequestBody));
+		this.amqp.producerAsync(this.visitaMapper.visitaDtoToVisitaAvro(visitaRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -78,7 +78,7 @@ public class VisitaAMQPImpl implements AmqpService<VisitaDto, EncerraVisitaDto> 
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  visitaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.visitaMapper.visitaToVisitaAvro(visita));
+		this.amqp.producerAsync(this.visitaMapper.visitaToVisitaAvro(visita));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

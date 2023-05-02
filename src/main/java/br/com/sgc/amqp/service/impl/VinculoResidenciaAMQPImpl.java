@@ -51,7 +51,7 @@ public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaD
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  vinculoRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producer(this.vinculoMapper.vinculoResidenciaDtoToVinculoResidenciaAvro(vinculoRequestBody));
+		this.amqp.producerAsync(this.vinculoMapper.vinculoResidenciaDtoToVinculoResidenciaAvro(vinculoRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

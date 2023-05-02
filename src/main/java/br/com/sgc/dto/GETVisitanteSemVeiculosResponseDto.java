@@ -1,7 +1,5 @@
 package br.com.sgc.dto;
 
-import java.util.List;
-
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -16,7 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GETVisitanteResponseDto {
+public class GETVisitanteSemVeiculosResponseDto {
 	
 	private Long   id;
 	
@@ -56,7 +54,6 @@ public class GETVisitanteResponseDto {
 	
 	@Transient
 	private String guide;
-	
-	private List<GETVeiculoSemVisitantesResponseDto> veiculos;
+
 
 }

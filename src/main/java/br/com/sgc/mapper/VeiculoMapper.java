@@ -7,6 +7,7 @@ import org.mapstruct.Named;
 import br.com.sgc.VeiculoAvro;
 import br.com.sgc.dto.AtualizaVeiculoDto;
 import br.com.sgc.dto.GETVeiculoResponseDto;
+import br.com.sgc.dto.GETVeiculoSemVisitantesResponseDto;
 import br.com.sgc.dto.VeiculoDto;
 import br.com.sgc.entities.Veiculo;
 import br.com.sgc.utils.Utils;
@@ -24,6 +25,8 @@ public interface VeiculoMapper {
 	public abstract VeiculoDto atualizaVeiculoDtoToVeiculoDto(AtualizaVeiculoDto dto);
 	
 	public abstract VeiculoDto veiculoToVeiculoDto(Veiculo veiculo);
+	
+	public abstract GETVeiculoSemVisitantesResponseDto veiculoToGETVeiculoSemVisitantesResponseDto(Veiculo veiculo);
 	
 	@Named("FormatarPlaca")
 	default String formatarPlaca(String placa) {
