@@ -37,6 +37,7 @@ public class VisitanteQueryRepositoryImpl implements QueryRepository<Visitante, 
         entity_ = query.from(Visitante.class);
         
         this.query.where(this.criarFiltros(entity_, filters, builder));
+        this.query.orderBy(builder.asc(entity_.get("nome")));
         
         TypedQuery<Visitante> typedQuery = manager.createQuery(query);
         
