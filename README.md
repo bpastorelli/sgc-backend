@@ -8,3 +8,8 @@ sudo docker build -f Dockerfile -t sgc_producer .
 <b>Comando para subir um arquivo docker-compose</b>
 
 <diretorio do arquivo> sudo docker-compose up
+
+<b>Comando para alterar o endereço de IP do arquivo de configuração do docker</b>
+
+Exemplo:
+echo nameserver 8.8.8.8 | sudo tee /etc/resolv.conf
