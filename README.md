@@ -13,3 +13,7 @@ sudo docker build -f Dockerfile -t sgc_producer .
 
 Exemplo:
 echo nameserver 8.8.8.8 | sudo tee /etc/resolv.conf
+
+<b>Instalação do docker via WSL</>
+
+https://educoutinho.com.br/windows/instalando-docker-no-wsl/
