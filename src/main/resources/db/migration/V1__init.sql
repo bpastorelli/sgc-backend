@@ -67,7 +67,9 @@ CREATE TABLE `visita` (
   `placa` varchar(8) NULL,	
   `posicao` int(1) NOT NULL,
   `guide` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK46i4k5vl8wah7feutye9kbpi57` FOREIGN KEY (`residencia_id`) REFERENCES `residencia` (`id`),
+  CONSTRAINT `FK46i4k5vl8wah7feutye9kbpi58` FOREIGN KEY (`visitante_id`) REFERENCES `visitante` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `veiculo` (
@@ -177,14 +179,6 @@ ALTER TABLE `vinculo_residencia`
   
 ALTER TABLE `vinculo_residencia`
   ADD CONSTRAINT `FK46i4k5vl8wah7feutye9kbpi56` FOREIGN KEY (`morador_id`) REFERENCES `morador` (`id`);
-  
- -- Constraints for table `visita`
---
-ALTER TABLE `visita`
-  ADD CONSTRAINT `FK46i4k5vl8wah7feutye9kbpi57` FOREIGN KEY (`residencia_id`) REFERENCES `residencia` (`id`);
-  --
-ALTER TABLE `visita`
-  ADD CONSTRAINT `FK46i4k5vl8wah7feutye9kbpi58` FOREIGN KEY (`visitante_id`) REFERENCES `visitante` (`id`);
   
 ALTER TABLE `vinculo_veiculo`
   ADD CONSTRAINT `FK46i4k5vl8wah7feutye9kbpi60` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculo` (`id`);
