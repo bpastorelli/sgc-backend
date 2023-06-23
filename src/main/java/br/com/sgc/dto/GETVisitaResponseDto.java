@@ -48,7 +48,7 @@ public class GETVisitaResponseDto implements Serializable {
 	
 	private Integer posicao;
 	
-	private GETVeiculoResponseDto veiculo;
+	private GETVeiculoSemVisitantesResponseDto veiculo;
 	
 	private String guide;
 	
