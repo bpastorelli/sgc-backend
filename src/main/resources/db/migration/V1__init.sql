@@ -1,7 +1,7 @@
 USE sgc_db;
 
 CREATE TABLE `residencia` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `endereco` varchar(100) NOT NULL,
   `numero` bigint(20) NOT NULL,
   `complemento` varchar(50) NULL,
@@ -16,7 +16,7 @@ CREATE TABLE `residencia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `morador` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `nome` varchar(255) NOT NULL,
   `email` varchar(50) NOT NULL,
   `cpf` varchar(11) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE `morador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `visitante` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `nome` varchar(255) NOT NULL,
   `cpf` varchar(11) NOT NULL,
   `rg` varchar(11) NOT NULL,
@@ -57,13 +57,13 @@ CREATE TABLE `visitante` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `visita` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `visitante_id` bigint(20) NOT NULL,
   `residencia_id` bigint(20) NOT NULL,
   `data_entrada` datetime NOT NULL,
   `hora_entrada` time NOT NULL,
-  `data_saida` datetime NULL,
-  `hora_saida` time NULL,
+  `data_saida` datetime,
+  `hora_saida` time,
   `placa` varchar(8) NULL,	
   `posicao` int(1) NOT NULL,
   `guide` varchar(100) NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE `visita` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `veiculo` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `placa` varchar(8) NOT NULL,
   `marca` varchar(50) NULL,
   `modelo` varchar(100) NULL,
@@ -88,7 +88,7 @@ CREATE TABLE `veiculo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `lancamento` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `morador_id` bigint(20) NOT NULL,
   `data_pagamento` date NOT NULL,
   `mes_referencia` varchar(7),
@@ -102,7 +102,7 @@ CREATE TABLE `lancamento` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `vinculo_residencia` (
-	`id` bigint(20) NOT NULL AUTO_INCREMENT,
+	`id` bigint(20) NOT NULL,
 	`morador_id` bigint(20) DEFAULT NULL,
 	`residencia_id` bigint(20) DEFAULT NULL,
 	`data_vinculo` datetime NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE `vinculo_residencia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `vinculo_veiculo` (
-	`id` bigint(20) NOT NULL AUTO_INCREMENT,
+	`id` bigint(20) NOT NULL,
 	`veiculo_id` bigint(20) NOT NULL,
 	`visitante_id` bigint(20) NOT NULL,
 	`data_vinculo` datetime NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE `vinculo_veiculo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `funcionalidade` (
-	`id` bigint(20) NOT NULL AUTO_INCREMENT,
+	`id` bigint(20) NOT NULL,
 	`id_modulo` bigint(20) NOT NULL,
 	`descricao` varchar(30)	NOT NULL,
 	`path_funcionalidade` varchar(40) NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE `funcionalidade` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `acesso_funcionalidade` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `id_usuario` bigint(20) NOT NULL,
   `id_modulo` bigint(20) NOT NULL,
   `id_funcionalidade` bigint(20) NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE `acesso_funcionalidade` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `modulo` (
-	`id` bigint(20) NOT NULL AUTO_INCREMENT,
+	`id` bigint(20) NOT NULL,
 	`descricao` varchar(30) NOT NULL,
 	`path_modulo` varchar(40) NOT NULL,
 	`posicao` bigint(10) NOT NULL,
@@ -152,7 +152,7 @@ CREATE TABLE `modulo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; 
 
 CREATE TABLE `acesso_modulo` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `id_usuario` bigint(20) NOT NULL,
   `id_modulo` bigint(20) NOT NULL,
   `acesso` tinyint(1) NOT NULL,
