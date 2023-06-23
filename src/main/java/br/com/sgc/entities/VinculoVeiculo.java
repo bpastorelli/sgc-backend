@@ -29,7 +29,7 @@ public class VinculoVeiculo implements Serializable {
 	private static final long serialVersionUID = 3960436649365666214L;
 
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long      id;
     
     @Column(name = "data_vinculo", nullable = false)

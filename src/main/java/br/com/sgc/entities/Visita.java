@@ -35,7 +35,7 @@ public class Visita implements Serializable {
 	private static final long serialVersionUID = -5754246207015712520L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long       id;
 	
 	@OneToOne(fetch = FetchType.EAGER)

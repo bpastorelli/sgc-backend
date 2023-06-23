@@ -32,7 +32,7 @@ public class Veiculo implements Serializable {
 	private static final long serialVersionUID = 3960436649365666213L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long   id;
 	
 	@Column(name = "placa", nullable = false)
