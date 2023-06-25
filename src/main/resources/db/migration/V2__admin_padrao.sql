@@ -88,5 +88,3 @@ INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcion
 INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 2, 9, true, CURRENT_DATE(), 1);
 
 INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 2, 10, true, CURRENT_DATE(), 1);
-
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 6, 11, true, CURRENT_DATE(), 1);
