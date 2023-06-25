@@ -45,6 +45,8 @@ INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalida
 
 INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Contribuições'), 'Consultar Contribuições', 'contribuicoes', 1);
 
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Contribuições'), 'Minhas Contribuições', 'minhascontribuicoes', 1);
+
 INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Visitas'), 'Consultar Visitas', 'visitas', 1);
 
 INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Veículos'), 'Cadastar Veículo', 'veiculo/create', 1);
