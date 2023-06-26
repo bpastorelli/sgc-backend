@@ -17,7 +17,6 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { UppercaseInputComponent } from './shared/input/uppercaseInput.component';
 
 import { appRoutingModule, ROUTES } from './app.routing';
 import { LoginComponent } from './login/login.component';
@@ -81,7 +80,6 @@ import { VisitasService } from './visitantes/visitas/visitas.service';
     SummaryVisitaComponent,
     VeiculosComponent,
     VeiculoComponent,
-    UppercaseInputComponent,
     CallbackPipe,
     ModulosComponent,
     ModuloComponent,
