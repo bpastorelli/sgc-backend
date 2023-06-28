@@ -44,7 +44,7 @@ public class ConvertListVisitaToGETListVisitaResponseDto implements Converter<Li
 					.placa(Utils.formatPlaca(m.getPlaca()))
 					.posicao(m.getPosicao())
 					.veiculo(!m.getPlaca().isBlank() ? 
-							veiculoMapper.veiculoToGETVeiculoResponseDto(
+							veiculoMapper.veiculoToGETVeiculoSemVisitantesResponseDto(
 									m.getVisitante().getVeiculos()
 										.stream()
 										.filter(p -> p.getVeiculo().getPlaca().trim().equals(m.getPlaca().trim()))

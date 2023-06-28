@@ -1,6 +1,7 @@
 ---
 version: '3'
 services:
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
     hostname: zookeeper
@@ -143,6 +144,20 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      
+  angular-app:
+    image: angular_app
+    build: ./web
+    environment:
+       NODE_ENV: production
+    ports: 
+      - "8000:80"
+    networks:
+      - app-net
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./templates:/app/templates
  
 networks:
   app-net:    

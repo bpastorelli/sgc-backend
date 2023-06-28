@@ -25,7 +25,7 @@ public class ValidarAuthentication implements Validators<JwtAuthenticationDto, A
 		
 		RegistroException errors = new RegistroException();
 		
-     	Optional<Morador> user = this.moradorRepository.findByEmail(dto.getEmail());
+     	Optional<Morador> user = this.moradorRepository.findByEmailAndPosicao(dto.getEmail(), 1L);
      	
     	if(!user.isPresent())
     		errors.getErros().add(new ErroRegistro("", "Autenticação", " Usuário não encontrado!"));

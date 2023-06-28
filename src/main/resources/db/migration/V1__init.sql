@@ -339,5 +339,3 @@ ALTER TABLE `vinculo_veiculo`
   
  ALTER TABLE `acesso_modulo`
   ADD CONSTRAINT `FK46i4k5vl8wah7feutye9kbpi67` FOREIGN KEY (`id_usuario`) REFERENCES `morador` (`id`);
-
- 

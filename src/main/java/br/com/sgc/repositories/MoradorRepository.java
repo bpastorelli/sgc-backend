@@ -24,6 +24,8 @@ public interface MoradorRepository extends JpaRepository<Morador, Long> {
 	
 	Optional<Morador> findByEmail(String email);
 	
+	Optional<Morador> findByEmailAndPosicao(String email, Long posicao);
+	
 	Optional<Morador> findByGuide(String guide);
 	
 	Optional<Morador> findByEmailAndSenha(String username, String senha);

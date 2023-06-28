@@ -23,7 +23,7 @@ public class Lancamento implements Serializable {
 	private static final long serialVersionUID = 6524560251526772839L;
 
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name = "morador_id", nullable = false)
