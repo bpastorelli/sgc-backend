@@ -1,6 +1,7 @@
 package br.com.sgc.controllers;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,11 @@ public class ContribuicaoController {
 	private ContribuicaoService service;
 	
 	@PostMapping(value = "/import")
-	public ResponseEntity<?> importacaoContribuicao(@RequestParam("file") MultipartFile file) throws RegistroException, IOException{
+	public ResponseEntity<?> importacaoContribuicao(@RequestParam("file") MultipartFile file) throws RegistroException, IOException, InterruptedException, ExecutionException{
 		
 		try {
 			
-			return ResponseEntity.ok(this.service.saveContribuicoes(file));
+			return ResponseEntity.ok().body(this.service.saveContribuicoes(file).get());
 			
 		} catch (RegistroException e) {
 			

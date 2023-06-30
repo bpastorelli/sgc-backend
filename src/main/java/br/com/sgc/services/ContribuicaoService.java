@@ -27,6 +27,7 @@ import br.com.sgc.entities.Morador;
 import br.com.sgc.entities.Residencia;
 import br.com.sgc.entities.VinculoResidencia;
 import br.com.sgc.enums.DataTypeEnum;
+import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.repositories.LancamentoRepository;
 import br.com.sgc.repositories.MoradorRepository;
@@ -80,7 +81,7 @@ public class ContribuicaoService {
 	    List<Lancamento> lancamentos = this.prepararDadosImportacao(file);
 	    
 		if(this.errorsList.size() > 0) {
-			this.errorsList.forEach(error -> this.addError(error));
+			this.errorsList.forEach(erro -> errors.getErros().add(new ErroRegistro("","", erro)));
 			throw errors;
 		}
 		
@@ -92,7 +93,7 @@ public class ContribuicaoService {
 
     }
     
-	private List<Lancamento> prepararDadosImportacao(MultipartFile file) throws IOException{
+	private List<Lancamento> prepararDadosImportacao(MultipartFile file) throws RegistroException, IOException{
 		
 		this.errorsList = new ArrayList<String>();
 		
@@ -229,7 +230,6 @@ public class ContribuicaoService {
 		if(!FilenameUtils.getExtension(file.getOriginalFilename()).equals("xlsx") 
 				&& !FilenameUtils.getExtension(file.getOriginalFilename()).equals("xls"))
 			this.addError("Formato de arquivo inválido. Formatos suportados: .xlsx e .xls");
-		
 		
 		//Se não houver erro de tipo de arquivo, inicia a preparação
 		if(this.errorsList.size() == 0) {			
