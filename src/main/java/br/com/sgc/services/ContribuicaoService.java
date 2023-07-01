@@ -2,10 +2,11 @@ package br.com.sgc.services;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -68,7 +69,7 @@ public class ContribuicaoService {
 	private static DecimalFormat df2 = new DecimalFormat("#,###.00");
     
     @Async
-    public CompletableFuture<List<LancamentoImportResponseDto>> saveContribuicoes(final MultipartFile file) throws RegistroException, IOException {
+    public CompletableFuture<List<LancamentoImportResponseDto>> processarContribuicoes(final MultipartFile file) throws RegistroException, IOException {
         final long start = System.currentTimeMillis();
 
         RegistroException errors = new RegistroException();
@@ -109,7 +110,7 @@ public class ContribuicaoService {
 			if(!ValidaCPF.isCPF(l.getCpf()))
 				this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | CPF inválido: " + l.getCpf() + ".");
 			
-			if(l.getDataPagamento().compareTo(new Date()) > 0)
+			if(l.getDataPagamento().compareTo(LocalDateTime.now()) > 0)
 				this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | Não é possível realizar um lançamento para uma data futura (" + Utils.dateFormat(l.getDataPagamento(),"dd/MM/yyyy") + ").");
 			
 			//Busca o morador a partir do cpf do arquivo .xls
@@ -140,7 +141,7 @@ public class ContribuicaoService {
 					if(lancamentoList.stream()
 							.filter(p -> p.getCpf().trim().equals(l.getCpf().trim()))
 							.filter(x -> x.getValor().equals(l.getValor()))
-							.filter(y -> Utils.convertToLocalDate(y.getDataPagamento()).equals(Utils.convertToLocalDate(l.getDataPagamento())))
+							.filter(y -> y.getDataPagamento().equals(l.getDataPagamento()))
 							.count() > 1) {
 						
 						this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | O lançamento para o CPF " + l.getCpf() + " no valor de " + l.getValor() + " está duplicado.");
@@ -152,7 +153,7 @@ public class ContribuicaoService {
 						.filter(a -> a.getMoradorId().equals(morador.get().getId()))
 						.filter(x -> (x.getValor()).setScale(2, BigDecimal.ROUND_HALF_EVEN)
 								.equals(l.getValor().setScale(2, BigDecimal.ROUND_HALF_EVEN)))
-						.filter(y -> Utils.convertToLocalDate(y.getDataPagamento()).equals(Utils.convertToLocalDate(l.getDataPagamento())))
+						.filter(y -> y.getDataPagamento().equals(l.getDataPagamento()))
 						.count() > 0) {
 					
 					this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | O lançamento para o CPF " + l.getCpf() + " no valor de " + l.getValor() + " já existe na base de dados.");
@@ -169,7 +170,7 @@ public class ContribuicaoService {
 					lancamento.setDataPagamento(l.getDataPagamento());
 					lancamento.setValor(l.getValor());
 					lancamento.setDocumento(l.getDocumento());
-					lancamento.setPeriodo(l.getDataPagamento().getMonth() + "/" + l.getDataPagamento().getYear());
+					lancamento.setPeriodo(l.getDataPagamento().getMonth().getValue() + "/" + l.getDataPagamento().getYear());
 					lancamento.setResidenciaId(vinculo.isPresent() ? vinculo.get().getResidencia().getId() : 0);
 					
 					listPreparada.add(lancamento);
@@ -248,7 +249,7 @@ public class ContribuicaoService {
 			    		
 			    		LancamentoDto lanca = new LancamentoDto();
 			    		lanca.setCpf(WorkbookUtils.<String>getCellValue(i, 0, worksheet, DataTypeEnum.CPF).replace(".", "").replace("-", ""));
-			    		lanca.setDataPagamento(WorkbookUtils.<Date>getCellValue(i, 1, worksheet, DataTypeEnum.DATE));
+			    		lanca.setDataPagamento(WorkbookUtils.<LocalDateTime>getCellValue(i, 1, worksheet, DataTypeEnum.DATE));
 			    		lanca.setValor(WorkbookUtils.getCellValue(i, 2, worksheet, DataTypeEnum.BIG_DECIMAL));
 			    		lanca.setDocumento(WorkbookUtils.getCellValue(i, 3, worksheet, DataTypeEnum.STRING));
 			    		

@@ -27,7 +27,7 @@ public class WorkbookUtils {
 					value = (T)BigDecimal.valueOf(row.getCell(col).getNumericCellValue());
 					break;
 				case DATE:
-					value = (T)row.getCell(col).getDateCellValue();
+					value = (T)row.getCell(col).getLocalDateTimeCellValue();
 					break;
 				case CPF:
 					value = (T)Long.valueOf((long)row.getCell(col).getNumericCellValue()).toString();
