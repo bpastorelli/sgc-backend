@@ -1,7 +1,7 @@
 package br.com.sgc.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -16,7 +16,7 @@ public class LancamentoDto {
 	private String cpf;
 	
 	@NotEmpty(message = "O campo data pagamento é obrigatório.")
-	private LocalDateTime dataPagamento;
+	private LocalDate dataPagamento;
 	
 	private String documento;
 	

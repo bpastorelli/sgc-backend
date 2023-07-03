@@ -65,7 +65,7 @@ public class Residencia implements Serializable {
 	@Column(name = "data_atualizacao", nullable = false)
 	private Date   dataAtualizacao;
 	
-	@OneToMany(mappedBy = "residenciaId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "residencia", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Lancamento> lancamentos;
 	
 	@OneToMany(mappedBy = "residencia", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

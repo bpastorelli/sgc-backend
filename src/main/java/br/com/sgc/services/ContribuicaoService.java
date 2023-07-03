@@ -2,9 +2,8 @@ package br.com.sgc.services;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -110,7 +109,7 @@ public class ContribuicaoService {
 			if(!ValidaCPF.isCPF(l.getCpf()))
 				this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | CPF inválido: " + l.getCpf() + ".");
 			
-			if(l.getDataPagamento().compareTo(LocalDateTime.now()) > 0)
+			if(l.getDataPagamento().compareTo(LocalDate.now()) > 0)
 				this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | Não é possível realizar um lançamento para uma data futura (" + Utils.dateFormat(l.getDataPagamento(),"dd/MM/yyyy") + ").");
 			
 			//Busca o morador a partir do cpf do arquivo .xls
@@ -150,7 +149,7 @@ public class ContribuicaoService {
 				
 				//Valida se existem lançamentos duplicados na base dados
 				if(lancamentosBase.stream()						
-						.filter(a -> a.getMoradorId().equals(morador.get().getId()))
+						.filter(a -> a.getMorador().equals(morador.get()))
 						.filter(x -> (x.getValor()).setScale(2, BigDecimal.ROUND_HALF_EVEN)
 								.equals(l.getValor().setScale(2, BigDecimal.ROUND_HALF_EVEN)))
 						.filter(y -> y.getDataPagamento().equals(l.getDataPagamento()))
@@ -166,12 +165,12 @@ public class ContribuicaoService {
 				if(this.errorsList.size() == 0){
 					
 					Lancamento lancamento = new Lancamento();
-					lancamento.setMoradorId(morador.get().getId());
+					lancamento.setMorador(morador.get());
 					lancamento.setDataPagamento(l.getDataPagamento());
 					lancamento.setValor(l.getValor());
 					lancamento.setDocumento(l.getDocumento());
 					lancamento.setPeriodo(l.getDataPagamento().getMonth().getValue() + "/" + l.getDataPagamento().getYear());
-					lancamento.setResidenciaId(vinculo.isPresent() ? vinculo.get().getResidencia().getId() : 0);
+					lancamento.setResidencia(vinculo.isPresent() ? vinculo.get().getResidencia() : null);
 					
 					listPreparada.add(lancamento);
 					
@@ -197,11 +196,11 @@ public class ContribuicaoService {
 		lancamentos.forEach(l -> {
 			
 			Optional<Morador> morador = moradores.stream()
-					.filter(m -> m.getId().equals(l.getMoradorId()))
+					.filter(m -> m.getId().equals(l.getMorador().getId()))
 					.findFirst();
 			
 			Optional<Residencia> residencia = residencias.stream()
-					.filter(r -> r.getId().equals(l.getResidenciaId()))
+					.filter(r -> r.getId().equals(l.getResidencia().getId()))
 					.findFirst();
 			
 			LancamentoImportResponseDto item = new LancamentoImportResponseDto();
@@ -249,7 +248,7 @@ public class ContribuicaoService {
 			    		
 			    		LancamentoDto lanca = new LancamentoDto();
 			    		lanca.setCpf(WorkbookUtils.<String>getCellValue(i, 0, worksheet, DataTypeEnum.CPF).replace(".", "").replace("-", ""));
-			    		lanca.setDataPagamento(WorkbookUtils.<LocalDateTime>getCellValue(i, 1, worksheet, DataTypeEnum.DATE));
+			    		lanca.setDataPagamento(WorkbookUtils.<LocalDate>getCellValue(i, 1, worksheet, DataTypeEnum.DATE));
 			    		lanca.setValor(WorkbookUtils.getCellValue(i, 2, worksheet, DataTypeEnum.BIG_DECIMAL));
 			    		lanca.setDocumento(WorkbookUtils.getCellValue(i, 3, worksheet, DataTypeEnum.STRING));
 			    		

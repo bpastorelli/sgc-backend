@@ -1,6 +1,7 @@
 package br.com.sgc.utils;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
 
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -27,7 +28,7 @@ public class WorkbookUtils {
 					value = (T)BigDecimal.valueOf(row.getCell(col).getNumericCellValue());
 					break;
 				case DATE:
-					value = (T)row.getCell(col).getLocalDateTimeCellValue();
+					value = (T)row.getCell(col).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 					break;
 				case CPF:
 					value = (T)Long.valueOf((long)row.getCell(col).getNumericCellValue()).toString();
