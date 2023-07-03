@@ -3,9 +3,9 @@
   <!--Inicio Form de Edição-->
   <section *ngIf="!create" class="invoice" >
 
-      <div *ngIf="errorMessage" class="alert alert-warning">
-        <strong>Atenção! </strong>{{ errorMessage }}
-      </div>
+    <div *ngFor="let erro of erros" class="alert alert-warning">
+      <strong>Atenção! </strong>{{ erro.detalhe }}
+    </div>
 
       <form #formEdit="ngForm" novalidate *ngFor="let veiculo of veiculos" >
 
@@ -140,8 +140,8 @@
 
     <section *ngIf="create" class="invoice">
 
-      <div *ngIf="errorMessage" class="alert alert-warning">
-        <strong>Atenção! </strong>{{ errorMessage }}
+      <div *ngFor="let erro of erros" class="alert alert-warning">
+        <strong>Atenção! </strong>{{ erro.detalhe }}
       </div>
 
         <form #formCreate="ngForm" novalidate>
