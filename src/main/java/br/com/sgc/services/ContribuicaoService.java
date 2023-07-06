@@ -22,13 +22,16 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.sgc.commons.ValidaCPF;
 import br.com.sgc.dto.LancamentoDto;
 import br.com.sgc.dto.LancamentoImportResponseDto;
+import br.com.sgc.entities.HistoricoImportacao;
 import br.com.sgc.entities.Lancamento;
 import br.com.sgc.entities.Morador;
 import br.com.sgc.entities.Residencia;
 import br.com.sgc.entities.VinculoResidencia;
 import br.com.sgc.enums.DataTypeEnum;
+import br.com.sgc.enums.SituacaoEnum;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.repositories.HistoricoImportacaoRepository;
 import br.com.sgc.repositories.LancamentoRepository;
 import br.com.sgc.repositories.MoradorRepository;
 import br.com.sgc.repositories.ResidenciaRepository;
@@ -41,8 +44,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ContribuicaoService {
 	
+	private HistoricoImportacao historico;
+	
 	@Autowired
 	private MoradorRepository moradorRepository;
+	
+	@Autowired
+	private HistoricoImportacaoRepository historicoRepository;
 	
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
@@ -70,11 +78,16 @@ public class ContribuicaoService {
     @Async
     public CompletableFuture<List<LancamentoImportResponseDto>> processarContribuicoes(final MultipartFile file) throws RegistroException, IOException {
         final long start = System.currentTimeMillis();
-
+        
+        log.info("Iniciando o processamento de importação {}", file.getName() );
+        
+		this.salvarHistorico(file.getName(), SituacaoEnum.IMPORTANDO);
+        
         RegistroException errors = new RegistroException();
         
 		if(file.isEmpty()) {
 			this.addError("Nenhum arquivo selecionado para importação.");
+			this.salvarHistorico(file.getName(), SituacaoEnum.FALHA);
 			throw errors;
 		}
 		
@@ -82,18 +95,25 @@ public class ContribuicaoService {
 	    
 		if(this.errorsList.size() > 0) {
 			this.errorsList.forEach(erro -> errors.getErros().add(new ErroRegistro("","", erro)));
+			this.salvarHistorico(file.getName(), SituacaoEnum.FALHA);
 			throw errors;
 		}
 		
 		log.info("Elapsed time: {}", (System.currentTimeMillis() - start));
-	    
+		
 		lancamentos = this.lancamentoRepository.saveAll(lancamentos);
+		
+		log.info("Finalizando o processamento de importação {}", file.getName() );
+		
+		this.salvarHistorico(file.getName(), SituacaoEnum.CONCLUIDO);
 		
 	    return CompletableFuture.completedFuture(this.montaResponseImportacao(lancamentos)); 
 
     }
     
 	private List<Lancamento> prepararDadosImportacao(MultipartFile file) throws RegistroException, IOException{
+		
+		log.info("Realizando a leitura do arquivo {}", file.getName());
 		
 		this.errorsList = new ArrayList<String>();
 		
@@ -104,6 +124,8 @@ public class ContribuicaoService {
 			this.loadBases();
 	    
 		lancamentoList.forEach(l -> {
+			
+			log.info("Validando os dados...");
 			
 			//Valida o CPF
 			if(!ValidaCPF.isCPF(l.getCpf()))
@@ -191,6 +213,8 @@ public class ContribuicaoService {
 	//Monta o reponse da Importação do arquivo xlsx ou xls
 	private List<LancamentoImportResponseDto> montaResponseImportacao(List<Lancamento> lancamentos) {
 		
+		log.info("Montando o response do processamento...");
+		
 		List<LancamentoImportResponseDto> responseList = new ArrayList<LancamentoImportResponseDto>();
 		
 		lancamentos.forEach(l -> {
@@ -224,6 +248,8 @@ public class ContribuicaoService {
     	
 	//Lê o aquivo de importação e trata os dados para LancamentoDto
 	private List<LancamentoDto> getDataFromFile(MultipartFile file) throws IOException{
+		
+		log.info("Extraindo dados do arquivo {}...", file.getName());
 		
 		List<LancamentoDto> lancamentoList = new ArrayList<LancamentoDto>();
 		
@@ -305,6 +331,18 @@ public class ContribuicaoService {
 		
 		if(!this.errorsList.contains(msg))
 			this.errorsList.add(msg);
+		
+	}
+	
+	private void salvarHistorico(String file, SituacaoEnum situacao) {
+		
+		if(this.historico.getId() == null) {
+			this.historico.setNomeArquivo(file);
+			this.historico.setSituacao(situacao);			
+		}else
+			this.historico.setSituacao(situacao);
+		
+		this.historico = this.historicoRepository.save(historico);
 		
 	}
 
