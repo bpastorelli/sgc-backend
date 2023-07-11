@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import org.apache.commons.io.FilenameUtils;
@@ -44,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ContribuicaoService {
 	
-	private HistoricoImportacao historico;
+	private HistoricoImportacao historico = new HistoricoImportacao();
 	
 	@Autowired
 	private MoradorRepository moradorRepository;
@@ -74,14 +75,16 @@ public class ContribuicaoService {
 	private XSSFWorkbook workbook;
 	
 	private static DecimalFormat df2 = new DecimalFormat("#,###.00");
+	
+	private static int PAGE_SIZE = 1000;
     
     @Async
     public CompletableFuture<List<LancamentoImportResponseDto>> processarContribuicoes(final MultipartFile file) throws RegistroException, IOException {
         final long start = System.currentTimeMillis();
         
-        log.info("Iniciando o processamento de importação {}", file.getName() );
+        log.info("Iniciando o processamento de importação {}", file.getOriginalFilename());
         
-		this.salvarHistorico(file.getName(), SituacaoEnum.IMPORTANDO);
+		this.salvarHistorico(file.getOriginalFilename(), SituacaoEnum.INICIANDO);
         
         RegistroException errors = new RegistroException();
         
@@ -101,11 +104,21 @@ public class ContribuicaoService {
 		
 		log.info("Elapsed time: {}", (System.currentTimeMillis() - start));
 		
-		lancamentos = this.lancamentoRepository.saveAll(lancamentos);
+		this.salvarHistorico(file.getOriginalFilename(), SituacaoEnum.IMPORTANDO);
+		
+		Double pages = (double) lancamentos.size() / PAGE_SIZE;
+		
+		int page;
+		for(page = 1; page <= Math.round(pages); page++) {
+			log.info("Salvando página: {}...", page);
+			this.lancamentoRepository.saveAll(Utils.getPage(lancamentos, page, PAGE_SIZE));
+		}
 		
 		log.info("Finalizando o processamento de importação {}", file.getName() );
 		
 		this.salvarHistorico(file.getName(), SituacaoEnum.CONCLUIDO);
+		
+		log.info("Processamento finalizado com {} registros inseridos.", lancamentos.size());
 		
 	    return CompletableFuture.completedFuture(this.montaResponseImportacao(lancamentos)); 
 
@@ -133,26 +146,27 @@ public class ContribuicaoService {
 			
 			if(l.getDataPagamento().compareTo(LocalDate.now()) > 0)
 				this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | Não é possível realizar um lançamento para uma data futura (" + Utils.dateFormat(l.getDataPagamento(),"dd/MM/yyyy") + ").");
-			
+
 			//Busca o morador a partir do cpf do arquivo .xls
 			Optional<Morador> morador = moradores.stream()
 							.filter(m -> m.getCpf().equals(l.getCpf()))
 							.findFirst();
-			
-			//Verifica se o morador está ativo
-			if(morador.get().getPosicao() == 0)
-				this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | O morador " + morador.get().getNome() + " está inativo.");
-			
-			
-			Optional<VinculoResidencia> vinculo = this.vinculos.stream()
-							.filter(v -> v.getMorador().getId().equals(morador.get().getId()))
-							.findFirst();
-			
-			if(!vinculo.isPresent())
-				this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | O morador " + morador.get().getNome() + " não está vinculado a uma residência.");
 				
 			//Caso o morador exista, inicia a validação dos dados
 			if(morador.isPresent()) {	
+
+				//Verifica se o morador está ativo
+				if(morador.get().getPosicao() == 0)
+					this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | O morador " + morador.get().getNome() + " está inativo.");
+				
+				
+				Optional<VinculoResidencia> vinculo = this.vinculos.stream()
+								.filter(v -> v.getMorador().getId().equals(morador.get().getId()))
+								.findFirst();
+				
+				if(!vinculo.isPresent())
+					this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | O morador " + morador.get().getNome() + " não está vinculado a uma residência.");
+
 				
 				//Teste se o valor é numerico
 				if(!Utils.isNumeric(l.getValor().toString())) {
@@ -334,10 +348,12 @@ public class ContribuicaoService {
 		
 	}
 	
+	@Async
 	private void salvarHistorico(String file, SituacaoEnum situacao) {
 		
-		if(this.historico.getId() == null) {
+		if(!Optional.ofNullable(this.historico.getId()).isPresent()) {
 			this.historico.setNomeArquivo(file);
+			this.historico.setIdRequisicao(UUID.randomUUID().toString());
 			this.historico.setSituacao(situacao);			
 		}else
 			this.historico.setSituacao(situacao);

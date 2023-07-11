@@ -140,8 +140,8 @@ CREATE TABLE `funcionalidade` (
 
 CREATE TABLE `historico_importacao` (
   `id` bigint(20) primary KEY AUTO_INCREMENT,
-  `id_requisicao` varchar(30) NULL,
-  `nome_arquivo` varchar(30) NOT NULL,
+  `id_requisicao` varchar(150) NULL,
+  `nome_arquivo` varchar(150) NOT NULL,
   `situacao` varchar(1) NOT NULL,
   `data_criacao` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

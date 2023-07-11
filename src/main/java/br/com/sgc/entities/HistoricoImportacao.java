@@ -24,6 +24,9 @@ public class HistoricoImportacao implements Serializable {
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name = "id_requisicao", nullable = false)
+	private String idRequisicao;
 	
 	@Column(name = "nome_arquivo", nullable = false)
 	private String nomeArquivo;
