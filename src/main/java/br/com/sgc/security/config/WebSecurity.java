@@ -52,6 +52,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         		.mvcMatchers(HttpMethod.PUT, "/sgc/access/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/access/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/contribuicao/**").permitAll()
+        		.mvcMatchers(HttpMethod.GET, "/sgc/contribuicao/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

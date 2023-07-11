@@ -37,10 +37,6 @@ public class HistoricoImportacao implements Serializable {
 	@Column(name = "data_criacao", nullable = false)
 	private LocalDate dataCriacao;
 	
-	public HistoricoImportacao() {
-		
-	}
-	
     @PrePersist
     public void prePersist() {
         final LocalDate atual = LocalDate.now();

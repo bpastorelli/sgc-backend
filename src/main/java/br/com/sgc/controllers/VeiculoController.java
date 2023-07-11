@@ -44,10 +44,6 @@ class VeiculoController extends RegistroExceptionHandler {
 	@Autowired
 	private ServicesCore<GETVeiculoResponseDto, VeiculoFilter> veiculoService;
 	
-	public VeiculoController() {
-		
-	}
-	
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody VeiculoDto veiculoRequestBody,
 											   BindingResult result ) throws RegistroException{

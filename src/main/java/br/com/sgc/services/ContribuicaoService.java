@@ -20,7 +20,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.sgc.access.mapper.HistoricoImportacaoMapper;
 import br.com.sgc.commons.ValidaCPF;
+import br.com.sgc.dto.GETHistoricoImportacaoResponseDto;
 import br.com.sgc.dto.LancamentoDto;
 import br.com.sgc.dto.LancamentoImportResponseDto;
 import br.com.sgc.entities.HistoricoImportacao;
@@ -56,11 +58,11 @@ public class ContribuicaoService {
 	@Autowired
 	private ResidenciaRepository residenciaRepository;
 	
-	@Autowired
-	private VinculoResidenciaRepository vinculoResidenciaRespository;
-	
     @Autowired
     private LancamentoRepository lancamentoRepository;
+	
+	@Autowired
+	private VinculoResidenciaRepository vinculoResidenciaRespository;
     
 	private List<String> errorsList = new ArrayList<String>();
 	
@@ -75,6 +77,9 @@ public class ContribuicaoService {
 	private XSSFWorkbook workbook;
 	
 	private static DecimalFormat df2 = new DecimalFormat("#,###.00");
+	
+	@Autowired
+	private HistoricoImportacaoMapper historicoMapper;
 	
 	private static int PAGE_SIZE = 1000;
     
@@ -122,6 +127,14 @@ public class ContribuicaoService {
 		
 	    return CompletableFuture.completedFuture(this.montaResponseImportacao(lancamentos)); 
 
+    }
+    
+    public List<GETHistoricoImportacaoResponseDto> buscarHistoricoImportacao(List<SituacaoEnum> situacao){
+    	
+    	List<GETHistoricoImportacaoResponseDto> response = this.historicoMapper.toGETHistoricoImportacaoResponseDto(this.historicoRepository.findBySituacaoIn(situacao));
+    	
+    	return response;
+    	
     }
     
 	private List<Lancamento> prepararDadosImportacao(MultipartFile file) throws RegistroException, IOException{
