@@ -34,7 +34,7 @@ public class ContribuicaoController {
 		
 		try {
 			
-			return ResponseEntity.ok().body(this.service.processarContribuicoes(file).get());
+			return ResponseEntity.ok().body(this.service.processarContribuicoes(file));
 			
 		} catch (RegistroException e) {
 			

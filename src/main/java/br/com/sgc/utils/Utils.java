@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +48,20 @@ public class Utils {
 	    return Instant.ofEpochMilli(dateToConvert.getTime())
 	      .atZone(ZoneId.systemDefault())
 	      .toLocalDateTime();
+	}
+	
+	public static LocalDateTime convertToLocalDateTime(LocalDate dateToConvert) {
+		
+		LocalDateTime dt = dateToConvert.atStartOfDay();
+		
+	    return dt;
+	}
+	
+	public static Long convertToLong(LocalDateTime date) {
+		
+		Long dt = date.getLong(ChronoField.EPOCH_DAY);
+		
+	    return dt;
 	}
 
 	public static String getFileTypeByMimetypesFileTypeMap(final String fileName){    

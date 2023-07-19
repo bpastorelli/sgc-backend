@@ -33,6 +33,9 @@ public class KafkaProducerConfig {
 	@Value(value = "${vinculo.topic.name}")
 	private String topicVinculo;
 	
+	@Value(value = "${contribuicao.topic.name}")
+	private String topicContribuicao;	
+	
 	@Bean
 	public NewTopic createMoradorTopic() {
 		
@@ -75,60 +78,10 @@ public class KafkaProducerConfig {
 		return new NewTopic(topicVinculo, 1,(short) 1);
 	}
 	
-	/*@Bean
-	public ProducerFactory<String, MoradorAvro> moradorProducerFactory(){
-		Map<String, Object> configProps = new HashMap<>();
-		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
-		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-		return new DefaultKafkaProducerFactory<>(configProps);
-	}
-	
 	@Bean
-	public ProducerFactory<String, ResidenciaDto> residenciaProducerFactory(){
-		Map<String, Object> configProps = new HashMap<>();
-		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
-		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-		return new DefaultKafkaProducerFactory<>(configProps);
+	public NewTopic createContribuicaoTopic() {
+		
+		return new NewTopic(topicContribuicao, 1,(short) 1);
 	}
-	
-	@Bean
-	public ProducerFactory<String, VeiculoDto> veiculoProducerFactory(){
-		Map<String, Object> configProps = new HashMap<>();
-		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
-		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-		return new DefaultKafkaProducerFactory<>(configProps);
-	}
-	
-	@Bean
-	public ProducerFactory<String, VisitaDto> visitaProducerFactory(){
-		Map<String, Object> configProps = new HashMap<>();
-		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
-		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-		return new DefaultKafkaProducerFactory<>(configProps);
-	}
-	
-	@Bean
-	public KafkaTemplate<String, MoradorAvro> moradorKafkaTemplate(){
-		return new KafkaTemplate<>(moradorProducerFactory());
-	}
-	
-	@Bean
-	public KafkaTemplate<String, ResidenciaDto> residenciaKafkaTemplate(){
-		return new KafkaTemplate<>(residenciaProducerFactory());
-	}
-	
-	@Bean
-	public KafkaTemplate<String, VeiculoDto> veiculoKafkaTemplate(){
-		return new KafkaTemplate<>(veiculoProducerFactory());
-	}
-	
-	@Bean
-	public KafkaTemplate<String, VisitaDto> visitaKafkaTemplate(){
-		return new KafkaTemplate<>(visitaProducerFactory());
-	}*/
 	
 }

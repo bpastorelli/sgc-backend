@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import lombok.Data;
 
 @Data
-public class LancamentoDto {
+public class ContribuicaoDto {
 	
 	@CPF(message = "CPF inválido!")
 	private String cpf;
@@ -25,6 +25,8 @@ public class LancamentoDto {
 	
 	@NotEmpty(message = "O campo residencia é obrigatório.")
 	private Long residenciaId;
+	
+	private String guide;
 	
 
 }

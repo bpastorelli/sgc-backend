@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -20,10 +19,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.sgc.ContribuicaoAvro;
 import br.com.sgc.access.mapper.HistoricoImportacaoMapper;
+import br.com.sgc.amqp.producer.AmqpProducer;
 import br.com.sgc.commons.ValidaCPF;
+import br.com.sgc.converter.Converter;
+import br.com.sgc.dto.CabecalhoResponsePublisherDto;
+import br.com.sgc.dto.ContribuicaoDto;
 import br.com.sgc.dto.GETHistoricoImportacaoResponseDto;
-import br.com.sgc.dto.LancamentoDto;
 import br.com.sgc.dto.LancamentoImportResponseDto;
 import br.com.sgc.entities.HistoricoImportacao;
 import br.com.sgc.entities.Lancamento;
@@ -81,11 +84,15 @@ public class ContribuicaoService {
 	@Autowired
 	private HistoricoImportacaoMapper historicoMapper;
 	
+	@Autowired
+	private AmqpProducer<ContribuicaoAvro> amqp;
+	
+	@Autowired
+	private Converter<ContribuicaoAvro, List<Lancamento>> convert;
+	
 	private static int PAGE_SIZE = 1000;
     
-    @Async
-    public CompletableFuture<List<LancamentoImportResponseDto>> processarContribuicoes(final MultipartFile file) throws RegistroException, IOException {
-        final long start = System.currentTimeMillis();
+    public CabecalhoResponsePublisherDto processarContribuicoes(final MultipartFile file) throws RegistroException, IOException {
         
         log.info("Iniciando o processamento de importação {}", file.getOriginalFilename());
         
@@ -107,25 +114,25 @@ public class ContribuicaoService {
 			throw errors;
 		}
 		
-		log.info("Elapsed time: {}", (System.currentTimeMillis() - start));
-		
 		this.salvarHistorico(file.getOriginalFilename(), SituacaoEnum.IMPORTANDO);
 		
 		Double pages = (double) lancamentos.size() / PAGE_SIZE;
+		pages = pages < 1 ? 1 : pages;
 		
 		int page;
 		for(page = 1; page <= Math.round(pages); page++) {
-			log.info("Salvando página: {}...", page);
-			this.lancamentoRepository.saveAll(Utils.getPage(lancamentos, page, PAGE_SIZE));
+			log.info("Enviando página: {}...", page);
+			this.amqp.producerAsync(this.convert.convert(Utils.getPage(lancamentos, page, PAGE_SIZE)));
 		}
 		
-		log.info("Finalizando o processamento de importação {}", file.getName() );
+		log.info("Conteúdo enviado para processamento.");
 		
-		this.salvarHistorico(file.getName(), SituacaoEnum.CONCLUIDO);
+		CabecalhoResponsePublisherDto response = CabecalhoResponsePublisherDto.builder()
+			.ticket(this.historico.getIdRequisicao())
+			.build();
+			
 		
-		log.info("Processamento finalizado com {} registros inseridos.", lancamentos.size());
-		
-	    return CompletableFuture.completedFuture(this.montaResponseImportacao(lancamentos)); 
+	    return response; 
 
     }
     
@@ -144,7 +151,7 @@ public class ContribuicaoService {
 		this.errorsList = new ArrayList<String>();
 		
 		List<Lancamento> listPreparada = new ArrayList<Lancamento>();
-		List<LancamentoDto> lancamentoList = this.getDataFromFile(file);
+		List<ContribuicaoDto> lancamentoList = this.getDataFromFile(file);
 	    
 		if(this.errorsList.size() == 0) 
 			this.loadBases();
@@ -215,7 +222,7 @@ public class ContribuicaoService {
 					
 					Lancamento lancamento = new Lancamento();
 					lancamento.setMorador(morador.get());
-					lancamento.setDataPagamento(l.getDataPagamento());
+					lancamento.setDataPagamento(Utils.convertToLocalDateTime(l.getDataPagamento()));
 					lancamento.setValor(l.getValor());
 					lancamento.setDocumento(l.getDocumento());
 					lancamento.setPeriodo(l.getDataPagamento().getMonth().getValue() + "/" + l.getDataPagamento().getYear());
@@ -273,12 +280,12 @@ public class ContribuicaoService {
 		
 	}
     	
-	//Lê o aquivo de importação e trata os dados para LancamentoDto
-	private List<LancamentoDto> getDataFromFile(MultipartFile file) throws IOException{
+	//Lê o aquivo de importação e trata os dados para ContribuicaoDto
+	private List<ContribuicaoDto> getDataFromFile(MultipartFile file) throws IOException{
 		
 		log.info("Extraindo dados do arquivo {}...", file.getName());
 		
-		List<LancamentoDto> lancamentoList = new ArrayList<LancamentoDto>();
+		List<ContribuicaoDto> lancamentoList = new ArrayList<ContribuicaoDto>();
 		
 		if(!FilenameUtils.getExtension(file.getOriginalFilename()).equals("xlsx") 
 				&& !FilenameUtils.getExtension(file.getOriginalFilename()).equals("xls"))
@@ -299,7 +306,7 @@ public class ContribuicaoService {
 			    	XSSFRow row = worksheet.getRow(i);
 			    	if(row.getCell(0) != null && row.getCell(0).getRawValue() != null) {
 			    		
-			    		LancamentoDto lanca = new LancamentoDto();
+			    		ContribuicaoDto lanca = new ContribuicaoDto();
 			    		lanca.setCpf(WorkbookUtils.<String>getCellValue(i, 0, worksheet, DataTypeEnum.CPF).replace(".", "").replace("-", ""));
 			    		lanca.setDataPagamento(WorkbookUtils.<LocalDate>getCellValue(i, 1, worksheet, DataTypeEnum.DATE));
 			    		lanca.setValor(WorkbookUtils.getCellValue(i, 2, worksheet, DataTypeEnum.BIG_DECIMAL));
