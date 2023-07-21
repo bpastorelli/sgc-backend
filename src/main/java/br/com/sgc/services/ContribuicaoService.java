@@ -27,6 +27,7 @@ import br.com.sgc.converter.Converter;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.ContribuicaoDto;
 import br.com.sgc.dto.GETHistoricoImportacaoResponseDto;
+import br.com.sgc.dto.LancamentoDto;
 import br.com.sgc.dto.LancamentoImportResponseDto;
 import br.com.sgc.entities.HistoricoImportacao;
 import br.com.sgc.entities.Lancamento;
@@ -49,6 +50,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ContribuicaoService {
+	
+	private List<String> cpfs = new ArrayList<String>();
 	
 	private HistoricoImportacao historico = new HistoricoImportacao();
 	
@@ -73,7 +76,7 @@ public class ContribuicaoService {
 	
 	private List<Residencia> residencias = new ArrayList<Residencia>();
 	
-	private List<Lancamento> lancamentosBase = new ArrayList<Lancamento>();
+	private List<Lancamento> lancamentos = new ArrayList<Lancamento>();
 	
 	private List<VinculoResidencia> vinculos = new ArrayList<VinculoResidencia>();
 
@@ -88,7 +91,7 @@ public class ContribuicaoService {
 	private AmqpProducer<ContribuicaoAvro> amqp;
 	
 	@Autowired
-	private Converter<ContribuicaoAvro, List<Lancamento>> convert;
+	private Converter<ContribuicaoAvro, List<LancamentoDto>> convert;
 	
 	private static int PAGE_SIZE = 1000;
     
@@ -106,7 +109,7 @@ public class ContribuicaoService {
 			throw errors;
 		}
 		
-	    List<Lancamento> lancamentos = this.prepararDadosImportacao(file);
+	    List<LancamentoDto> lancamentos = this.prepararDadosImportacao(file);
 	    
 		if(this.errorsList.size() > 0) {
 			this.errorsList.forEach(erro -> errors.getErros().add(new ErroRegistro("","", erro)));
@@ -116,8 +119,10 @@ public class ContribuicaoService {
 		
 		this.salvarHistorico(file.getOriginalFilename(), SituacaoEnum.IMPORTANDO);
 		
-		Double pages = (double) lancamentos.size() / PAGE_SIZE;
+		Double pages = ((double) lancamentos.size() / PAGE_SIZE);
+		Double resto = ((double) lancamentos.size() % PAGE_SIZE);
 		pages = pages < 1 ? 1 : pages;
+		pages = resto > 0 ? Math.round(pages) + 1 : pages;
 		
 		int page;
 		for(page = 1; page <= Math.round(pages); page++) {
@@ -138,27 +143,30 @@ public class ContribuicaoService {
     
     public List<GETHistoricoImportacaoResponseDto> buscarHistoricoImportacao(List<SituacaoEnum> situacao){
     	
-    	List<GETHistoricoImportacaoResponseDto> response = this.historicoMapper.toGETHistoricoImportacaoResponseDto(this.historicoRepository.findBySituacaoIn(situacao));
+    	List<GETHistoricoImportacaoResponseDto> response = 
+    			this.historicoMapper.toGETHistoricoImportacaoResponseDto(this.historicoRepository.findBySituacaoIn(situacao));
     	
     	return response;
     	
     }
     
-	private List<Lancamento> prepararDadosImportacao(MultipartFile file) throws RegistroException, IOException{
+	private List<LancamentoDto> prepararDadosImportacao(MultipartFile file) throws RegistroException, IOException{
 		
 		log.info("Realizando a leitura do arquivo {}", file.getName());
 		
 		this.errorsList = new ArrayList<String>();
 		
-		List<Lancamento> listPreparada = new ArrayList<Lancamento>();
+		List<LancamentoDto> listPreparada = new ArrayList<LancamentoDto>();
 		List<ContribuicaoDto> lancamentoList = this.getDataFromFile(file);
 	    
 		if(this.errorsList.size() == 0) 
 			this.loadBases();
+		
+		this.historico.setIdRequisicao(UUID.randomUUID().toString()); 
 	    
+		log.info("Validando os dados...");
+		
 		lancamentoList.forEach(l -> {
-			
-			log.info("Validando os dados...");
 			
 			//Valida o CPF
 			if(!ValidaCPF.isCPF(l.getCpf()))
@@ -203,16 +211,16 @@ public class ContribuicaoService {
 					}
 				}
 				
-				//Valida se existem lançamentos duplicados na base dados
-				if(lancamentosBase.stream()						
+				//Valida se existem lançamentos duplicados na base dados				
+				if(lancamentos.stream()						
 						.filter(a -> a.getMorador().equals(morador.get()))
 						.filter(x -> (x.getValor()).setScale(2, BigDecimal.ROUND_HALF_EVEN)
 								.equals(l.getValor().setScale(2, BigDecimal.ROUND_HALF_EVEN)))
-						.filter(y -> y.getDataPagamento().equals(l.getDataPagamento()))
+						.filter(y -> y.getDataPagamento().equals(Utils.convertToLocalDateTime(l.getDataPagamento())))
 						.count() > 0) {
 					
 					this.addError("Linha: " + (lancamentoList.indexOf(l) + 2) + " | O lançamento para o CPF " + l.getCpf() + " no valor de " + l.getValor() + " já existe na base de dados.");
-				}				
+				}	
 				
 				//Valida se existem lançamentos com valor Zero
 				if(l.getValor().compareTo(new BigDecimal(0)) == 0)
@@ -220,13 +228,15 @@ public class ContribuicaoService {
 				
 				if(this.errorsList.size() == 0){
 					
-					Lancamento lancamento = new Lancamento();
-					lancamento.setMorador(morador.get());
-					lancamento.setDataPagamento(Utils.convertToLocalDateTime(l.getDataPagamento()));
-					lancamento.setValor(l.getValor());
-					lancamento.setDocumento(l.getDocumento());
-					lancamento.setPeriodo(l.getDataPagamento().getMonth().getValue() + "/" + l.getDataPagamento().getYear());
-					lancamento.setResidencia(vinculo.isPresent() ? vinculo.get().getResidencia() : null);
+					LancamentoDto lancamento = LancamentoDto.builder()
+						.morador(morador.get())
+						.dataPagamento(Utils.convertToLocalDateTime(l.getDataPagamento()))
+						.valor(l.getValor())
+						.documento(l.getDocumento())
+						.periodo(l.getDataPagamento().getMonth().getValue() + "/" + l.getDataPagamento().getYear())
+						.residencia(vinculo.isPresent() ? vinculo.get().getResidencia() : null)
+						.requisicaoId(this.historico.getIdRequisicao())
+						.build();
 					
 					listPreparada.add(lancamento);
 					
@@ -312,6 +322,9 @@ public class ContribuicaoService {
 			    		lanca.setValor(WorkbookUtils.getCellValue(i, 2, worksheet, DataTypeEnum.BIG_DECIMAL));
 			    		lanca.setDocumento(WorkbookUtils.getCellValue(i, 3, worksheet, DataTypeEnum.STRING));
 			    		
+			    		if(!this.cpfs.contains(lanca.getCpf()))
+			    			this.cpfs.add(lanca.getCpf());
+			    		
 			    		lancamentoList.add(lanca);
 			    	}
 			       
@@ -331,21 +344,20 @@ public class ContribuicaoService {
 	//Carrega as tabelas necessárias em memória para poupar requisições em banco.
 	private void loadBases() {
 		
-		//Popula as bases em memória se estiverem vazias
-		List<Long> codigosList = new ArrayList<Long>();
+		List<Long> codigosList = new ArrayList<>();
 			
 		//Busca todos os moradores uma única vez para utilização
-		this.moradores = this.moradorRepository.findAll();
+		this.moradores = this.moradorRepository.findByCpfIn(this.cpfs);
 		    
 		//Busca todas as residencias uma única vez para utilização
 		this.residencias = this.residenciaRepository.findAll();
-		    
+		
 		moradores.forEach(m -> {
 		   	codigosList.add(m.getId());
 		});
-		    
+		
 		//Busca todos os lancamentos uma unica vez para utilização
-		this.lancamentosBase = this.lancamentoRepository.findByMoradorIdIn(codigosList);
+		this.lancamentos = this.lancamentoRepository.findByMoradorIdIn(codigosList);
 		    
 		 //Busca todos os vinculos uma unica vez para uitilização
 		this.vinculos = this.vinculoResidenciaRespository.findAll(); 
@@ -373,7 +385,6 @@ public class ContribuicaoService {
 		
 		if(!Optional.ofNullable(this.historico.getId()).isPresent()) {
 			this.historico.setNomeArquivo(file);
-			this.historico.setIdRequisicao(UUID.randomUUID().toString());
 			this.historico.setSituacao(situacao);			
 		}else
 			this.historico.setSituacao(situacao);

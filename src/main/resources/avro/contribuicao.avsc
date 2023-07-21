@@ -4,6 +4,10 @@
 	"namespace": "br.com.sgc",
 	"fields": [
 		{
+			"name": "requisicaoId",
+			"type": "string"	
+		},
+		{
 			"name":"lancamentos",
             "type":{
                 "type": "array",  
@@ -21,7 +25,7 @@
 								},
 								{
 									"name": "dataPagamento",
-									"type": ["null", {"type": "long", "logicalType": "local-timestamp-millis"}] 
+									"type": "string" 
 								},
 								{
 									"name": "periodo",

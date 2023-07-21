@@ -85,6 +85,9 @@ public class Morador implements Serializable {
 	@OneToMany(mappedBy = "morador", fetch = FetchType.LAZY, cascade = CascadeType.ALL)	
 	private List<VinculoResidencia> residencias;
 	
+	@OneToMany(mappedBy = "morador", fetch = FetchType.LAZY, cascade = CascadeType.ALL)	
+	private List<Lancamento> lancamentos;
+	
 	@PreUpdate
     public void preUpdate() {
         dataAtualizacao = new Date();

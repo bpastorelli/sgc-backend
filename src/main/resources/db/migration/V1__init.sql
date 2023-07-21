@@ -78,7 +78,7 @@ CREATE TABLE `veiculo` (
 CREATE TABLE `lancamento` (
   `id` bigint(20) NOT NULL,
   `morador_id` bigint(20) NOT NULL,
-  `data_pagamento` date NOT NULL,
+  `data_pagamento` datetime NOT NULL,
   `mes_referencia` varchar(7),
   `documento` varchar(15) DEFAULT NULL,
   `valor` decimal(19,2),

@@ -1,5 +1,6 @@
 package br.com.sgc.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -19,6 +20,8 @@ public interface MoradorRepository extends JpaRepository<Morador, Long> {
 	Optional<Morador> findByNomeAndCpf(String nome, String cpf);
 	
 	Optional<Morador> findByCpf(String cpf);
+	
+	List<Morador> findByCpfIn(List<String> cpfs);
 	
 	Optional<Morador> findByRg(String rg);
 	

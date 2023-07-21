@@ -57,9 +57,16 @@ public class Utils {
 	    return dt;
 	}
 	
+	public static Date convertToDate(LocalDate date) {
+		
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+		
+		return Date.from(date.atStartOfDay(defaultZoneId).toInstant());
+	}
+	
 	public static Long convertToLong(LocalDateTime date) {
 		
-		Long dt = date.getLong(ChronoField.EPOCH_DAY);
+		Long dt = date.getLong(ChronoField.DAY_OF_YEAR);
 		
 	    return dt;
 	}
@@ -93,11 +100,31 @@ public class Utils {
 	     
 	}
 	
+	public static LocalDateTime convertToLocalDateTime(CharSequence dateToConvert) {
+	    
+		return LocalDateTime.parse(dateToConvert);
+		
+	}
+	
+	public static LocalDateTime convertToLocalDateTime(String dateToConvert) {
+	    
+		return LocalDateTime.parse(dateToConvert);
+		
+	}
+	
 	public static LocalDate parseDate(Date date) {
 		
 		return date.toInstant()
 			      .atZone(ZoneId.systemDefault())
 			      .toLocalDate();
+		
+	}
+	
+	public static LocalDateTime ajustaData(LocalDate date) {
+		
+		LocalDateTime date1 = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 0, 0, 0);
+		
+		return date1;
 		
 	}
 	

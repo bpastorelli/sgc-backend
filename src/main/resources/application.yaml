@@ -25,4 +25,8 @@ visitante:
 vinculo:
   topic:
     name: vinculo-mq
+    
+contribuicao:
+  topic:
+    name: contribuicao-mq
   
