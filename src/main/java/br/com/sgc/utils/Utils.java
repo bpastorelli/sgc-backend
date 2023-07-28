@@ -1,5 +1,7 @@
 package br.com.sgc.utils;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -165,6 +167,18 @@ public class Utils {
         
         // toIndex exclusive
         return sourceList.subList(fromIndex, Math.min(fromIndex + pageSize, sourceList.size()));
+    }
+    
+    public static String formatNumber(BigDecimal valor, String format) {
+    	
+    	DecimalFormat df2 = new DecimalFormat(format);
+    	
+    	return df2.format(valor);
+    }
+    
+    public static String formatNumber(BigDecimal valor) {
+    	
+    	return formatNumber(valor, "#,###.00");
     }
 	
 }

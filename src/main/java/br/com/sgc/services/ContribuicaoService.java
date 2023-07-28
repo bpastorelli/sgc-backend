@@ -2,10 +2,8 @@ package br.com.sgc.services;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,11 +26,9 @@ import br.com.sgc.dto.CabecalhoResponsePublisherDto;
 import br.com.sgc.dto.ContribuicaoDto;
 import br.com.sgc.dto.GETHistoricoImportacaoResponseDto;
 import br.com.sgc.dto.LancamentoDto;
-import br.com.sgc.dto.LancamentoImportResponseDto;
 import br.com.sgc.entities.HistoricoImportacao;
 import br.com.sgc.entities.Lancamento;
 import br.com.sgc.entities.Morador;
-import br.com.sgc.entities.Residencia;
 import br.com.sgc.entities.VinculoResidencia;
 import br.com.sgc.enums.DataTypeEnum;
 import br.com.sgc.enums.SituacaoEnum;
@@ -41,7 +37,6 @@ import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.repositories.HistoricoImportacaoRepository;
 import br.com.sgc.repositories.LancamentoRepository;
 import br.com.sgc.repositories.MoradorRepository;
-import br.com.sgc.repositories.ResidenciaRepository;
 import br.com.sgc.repositories.VinculoResidenciaRepository;
 import br.com.sgc.utils.Utils;
 import br.com.sgc.utils.WorkbookUtils;
@@ -61,9 +56,6 @@ public class ContribuicaoService {
 	@Autowired
 	private HistoricoImportacaoRepository historicoRepository;
 	
-	@Autowired
-	private ResidenciaRepository residenciaRepository;
-	
     @Autowired
     private LancamentoRepository lancamentoRepository;
 	
@@ -74,15 +66,11 @@ public class ContribuicaoService {
 	
 	private List<Morador> moradores = new ArrayList<Morador>();
 	
-	private List<Residencia> residencias = new ArrayList<Residencia>();
-	
 	private List<Lancamento> lancamentos = new ArrayList<Lancamento>();
 	
 	private List<VinculoResidencia> vinculos = new ArrayList<VinculoResidencia>();
 
 	private XSSFWorkbook workbook;
-	
-	private static DecimalFormat df2 = new DecimalFormat("#,###.00");
 	
 	@Autowired
 	private HistoricoImportacaoMapper historicoMapper;
@@ -253,43 +241,7 @@ public class ContribuicaoService {
 		return listPreparada;
 	    
 	}
-	
-	//Monta o reponse da Importação do arquivo xlsx ou xls
-	private List<LancamentoImportResponseDto> montaResponseImportacao(List<Lancamento> lancamentos) {
-		
-		log.info("Montando o response do processamento...");
-		
-		List<LancamentoImportResponseDto> responseList = new ArrayList<LancamentoImportResponseDto>();
-		
-		lancamentos.forEach(l -> {
-			
-			Optional<Morador> morador = moradores.stream()
-					.filter(m -> m.getId().equals(l.getMorador().getId()))
-					.findFirst();
-			
-			Optional<Residencia> residencia = residencias.stream()
-					.filter(r -> r.getId().equals(l.getResidencia().getId()))
-					.findFirst();
-			
-			LancamentoImportResponseDto item = new LancamentoImportResponseDto();
-			item.setId(l.getId());
-			item.setNome(morador.get().getNome());
-			item.setCpf(morador.get().getCpf());
-			item.setDataPagamento(Utils.dateFormat(l.getDataPagamento(), "dd/MM/yyyy"));
-			item.setDocumento(l.getDocumento());
-			item.setValor(df2.format(l.getValor()));
-			item.setEndereco(residencia.get().getEndereco() + ", " + residencia.get().getNumero());
-			
-			responseList.add(item);
-			
-		});
-		
-		Collections.sort(responseList);
-		
-		return responseList;
-		
-	}
-    	
+	    	
 	//Lê o aquivo de importação e trata os dados para ContribuicaoDto
 	private List<ContribuicaoDto> getDataFromFile(MultipartFile file) throws IOException{
 		
@@ -348,9 +300,6 @@ public class ContribuicaoService {
 			
 		//Busca todos os moradores uma única vez para utilização
 		this.moradores = this.moradorRepository.findByCpfIn(this.cpfs);
-		    
-		//Busca todas as residencias uma única vez para utilização
-		this.residencias = this.residenciaRepository.findAll();
 		
 		moradores.forEach(m -> {
 		   	codigosList.add(m.getId());

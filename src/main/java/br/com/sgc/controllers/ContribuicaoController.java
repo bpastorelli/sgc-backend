@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,11 +20,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.sgc.dto.GETContribuicaoResponseDto;
 import br.com.sgc.dto.GETHistoricoImportacaoResponseDto;
 import br.com.sgc.enums.SituacaoEnum;
 import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.filter.ContribuicaoFilter;
 import br.com.sgc.services.ContribuicaoService;
+import br.com.sgc.services.ServicesCore;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/sgc/contribuicao")
 @CrossOrigin(origins = "*")
@@ -28,6 +37,9 @@ public class ContribuicaoController {
 	
 	@Autowired
 	private ContribuicaoService service;
+	
+	@Autowired
+	private ServicesCore<GETContribuicaoResponseDto, ContribuicaoFilter> serviceBusca;
 	
 	@PostMapping(value = "/import")
 	public ResponseEntity<?> importacaoContribuicao(@RequestParam("file") MultipartFile file) throws RegistroException, IOException, InterruptedException, ExecutionException{
@@ -41,6 +53,20 @@ public class ContribuicaoController {
 			return ResponseEntity.badRequest().body(e.getErros());
 			
 		}
+		
+	}
+	
+	@GetMapping(value = "/filtro")
+	public ResponseEntity<?> buscarVisitasFiltro(
+			ContribuicaoFilter filters,
+			@PageableDefault(sort = "nome", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException {
+		
+		log.info("Buscando lançamentos...");
+		
+		Page<GETContribuicaoResponseDto> visitas = this.serviceBusca.buscar(filters, paginacao);
+		
+		return filters.isContent() ? new ResponseEntity<>(visitas.getContent(), HttpStatus.OK) :
+					new ResponseEntity<>(visitas, HttpStatus.OK);
 		
 	}
 	

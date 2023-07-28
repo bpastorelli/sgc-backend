@@ -81,7 +81,7 @@ public class KafkaProducerConfig {
 	@Bean
 	public NewTopic createContribuicaoTopic() {
 		
-		return new NewTopic(topicContribuicao, 1,(short) 1);
+		return new NewTopic(topicContribuicao, 3,(short) 3);
 	}
 	
 }
