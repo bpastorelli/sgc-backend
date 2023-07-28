@@ -78,6 +78,9 @@ public class ContribuicaoQueryRepositoryImpl implements QueryRepository<Lancamen
 		
 		if(filters.getDataInicio() != null && filters.getDataFim() != null)
 			predicates.add(builder.between(root.get("dataPagamento"), ajustaData(filters.getDataInicio(), true), ajustaData(filters.getDataFim(), false)));
+		
+		if(filters.getDataInicio() != null && filters.getDataFim() == null)
+			predicates.add(builder.equal(root.get("dataPagamento"), ajustaData(filters.getDataInicio(), true)));
 			
 		if(filters.getGuide() != null)
 			predicates.add(builder.equal(root.get("guide"), filters.getGuide()));

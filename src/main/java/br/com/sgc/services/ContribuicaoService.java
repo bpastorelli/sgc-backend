@@ -301,9 +301,7 @@ public class ContribuicaoService {
 		//Busca todos os moradores uma única vez para utilização
 		this.moradores = this.moradorRepository.findByCpfIn(this.cpfs);
 		
-		moradores.forEach(m -> {
-		   	codigosList.add(m.getId());
-		});
+		moradores.forEach(m -> { codigosList.add(m.getId()); });
 		
 		//Busca todos os lancamentos uma unica vez para utilização
 		this.lancamentos = this.lancamentoRepository.findByMoradorIdIn(codigosList);
