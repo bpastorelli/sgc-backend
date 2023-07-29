@@ -29,10 +29,6 @@ class VinculoResidenciaController extends RegistroExceptionHandler {
 	@Autowired
 	private AmqpService<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> vinculoAmqpService;
 	
-	public VinculoResidenciaController() {
-		
-	}
-	
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody VinculoResidenciaDto vinculoRequestBody,
 											   BindingResult result ) throws RegistroException{

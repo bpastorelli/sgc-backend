@@ -3,6 +3,7 @@ package br.com.sgc.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 
@@ -32,7 +34,7 @@ public class Lancamento implements Serializable {
 	private Morador morador;
 	
 	@Column(name = "data_pagamento", nullable = false)
-	private LocalDate dataPagamento;
+	private LocalDateTime dataPagamento;
 	
 	@Column(name = "mes_referencia", nullable = false)
 	private String periodo;
@@ -52,9 +54,8 @@ public class Lancamento implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	private Residencia residencia;
 	
-	public Lancamento() {
-		
-	}
+	@Transient
+	private String requisicaoId;
 	
 	@PreUpdate
     public void preUpdate() {

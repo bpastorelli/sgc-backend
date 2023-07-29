@@ -1,5 +1,7 @@
 package br.com.sgc.utils;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -7,7 +9,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
 
@@ -46,6 +51,27 @@ public class Utils {
 	      .atZone(ZoneId.systemDefault())
 	      .toLocalDateTime();
 	}
+	
+	public static LocalDateTime convertToLocalDateTime(LocalDate dateToConvert) {
+		
+		LocalDateTime dt = dateToConvert.atStartOfDay();
+		
+	    return dt;
+	}
+	
+	public static Date convertToDate(LocalDate date) {
+		
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+		
+		return Date.from(date.atStartOfDay(defaultZoneId).toInstant());
+	}
+	
+	public static Long convertToLong(LocalDateTime date) {
+		
+		Long dt = date.getLong(ChronoField.DAY_OF_YEAR);
+		
+	    return dt;
+	}
 
 	public static String getFileTypeByMimetypesFileTypeMap(final String fileName){    
 	
@@ -76,11 +102,31 @@ public class Utils {
 	     
 	}
 	
+	public static LocalDateTime convertToLocalDateTime(CharSequence dateToConvert) {
+	    
+		return LocalDateTime.parse(dateToConvert);
+		
+	}
+	
+	public static LocalDateTime convertToLocalDateTime(String dateToConvert) {
+	    
+		return LocalDateTime.parse(dateToConvert);
+		
+	}
+	
 	public static LocalDate parseDate(Date date) {
 		
 		return date.toInstant()
 			      .atZone(ZoneId.systemDefault())
 			      .toLocalDate();
+		
+	}
+	
+	public static LocalDateTime ajustaData(LocalDate date) {
+		
+		LocalDateTime date1 = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 0, 0, 0);
+		
+		return date1;
 		
 	}
 	
@@ -107,6 +153,32 @@ public class Utils {
     	}
 		
 		return placa;
+    }
+    
+    public static <T> List<T> getPage(List<T> sourceList, int page, int pageSize) {
+        if(pageSize <= 0 || page <= 0) {
+            throw new IllegalArgumentException("invalid page size: " + pageSize);
+        }
+        
+        int fromIndex = (page - 1) * pageSize;
+        if(sourceList == null || sourceList.size() <= fromIndex){
+            return Collections.emptyList();
+        }
+        
+        // toIndex exclusive
+        return sourceList.subList(fromIndex, Math.min(fromIndex + pageSize, sourceList.size()));
+    }
+    
+    public static String formatNumber(BigDecimal valor, String format) {
+    	
+    	DecimalFormat df2 = new DecimalFormat(format);
+    	
+    	return df2.format(valor);
+    }
+    
+    public static String formatNumber(BigDecimal valor) {
+    	
+    	return formatNumber(valor, "#,###.00");
     }
 	
 }

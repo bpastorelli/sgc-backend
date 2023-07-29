@@ -44,10 +44,6 @@ class ResidenciaController extends RegistroExceptionHandler {
 	@Autowired
 	private ServicesCore<GETResidenciaResponseDto, ResidenciaFilter> residenciaService;
 	
-	public ResidenciaController() {
-		
-	}
-	
 	@PostMapping(value = "/amqp/nova")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody ResidenciaDto residenciaRequestBody,
 											   BindingResult result ) throws RegistroException{

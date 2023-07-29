@@ -44,10 +44,6 @@ class VisitanteController extends RegistroExceptionHandler {
 	@Autowired
 	private ServicesCore<GETVisitanteResponseDto, VisitanteFilter> visitanteService;
 	
-	public VisitanteController() {
-		
-	}
-	
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody VisitanteDto visitanteRequestBody,
 											   BindingResult result ) throws RegistroException{

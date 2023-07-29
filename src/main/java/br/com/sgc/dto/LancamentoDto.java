@@ -1,30 +1,32 @@
 package br.com.sgc.dto;
 
+
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import javax.validation.constraints.NotEmpty;
+import br.com.sgc.entities.Morador;
+import br.com.sgc.entities.Residencia;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.hibernate.validator.constraints.br.CPF;
-
-import lombok.Data;
-
-@Data
+@Getter
+@Setter
+@Builder
 public class LancamentoDto {
 	
-	@CPF(message = "CPF inválido!")
-	private String cpf;
+	private Morador morador;
 	
-	@NotEmpty(message = "O campo data pagamento é obrigatório.")
-	private LocalDate dataPagamento;
+	private LocalDateTime dataPagamento;
 	
 	private String documento;
 	
-	@NotEmpty(message = "O campo valor é obrigatório.")
+	private String periodo;
+	
 	private BigDecimal valor;
 	
-	@NotEmpty(message = "O campo residencia é obrigatório.")
-	private Long residenciaId;
+	private Residencia residencia;
 	
+	private String requisicaoId;
 
 }
