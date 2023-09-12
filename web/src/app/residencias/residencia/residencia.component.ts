@@ -56,8 +56,11 @@ export class ResidenciaComponent implements OnInit {
     this.acao = this.route.snapshot.paramMap.get('acao');
     this.codigo = this.route.snapshot.paramMap.get('codigo');
 
+    console.log(this.acao);
+    console.log(this.codigo);
+
     if(this.authenticationService.currentUserValue){
-      if(this.codigo != "create" && this.codigo != "novo"  && this.acao === null){
+      if(this.acao != "create" && this.acao != "novo2"){
           this.create = false;
           this.getResidenciaById(this.codigo);
       }
@@ -121,6 +124,13 @@ export class ResidenciaComponent implements OnInit {
 
   }
 
+  editResidencia(id: string){
+
+    this.acao = 'edit';
+    this.router.navigate(['/residencia/edit/', id]);
+
+  }
+
   getCep(cep: string){
 
     if(cep != ""){
@@ -144,7 +154,7 @@ export class ResidenciaComponent implements OnInit {
   getIdMorador(codigo: string){
 
     console.log(`Código enviado: ${codigo}`)
-    this.router.navigate([`/morador/`, codigo])
+    this.router.navigate([`/morador/view/`, codigo])
 
   }
 

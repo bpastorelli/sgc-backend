@@ -1,13 +1,14 @@
 <section class="content">
 
-  <section *ngIf="!create" class="invoice">
+  <!--Editar uma residencia-->
+  <section *ngIf="acao==='edit'" class="invoice">
     <div *ngFor="let erro of erros" class="alert alert-warning">
       <strong>Atenção! </strong>{{ erro.detalhe }}
     </div>
     <section class="invoice">
 
       <label class="labelPagina">
-        Alterar Residência
+        Alterar Cadastro de Residência
       </label>
 
       <form #formEdit="ngForm" *ngFor="let residencia of residencias" novalidate>
@@ -134,7 +135,142 @@
   </section>
 </section>
 
-<section *ngIf="create" class="content">
+  <!--Visualizar uma residencia-->
+  <section *ngIf="acao==='view'" class="invoice">
+    <div *ngFor="let erro of erros" class="alert alert-warning">
+      <strong>Atenção! </strong>{{ erro.detalhe }}
+    </div>
+    <section class="invoice">
+
+      <label class="labelPagina">
+        Visualizar Cadastro de Residência
+      </label>
+
+      <form #formEdit="ngForm" *ngFor="let residencia of residencias" novalidate>
+
+        <div class="row invoice-info">
+
+          <div class="col-xs-12">
+            <p class="control-label"> CEP:</p>
+          </div>
+          <div class="col-sm-2 col-xs-2">
+            <app-input-container errorMessage="Campo obrigatório com mínimo 5 caracteres" label="e-mail">
+              <input class="form-control" #cep (blur)="getCep(residencia.cep)" disabled name="cep" [(ngModel)]="residencia.cep" required maxlength="8" placeholder="CEP" autocomplete="off">
+            </app-input-container>
+          </div>
+
+          <div class="col-xs-12">
+            <p class="control-label"> Endereço:</p>
+          </div>
+          <div class="col-sm-6 col-xs-6">
+            <app-input-container errorMessage="Campo obrigatório!" label="Endereço">
+              <input class="form-control" #endereco type="text" name="endereco" [(ngModel)]="logradouroResp" disabled required maxlength="100" placeholder="Endereço" autocomplete="off">
+            </app-input-container>
+          </div>
+
+          <div class="col-sm-2 col-xs-6">
+            <app-input-container errorMessage="Campo obrigatório e somente números" label="Número">
+              <input class="form-control" #numero name="numero" [(ngModel)]="residencia.numero" disabled required minlength="1" placeholder="Número" pattern="^[0-9]*$" autocomplete="off">
+            </app-input-container>
+          </div>
+
+          <div class="col-xs-12">
+            <p class="control-label"> Complemento:</p>
+          </div>
+          <div class="col-sm-4 col-xs-12">
+            <app-input-container label="Complemento">
+              <input class="form-control" #complemento name="complemento" [(ngModel)]="residencia.complemento" maxlength="50" disabled placeholder="Complemento" autocomplete="off">
+            </app-input-container>
+          </div>
+
+            <div class="col-xs-12">
+              <p class="control-label"> Bairro:</p>
+            </div>
+            <div class="col-sm-4 col-xs-6">
+              <app-input-container errorMessage="Campo obrigatório!" label="Bairro">
+                <input class="form-control" #bairro name="bairro" [(ngModel)]="bairroResp" required maxlength="50" disabled placeholder="Bairro" autocomplete="off">
+              </app-input-container>
+            </div>
+
+            <div class="col-xs-12">
+              <p class="control-label">Cidade:</p>
+            </div>
+            <div class="col-sm-4 col-xs-6">
+              <app-input-container errorMessage="Campo obrigatório com mínimo 5 caracteres" label="Cidade">
+                <input class="form-control" #cidade name="cidade" [(ngModel)]="localidadeResp" required maxlength="50" disabled placeholder="Cidade" autocomplete="off">
+              </app-input-container>
+            </div>
+
+            <div class="col-xs-12">
+              <p class="control-label"> UF:</p>
+            </div>
+            <div class="col-sm-1 col-xs-6">
+              <app-input-container errorMessage="Campo obrigatório!" label="UF">
+                <input class="form-control" #uf name="uf" [(ngModel)]="ufResp" required maxlength="2" placeholder="UF" disabled autocomplete="off">
+              </app-input-container>
+            </div>
+
+          <div class="col-sm-1 col-xs-6">
+            <app-input-container errorMessage="Campo obrigatório e somente números" label="Código Residência">
+              <input class="form-control" type="hidden" disabled name="id" #id [(ngModel)]="residencia.id" minlength="1" pattern="^[0-9]*$" placeholder="Código Residência" autocomplete="off">
+            </app-input-container>
+          </div>
+
+      <!-- /.row -->
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+
+          <button (click)="editResidencia(id.value)" class="btn btn-success pull-right"><i></i> Editar
+          </button>
+          <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <section class="invoice">
+
+    <div class="col-xs-12">
+      <p class="control-label"> <b>Moradores responsáveis:</b></p>
+    </div>
+
+    <table class="table-striped">
+      <thead>
+        <tr>
+            <th #nome scope="col">Nome</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Telefone</th>
+            <th scope="col">Celular</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let residencia of residencias">
+        <tr *ngFor="let morador of residencia.moradores | paginate: { itemsPerPage: contador, currentPage: pag }">
+          <td ><div class="pointer" (click)="getIdMorador(morador.id)">{{ morador.nome.toUpperCase() }}</div></td>
+          <td><div class="pointer" (click)="getIdMorador(morador.id)">{{ morador.email }}</div></td>
+          <td class="textCenter"><div class="pointer" (click)="getIdMorador(morador.id)">{{ morador.telefone }}</div></td>
+          <td class="textCenter"><div class="pointer" (click)="getIdMorador(morador.id)">{{ morador.celular }}</div></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <!--inclindo o controle de paginação.-->
+    <div style="padding: 20px;">
+      <div class="text-right">
+        <pagination-controls class="pointer" (pageChange)="pageChanged($event)"
+            previousLabel="Anterior"
+            nextLabel="Próximo"
+        ></pagination-controls>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!--Inclusão de residência-->
+<section *ngIf="acao==='create' || acao==='novo2'" class="content">
 
 
 <section class="invoice">
@@ -224,7 +360,7 @@
       <!-- /.row -->
       </div>
 
-      <div *ngIf="acao===null" class="row">
+      <div *ngIf="acao==='create' && codigo===null" class="row">
         <div class="col-xs-12">
           <button (click)="postNovaResidenciaAmqp(formCreate.value)" class="btn btn-success pull-right"
           [disabled]="!formCreate.valid"><i></i> Salvar

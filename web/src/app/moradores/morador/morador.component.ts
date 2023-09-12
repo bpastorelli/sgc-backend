@@ -50,10 +50,16 @@ export class MoradorComponent implements OnInit {
       this.acao = this.route.snapshot.paramMap.get('acao');
       this.codigo = this.route.snapshot.paramMap.get('codigo');
 
+      //console.log(this.acao);
+      //console.log(this.codigo);
+
       if(this.authenticationService.currentUserValue){
-        if(this.codigo != "create" && this.codigo != "novo"  && this.acao === null){
+        if(this.acao != "create"){
             this.create = false;
             this.getMoradorById(this.codigo);
+        }else{
+          this.create = true;
+          this.acao = "create";
         }
       }else{
           this.router.navigate(['/login']);
@@ -93,6 +99,13 @@ export class MoradorComponent implements OnInit {
     },err=>{
         this.erros = err['erros'];
     });
+
+  }
+
+  editMorador(id: string){
+
+    this.acao = 'edit';
+    this.router.navigate(['/morador/edit/', id]);
 
   }
 
@@ -183,7 +196,7 @@ export class MoradorComponent implements OnInit {
 
   editResidencia(codigo: string){
 
-    this.router.navigate([`/residencia/`, codigo])
+    this.router.navigate([`/residencia/view/`, codigo])
 
   }
 
