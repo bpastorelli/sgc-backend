@@ -111,7 +111,13 @@ export class MoradoresComponent implements OnInit {
 
   getIdMorador(codigo: string){
 
-    this.router.navigate([`/morador/`, codigo])
+    this.router.navigate([`/morador/view/`, codigo])
+
+  }
+
+  viewMorador(codigo: string){
+
+    this.router.navigate([`/morador/view/`, codigo])
 
   }
 

@@ -97,7 +97,13 @@ export class ResidenciasComponent implements OnInit {
 
   editResidencia(codigo: string){
 
-    this.router.navigate([`/residencia/`, codigo])
+    this.router.navigate([`/residencia/view/`, codigo])
+
+  }
+
+  viewResidencia(codigo: string){
+
+    this.router.navigate([`/residencia/view/`, codigo])
 
   }
 
