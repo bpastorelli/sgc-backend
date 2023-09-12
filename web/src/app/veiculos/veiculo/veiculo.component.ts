@@ -52,7 +52,8 @@ export class VeiculoComponent implements OnInit {
 
   postVeiculo(veiculo: Veiculo){
 
-    veiculo.ticketVisitante = this.codigo;
+    if(this.codigo != "create")
+      veiculo.ticketVisitante = this.codigo;
 
     this.veiculosService.postVeiculo(veiculo)
       .subscribe(data => {
@@ -66,7 +67,9 @@ export class VeiculoComponent implements OnInit {
 
   postVeiculoAmqp(veiculo: Veiculo){
 
-    veiculo.ticketVisitante = this.codigo;
+    if(this.codigo != "create")
+      veiculo.ticketVisitante = this.codigo;
+    
     this.veiculosService.postVeiculoAmqp(veiculo)
       .subscribe(data => {
         this.id = data.ticket;

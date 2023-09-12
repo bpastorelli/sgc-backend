@@ -71,9 +71,10 @@ export class VeiculosService extends BaseService {
 
   }
 
-  getVeiculoByPlaca(placa: string): Observable<Veiculo>{
+  getVeiculoByPlaca(placa: string): Observable<Array<Veiculo>>{
 
-      return this.http.get<Veiculo>(`${environment.protocol + environment.apiUrl}/veiculo/filtro?placa=${placa}&content=true`);
+      placa = placa.replace("-", "");
+      return this.http.get<Array<Veiculo>>(`${environment.protocol + environment.apiUrl}/veiculo/filtro?placa=${placa}&content=true`);
 
   }
 

@@ -188,8 +188,7 @@ export class VisitaComponent implements OnInit {
       this.veiculoService.getVeiculoByPlaca(placa)
         .subscribe(
           data=>{
-            this.veiculo = data;
-            if(this.veiculo.placa == null){
+            if(data.length == 0){
               this.createVeiculo = true;
             }
           }, err=>{
