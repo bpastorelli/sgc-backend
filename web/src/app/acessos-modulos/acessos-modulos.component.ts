@@ -116,12 +116,46 @@ export class AcessosModulosComponent implements OnInit {
 
   }
 
-  addAcessoFuncionalidade(acessoFunc: PerfilFuncionalidade, isChecked: boolean) {
+  addAcessoFuncionalidade(acessoFunc: PerfilFuncionalidade, isChecked: boolean, campo: string) {
+    
+    console.log(campo);
 
-    if(isChecked) {
-        acessoFunc.acesso = true;
-    } else {
-        acessoFunc.acesso = false;
+    switch(campo){
+      case 'acesso':{
+        if(isChecked) {
+          acessoFunc.acesso = true;
+          console.log(acessoFunc.acesso);
+        } else {
+          acessoFunc.acesso = false;
+        }
+        break;
+      }
+      case 'inclusao':{
+        if(isChecked) {
+          acessoFunc.inclusao = true;
+          console.log(acessoFunc.inclusao);
+        } else {
+          acessoFunc.inclusao = false;
+        }
+        break;
+      }
+      case 'alteracao':{
+        if(isChecked) {
+          acessoFunc.alteracao = true;
+        } else {
+          acessoFunc.alteracao = false;
+        }
+        break;
+      }
+      case 'exclusao':{
+        if(isChecked) {
+          acessoFunc.exclusao = true;
+        } else {
+          acessoFunc.exclusao = false;
+        }
+        break;
+      }
+
     }
 
     this.selecionadosFunc.push(acessoFunc);
@@ -160,6 +194,9 @@ export class AcessosModulosComponent implements OnInit {
         perfil.idFuncionalidade = x.idFuncionalidade;
         perfil.idModulo = this.idModulo;
         perfil.acesso = x.acesso;
+        perfil.inclusao = x.inclusao;
+        perfil.alteracao = x.alteracao;
+        perfil.exclusao = x.exclusao;
         this.requestListFunc.push(perfil);
     });
 
