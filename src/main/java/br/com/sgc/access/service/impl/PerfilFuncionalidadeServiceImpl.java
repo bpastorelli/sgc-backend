@@ -71,6 +71,9 @@ public class PerfilFuncionalidadeServiceImpl implements ServicesAccess<List<Cada
 					.nomeFuncionalidade(m.getDescricao())
 					.pathFuncionalidade(m.getPathFuncionalidade())
 					.acesso(acessoFuncionalidade.isPresent() ? acessoFuncionalidade.get().isAcesso() : false)
+					.inclusao(acessoFuncionalidade.isPresent() ? acessoFuncionalidade.get().isInclusao() : false)
+					.alteracao(acessoFuncionalidade.isPresent() ? acessoFuncionalidade.get().isAlteracao() : false)
+					.exclusao(acessoFuncionalidade.isPresent() ? acessoFuncionalidade.get().isExclusao() : false)
 					.build();
 				listAcessos.add(acesso);			
 		});

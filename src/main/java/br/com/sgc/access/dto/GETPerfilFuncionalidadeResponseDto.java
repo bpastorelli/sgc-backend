@@ -17,6 +17,12 @@ public class GETPerfilFuncionalidadeResponseDto implements Comparable<GETPerfilF
 	
 	private boolean acesso;
 	
+	private boolean inclusao;
+	
+	private boolean alteracao;
+	
+	private boolean exclusao;
+	
 	@Override
 	public int compareTo(GETPerfilFuncionalidadeResponseDto o) {
 		return this.nomeFuncionalidade.compareTo(o.nomeFuncionalidade);

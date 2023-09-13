@@ -69,22 +69,22 @@ INSERT INTO `acesso_modulo` (`id`, `id_usuario`,`id_modulo`, `acesso`, `data_cad
 
 INSERT INTO `acesso_modulo` (`id`, `id_usuario`,`id_modulo`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 6, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 1, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 1, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 2, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 2, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 3, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 3, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 4, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 4, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 5, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 5, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 6, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, 6, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 3, 7, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 3, 7, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 3, 8, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 3, 8, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 2, 9, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 2, 9, true, true, true, true, CURRENT_DATE(), 1);
 
-INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 2, 10, true, CURRENT_DATE(), 1);
+INSERT INTO `acesso_funcionalidade` (`id`, `id_usuario`,`id_modulo`, `id_funcionalidade`, `acesso`, `inclusao`, `alteracao`, `exclusao`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 2, 10, true, true, true, true, CURRENT_DATE(), 1);
