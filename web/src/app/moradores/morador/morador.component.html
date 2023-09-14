@@ -268,7 +268,7 @@
             <div *ngIf="acao==='create' && codigo === null">
               <div *ngIf="create" class="row">
                 <div class="col-xs-12">
-                  <button class="pointer" (click)="postMoradorAmqp(formCreate.value, true)" class="btn btn-success pull-right"
+                  <button class="pointer" *ngIf="perfil.alteracao" (click)="postMoradorAmqp(formCreate.value, true)" class="btn btn-success pull-right"
                   [disabled]="!formCreate.valid"><i></i> Avançar
                   </button>
                   <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
@@ -384,7 +384,7 @@
         <div *ngIf="acao==='view'">
           <div class="row">
               <div class="col-xs-12">
-                <button (click)="editMorador(id.value)" class="btn btn-success pull-right"><i></i> Editar
+                <button *ngIf="perfil.alteracao" (click)="editMorador(id.value)" class="btn btn-success pull-right"><i></i> Editar
                 </button>
                 <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
                 </button>

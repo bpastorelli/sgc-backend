@@ -7,6 +7,9 @@ import { Morador } from './../morador/morador.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/_services/authentication.service';
 import { ErroRegistro } from 'src/app/_models/erro-registro';
+import { PermissoesService } from 'src/app/_services/permissoes.service';
+import { AcessoFuncionalidade } from 'src/app/_models/acessoFuncionalidade';
+import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
 @Component({
   selector: 'app-morador',
@@ -29,8 +32,10 @@ export class MoradorComponent implements OnInit {
 
   mor = {} as Morador;
   guide = {} as Publisher;
+  perfil = {} as PerfilFuncionalidade;
   moradores: MoradorResponse[] = [];
   residenciasVinculadas: ResidenciaResponse[];
+  permissoes = {} as AcessoFuncionalidade;
 
   situacaoCadastral = [
         { id: 1, label: "ATIVO" },
@@ -43,23 +48,40 @@ export class MoradorComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private moradorService: MoradorService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private permissao: PermissoesService) { }
 
   ngOnInit() {
 
       this.acao = this.route.snapshot.paramMap.get('acao');
       this.codigo = this.route.snapshot.paramMap.get('codigo');
-
+      
       //console.log(this.acao);
       //console.log(this.codigo);
-
+      
       if(this.authenticationService.currentUserValue){
         if(this.acao != "create"){
-            this.create = false;
-            this.getMoradorById(this.codigo);
+          this.create = false;
+          this.getMoradorById(this.codigo);
+          this.permissao.getPermissao('3', '8')
+          .subscribe(
+            data=>{
+              this.perfil = data[0];
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );
         }else{
           this.create = true;
           this.acao = "create";
+          this.permissao.getPermissao('3', '7')
+          .subscribe(
+            data=>{
+              this.perfil = data[0];
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );  
         }
       }else{
           this.router.navigate(['/login']);

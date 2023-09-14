@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { Moradores } from './moradores.model';
 import { MoradoresService } from './moradores.service';
 import { AuthenticationService } from './../_services/authentication.service';
+import { PermissoesService } from '../_services/permissoes.service';
+import { PerfilFuncionalidade } from '../acessos-funcionalidades/acesso-funcionalidade.model';
 
 @Component({
   selector: 'app-moradores',
@@ -28,13 +30,16 @@ export class MoradoresComponent implements OnInit {
 
   erros: ErroRegistro[] = [];
 
+  perfil = {} as PerfilFuncionalidade;
+
   requestDto: MoradoresFilterModel = new MoradoresFilterModel();
 
   constructor(
       private fb: FormBuilder,
       private router: Router,
       private moradoresService: MoradoresService,
-      private authenticationService: AuthenticationService
+      private authenticationService: AuthenticationService,
+      private permissao: PermissoesService
     )  { }
 
   ngOnInit() {
@@ -69,6 +74,14 @@ export class MoradoresComponent implements OnInit {
       .subscribe(
         data=>{
           this.moradores = data;
+          this.permissao.getPermissao('4', '9')
+          .subscribe(
+            data=>{
+              this.perfil = data[0];
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );
         }, err=>{
           this.erros = err['erros'];
         }
