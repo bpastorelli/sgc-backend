@@ -117,8 +117,6 @@ export class AcessosModulosComponent implements OnInit {
   }
 
   addAcessoFuncionalidade(acessoFunc: PerfilFuncionalidade, isChecked: boolean, campo: string) {
-    
-    console.log(campo);
 
     switch(campo){
       case 'acesso':{
