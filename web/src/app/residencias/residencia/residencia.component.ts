@@ -9,6 +9,8 @@ import { ResidenciasService } from '../residencias.service';
 import { ResidenciaService } from './residencia.service';
 import { AuthenticationService } from './../../_services/authentication.service';
 import { ResidenciaResponse } from '../residencia-response.model';
+import { PermissoesService } from 'src/app/_services/permissoes.service';
+import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
 @Component({
   selector: 'app-residencia',
@@ -23,6 +25,8 @@ export class ResidenciaComponent implements OnInit {
   residenciaId: string;
 
   requestFilterDto: ResidenciasFilterModel;
+
+  perfil = {} as PerfilFuncionalidade;
 
   erros: ErroRegistro[] = [];
 
@@ -47,8 +51,8 @@ export class ResidenciaComponent implements OnInit {
               private cepService: CepService,
               private residenciaService: ResidenciaService,
               private residenciasService: ResidenciasService,
-              private authenticationService: AuthenticationService
-
+              private authenticationService: AuthenticationService,
+              private permissao: PermissoesService
               ) { }
 
   ngOnInit() {
@@ -63,6 +67,23 @@ export class ResidenciaComponent implements OnInit {
       if(this.acao != "create" && this.acao != "novo2"){
           this.create = false;
           this.getResidenciaById(this.codigo);
+          this.permissao.getPermissao('4', '10')
+            .subscribe(
+              data=>{
+                this.perfil = data[0];
+              }, err=>{
+                console.log(err['erros']);
+              }
+            );
+      }else{
+        this.permissao.getPermissao('4', '9')
+          .subscribe(
+            data=>{
+              this.perfil = data[0];
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );
       }
     }else{
       this.router.navigate(['/login']);
@@ -169,3 +190,7 @@ export class ResidenciaComponent implements OnInit {
   }
 
 }
+function subscribe(arg0: (data: any) => void, arg1: (err: any) => void) {
+  throw new Error('Function not implemented.');
+}
+

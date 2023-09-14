@@ -7,6 +7,8 @@ import { ResidenciasService } from './residencias.service';
 import { ErroRegistro } from '../_models/erro-registro';
 import { ResidenciasFilterModel } from './residencias-filter.model';
 import { ResidenciaResponse } from './residencia-response.model';
+import { PerfilFuncionalidade } from '../acessos-funcionalidades/acesso-funcionalidade.model';
+import { PermissoesService } from '../_services/permissoes.service';
 
 @Component({
   selector: 'app-residencias',
@@ -21,12 +23,15 @@ export class ResidenciasComponent implements OnInit {
 
   erros: ErroRegistro[] = [];
 
+  perfil = {} as PerfilFuncionalidade;
+
   requestDto: ResidenciasFilterModel = new ResidenciasFilterModel();
 
   constructor(
       private residenciasService: ResidenciasService,
       private authenticationService: AuthenticationService,
       private router: Router,
+      private permissao: PermissoesService
   ) { }
 
   ngOnInit() {
@@ -56,6 +61,14 @@ export class ResidenciasComponent implements OnInit {
     .subscribe(
       data=>{
         this.residencias = data;
+        this.permissao.getPermissao('3', '8')
+        .subscribe(
+          data=>{
+            this.perfil = data[0];
+          }, err=>{
+            console.log(err['erros']);
+          }
+        );
       }, err=>{
         this.erros = err['erros'];
       }

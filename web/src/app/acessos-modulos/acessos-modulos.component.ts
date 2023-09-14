@@ -1,12 +1,11 @@
 import { ErroRegistro } from './../_models/erro-registro';
 import { MoradoresFilterModel } from './../moradores/moradores-filter.model';
 import { AcessoModuloService } from './acessos-modulos.service';
-import { Component, OnInit, ElementRef, ViewChild, ComponentRef, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { properties } from 'src/properties/properties';
 import { Modulo } from '../modulos/modulo.model';
-import { ModulosService } from '../modulos/modulos.service';
 import { Moradores } from '../moradores/moradores.model';
 import { MoradoresService } from '../moradores/moradores.service';
 import { AcessosModulos } from './acessos-modulos.model';
@@ -53,7 +52,6 @@ export class AcessosModulosComponent implements OnInit {
   constructor(
     private router: Router,
     private modalService: ModalService,
-    private modulosService: ModulosService,
     private usuariosService: MoradoresService,
     private acessosModulo: AcessoModuloService,
     private acessosFuncService: AcessoFuncionalidadeService,
@@ -117,8 +115,6 @@ export class AcessosModulosComponent implements OnInit {
   }
 
   addAcessoFuncionalidade(acessoFunc: PerfilFuncionalidade, isChecked: boolean, campo: string) {
-    
-    console.log(campo);
 
     switch(campo){
       case 'acesso':{
