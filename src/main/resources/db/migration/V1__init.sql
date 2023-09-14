@@ -110,6 +110,9 @@ CREATE TABLE `acesso_funcionalidade` (
   `id_modulo` bigint(20) NOT NULL,
   `id_funcionalidade` bigint(20) NOT NULL,
   `acesso` tinyint(1) NOT NULL,
+  `inclusao` tinyint(1) NOT NULL,
+  `alteracao` tinyint(1) NOT NULL,
+  `exclusao` tinyint(1) NOT NULL, 
   `data_cadastro` datetime NOT NULL,
   `posicao` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

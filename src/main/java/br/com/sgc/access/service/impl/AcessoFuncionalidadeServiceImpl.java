@@ -113,6 +113,10 @@ public class AcessoFuncionalidadeServiceImpl implements ServicesAccess<CadastroA
 			
 			if(acessoOld.isPresent()) {
 				acessoOld.get().setAcesso(a.isAcesso());
+				acessoOld.get().setInclusao(a.isInclusao());
+				acessoOld.get().setAlteracao(a.isAlteracao());
+				acessoOld.get().setExclusao(a.isExclusao());
+				acessos.add(acessoOld.get());
 			}else {
 				AcessoFuncionalidade acesso = AcessoFuncionalidade.builder()
 						.id(acessoOld.isPresent() ? acessoOld.get().getId() : null)
@@ -120,6 +124,9 @@ public class AcessoFuncionalidadeServiceImpl implements ServicesAccess<CadastroA
 						.funcionalidade(Funcionalidade.builder().id(a.getIdFuncionalidade()).build())
 						.modulo(Modulo.builder().id(a.getIdModulo()).build())
 						.acesso(a.isAcesso())
+						.inclusao(a.isInclusao())
+						.alteracao(a.isAlteracao())
+						.exclusao(a.isExclusao())
 						.build();
 				acessos.add(acesso);	
 			}

@@ -19,5 +19,11 @@ public class AtualizaAcessoFuncionalidadeDto {
 	private Long idFuncionalidade;
 	
 	private boolean acesso;
+	
+	private boolean inclusao;
+	
+	private boolean alteracao;
+	
+	private boolean exclusao;
 
 }

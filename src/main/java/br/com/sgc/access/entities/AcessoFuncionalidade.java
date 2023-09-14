@@ -47,6 +47,15 @@ public class AcessoFuncionalidade implements Serializable {
 	@Column(name = "acesso", nullable = false)
 	private boolean acesso;
 	
+	@Column(name = "inclusao", nullable = false)
+	private boolean inclusao;
+	
+	@Column(name = "alteracao", nullable = false)
+	private boolean alteracao;
+	
+	@Column(name = "exclusao", nullable = false)
+	private boolean exclusao;
+	
 	@Column(name = "data_cadastro", nullable = false)
 	private Date dataCadastro;
 	

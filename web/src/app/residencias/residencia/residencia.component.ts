@@ -56,8 +56,8 @@ export class ResidenciaComponent implements OnInit {
     this.acao = this.route.snapshot.paramMap.get('acao');
     this.codigo = this.route.snapshot.paramMap.get('codigo');
 
-    console.log(this.acao);
-    console.log(this.codigo);
+    //console.log(this.acao);
+    //console.log(this.codigo);
 
     if(this.authenticationService.currentUserValue){
       if(this.acao != "create" && this.acao != "novo2"){
