@@ -1,5 +1,6 @@
 package br.com.sgc.access.dto;
 
+import br.com.sgc.enums.FuncaoFuncionalidadeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,8 @@ public class GETFuncionalidadeResponseDto {
 	private String descricao;
 	
 	private String pathFuncionalidade;
+	
+	private FuncaoFuncionalidadeEnum funcao; 
 	
 	private Long posicao;
 	
