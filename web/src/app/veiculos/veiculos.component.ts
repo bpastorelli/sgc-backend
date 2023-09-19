@@ -69,7 +69,7 @@ export class VeiculosComponent implements OnInit {
 
   editVeiculo(codigo: string){
 
-    this.router.navigate(['/veiculo/', codigo]);
+    this.router.navigate(['/veiculo/view/', codigo]);
 
   }
 

@@ -4,6 +4,8 @@ import { Veiculo } from './../veiculo.model';
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/_services/authentication.service';
 import { ErroRegistro } from 'src/app/_models/erro-registro';
+import { PermissoesService } from 'src/app/_services/permissoes.service';
+import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
 @Component({
   selector: 'app-veiculo',
@@ -22,6 +24,7 @@ export class VeiculoComponent implements OnInit {
   pag: Number = 1;
   contador: Number = 5;
   erros: ErroRegistro[] = [];
+  perfil = {} as PerfilFuncionalidade;
 
   situacaoCadastral = [
         { id: 1, label: "ATIVO" },
@@ -31,18 +34,27 @@ export class VeiculoComponent implements OnInit {
       private route: ActivatedRoute,
       private router: Router,
       private veiculosService: VeiculosService,
-      private authenticationService: AuthenticationService
+      private authenticationService: AuthenticationService,
+      private permissao: PermissoesService
   ) { }
 
   ngOnInit(): void {
 
     this.acao = this.route.snapshot.paramMap.get('acao');
     this.codigo = this.route.snapshot.paramMap.get('codigo');
-
+    
     if(this.authenticationService.currentUserValue){
-      if(this.codigo != "create" && this.codigo != "novo" && this.acao === null){
-          this.create = false;
+      if(this.acao != "create" && this.acao != "novo"){
+        this.create = false;
           this.getVeiculoById(this.codigo);
+          this.permissao.getPermissao('5', '15')
+          .subscribe(
+            data=>{
+              this.perfil = data[0];
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );
       }
     }else{
         this.router.navigate(['/login']);
@@ -62,6 +74,13 @@ export class VeiculoComponent implements OnInit {
     },err=>{
         this.erros = err['erros'];
     });
+
+  }
+
+  editVeiculo(id: string){
+
+    this.acao = 'edit';
+    this.router.navigate(['/veiculo/edit/', id]);
 
   }
 

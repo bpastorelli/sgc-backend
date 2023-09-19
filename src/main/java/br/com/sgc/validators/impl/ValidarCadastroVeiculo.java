@@ -31,11 +31,11 @@ public class ValidarCadastroVeiculo implements Validators<VeiculoDto, AtualizaVe
 		
 		RegistroException errors = new RegistroException();
 		
-		if(t.getTicketVisitante() == null && t.getVisitanteId() == null)
+		/*if(t.getTicketVisitante() == null && t.getVisitanteId() == null)
 			errors.getErros().add(new ErroRegistro("", TITULO, " Visitante responsável não informado!"));
 		
 		if(t.getTicketVisitante() == "" && t.getVisitanteId() == null)
-			errors.getErros().add(new ErroRegistro("", TITULO, " Visitante responsável não informado!"));
+			errors.getErros().add(new ErroRegistro("", TITULO, " Visitante responsável não informado!"));*/
 		
 		if(t.getTicketVisitante() != "" && t.getTicketVisitante() != null) {
 			Optional<Visitante> visitante = this.visitanteRepository.findByGuide(t.getTicketVisitante());
