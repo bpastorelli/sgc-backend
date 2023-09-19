@@ -192,8 +192,6 @@ export class MoradorComponent implements OnInit {
     .subscribe(
       data=>{
         this.mor = data;
-        console.log(this.mor);
-        console.log(this.mor.id);
       }, err=>{
         this.errorMessage = err;
       }

@@ -1,5 +1,6 @@
 package br.com.sgc.access.filter;
 
+import br.com.sgc.enums.FuncaoFuncionalidadeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,8 @@ public class FuncionalidadeFilter {
 	private Long idModulo;
 	
 	private String descricao;
+	
+	private FuncaoFuncionalidadeEnum funcao;
 	
 	private String pathFuncionalidade;
 	

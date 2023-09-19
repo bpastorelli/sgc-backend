@@ -21,41 +21,41 @@ INSERT INTO `modulo` (`id`,`descricao`, `path_modulo`, `posicao`) VALUES (NULL,'
 
 INSERT INTO `modulo` (`id`,`descricao`, `path_modulo`, `posicao`) VALUES (NULL,'Visitantes', '', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Atribuir Acessos', 'acessoModulo/create', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Atribuir Acessos', 'create', 'acessoModulo/create', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Acessos Funcionalidades', 'acessoFuncionalidade/create', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Acessos Funcionalidades', 'create', 'acessoFuncionalidade/create', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Consultar Módulos', 'modulos', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Consultar Módulos', 'view', 'modulos', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Consultar Funcionalidades', 'funcionalidades', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Consultar Funcionalidades', 'view', 'funcionalidades', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Cadastrar Módulo', 'modulo/create', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Cadastrar Módulo', 'create', 'modulo/create', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Cadastrar Funcionalidade', 'funcionalidade/create', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Administração'), 'Cadastrar Funcionalidade', 'create','funcionalidade/create', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Moradores'), 'Cadastrar Morador', 'morador/create', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Moradores'), 'Cadastrar Morador', 'create', 'morador/create', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Moradores'), 'Consultar Moradores', 'moradores', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Moradores'), 'Consultar Moradores', 'view', 'moradores', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Residências'), 'Cadastrar Residência', 'residencia/create', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Residências'), 'Cadastrar Residência', 'create', 'residencia/create', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Residências'), 'Consultar Residências', 'residencias', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Residências'), 'Consultar Residências', 'view', 'residencias', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Contribuições'), 'Importar Contribuições', 'importar', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Contribuições'), 'Importar Contribuições', 'create', 'importar', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Contribuições'), 'Consultar Contribuições', 'contribuicoes', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Contribuições'), 'Consultar Contribuições', 'view', 'contribuicoes', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Contribuições'), 'Minhas Contribuições', 'minhascontribuicoes', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Contribuições'), 'Minhas Contribuições', 'view', 'minhascontribuicoes', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Visitas'), 'Consultar Visitas', 'visitas', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Visitas'), 'Consultar Visitas', 'view', 'visitas', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Veículos'), 'Cadastar Veículo', 'veiculo/create', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Veículos'), 'Cadastar Veículo', 'create', 'veiculo/create', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Veículos'), 'Consultar Veículos', 'veiculos', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Veículos'), 'Consultar Veículos', 'view', 'veiculos', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Visitantes'), 'Cadastar Visitante', 'visitante/create', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Visitantes'), 'Cadastar Visitante', 'create', 'visitante/create', 1);
 
-INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Visitantes'), 'Consultar Visitantes', 'visitantes', 1);
+INSERT INTO `funcionalidade` (`id`, `id_modulo`, `descricao`, `funcao`, `path_funcionalidade`, `posicao`) VALUES (NULL, (SELECT `id` FROM `modulo` WHERE `descricao`='Visitantes'), 'Consultar Visitantes', 'view', 'visitantes', 1);
 
 INSERT INTO `acesso_modulo` (`id`, `id_usuario`,`id_modulo`, `acesso`, `data_cadastro`, `posicao`) VALUES (NULL, 1, 1, true, CURRENT_DATE(), 1);
 

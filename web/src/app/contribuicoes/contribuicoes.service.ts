@@ -46,7 +46,7 @@ export class ContribuicoesService extends BaseService  {
 
   getContribuicoesPorUsuario(moradorId: number): Observable<Contribuicao[]> {
 
-    return this.http.get<Contribuicao[]>(`${environment.apiUrl}/associados/lancamento/filtroPorDatas?dataInicio=&dataFim=&moradorId=${moradorId}&pag=0&ord=dataPagamento&dir=DESC&qtdePorPagina=1000000`)
+    return this.http.get<Contribuicao[]>(`${environment.apiUrl}/associados/lancamento/filtroPorDatas?dataInicio=&dataFim=&moradorId=${moradorId}&pag=0&ord=dataPagamento&dir=DESC&qtdePorPagina=100000000`)
 
   }
 
@@ -54,7 +54,7 @@ export class ContribuicoesService extends BaseService  {
 
     request.content == null ? request.content = true : request.content;
     request.posicao == 2 ? request.posicao = null : request.posicao;
-    request.size == null ? request.size =  1000000 : request.size;
+    request.size == null ? request.size =  100000000 : request.size;
     request.sort == null ? request.sort = 'nome' : request.sort;
     request.page == null ? request.page = 0 : request.page;
 

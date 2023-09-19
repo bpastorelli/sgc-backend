@@ -42,7 +42,7 @@ public class FuncionalidadeServiceImpl implements ServicesAccess<CadastroFuncion
 	@Override
 	public GETFuncionalidadeResponseDto cadastra(CadastroFuncionalidadeDto post) throws RegistroException {
 		
-		log.info("Cadastrando módulo...");
+		log.info("Cadastrando funcionalidade...");
 		
 		Funcionalidade funcionalidade = this.mapper.cadastroFuncionalidadeDtoToFuncionalidade(post);
 		
@@ -57,7 +57,7 @@ public class FuncionalidadeServiceImpl implements ServicesAccess<CadastroFuncion
 	@Override
 	public List<GETFuncionalidadeResponseDto> cadastraEmLote(List<CadastroFuncionalidadeDto> post) throws RegistroException {
 
-		log.info("Cadastrando módulos...");
+		log.info("Cadastrando funcionalidades...");
 		
 		List<GETFuncionalidadeResponseDto> response = new ArrayList<GETFuncionalidadeResponseDto>();
 
@@ -74,7 +74,7 @@ public class FuncionalidadeServiceImpl implements ServicesAccess<CadastroFuncion
 	@Override
 	public GETFuncionalidadeResponseDto atualiza(AtualizaFuncionalidadeDto put, Long id) throws RegistroException {
 		
-		log.info("Atualizando módulo...");		
+		log.info("Atualizando funcionalidade...");		
 		
 		//Validação
 		this.validar.validarPut(put, id);
@@ -82,6 +82,7 @@ public class FuncionalidadeServiceImpl implements ServicesAccess<CadastroFuncion
 		Funcionalidade funcionalidade = this.funcionalidadeRepository.findById(id).get();
 		
 		funcionalidade.setDescricao(put.getDescricao());
+		funcionalidade.setFuncao(put.getFuncao());
 		funcionalidade.setPathFuncionalidade(put.getPathFuncionalidade().toLowerCase());
 		funcionalidade.setPosicao(put.getPosicao());
 		

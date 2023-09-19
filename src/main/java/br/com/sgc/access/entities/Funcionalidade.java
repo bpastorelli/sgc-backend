@@ -4,12 +4,15 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import br.com.sgc.enums.FuncaoFuncionalidadeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +37,10 @@ public class Funcionalidade implements Serializable {
 	
 	@Column(name = "descricao", nullable = false)
 	private String descricao;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "funcao")
+	private FuncaoFuncionalidadeEnum funcao;
 	
 	@Column(name = "path_funcionalidade", nullable = false)
 	private String pathFuncionalidade;

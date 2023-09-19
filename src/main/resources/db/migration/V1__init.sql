@@ -138,6 +138,7 @@ CREATE TABLE `funcionalidade` (
 	`id_modulo` bigint(20) NOT NULL,
 	`descricao` varchar(30)	NOT NULL,
 	`path_funcionalidade` varchar(40) NOT NULL,
+	`funcao` varchar(20) NOT NULL,
 	`posicao` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
