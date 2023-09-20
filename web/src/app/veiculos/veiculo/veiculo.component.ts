@@ -47,7 +47,16 @@ export class VeiculoComponent implements OnInit {
       if(this.acao != "create" && this.acao != "novo"){
         this.create = false;
           this.getVeiculoById(this.codigo);
-          this.permissao.getPermissao('5', '15')
+          this.permissao.getPermissao('5', '16')
+          .subscribe(
+            data=>{
+              this.perfil = data[0];
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );
+      }else{
+        this.permissao.getPermissao('5', '15')
           .subscribe(
             data=>{
               this.perfil = data[0];
@@ -130,7 +139,8 @@ export class VeiculoComponent implements OnInit {
 
   editVisitante(codigo: string){
 
-    this.router.navigate([`/visitante/`, codigo])
+    this.acao = 'view';
+    this.router.navigate([`/visitante/view/`, codigo])
 
   }
 
