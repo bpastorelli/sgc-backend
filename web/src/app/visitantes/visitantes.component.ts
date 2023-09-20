@@ -130,7 +130,7 @@ export class VisitantesComponent implements OnInit {
 
   editVisitante(codigo: string){
 
-    this.router.navigate([`/visitante/`, codigo])
+    this.router.navigate([`/visitante/view/`, codigo])
 
   }
 

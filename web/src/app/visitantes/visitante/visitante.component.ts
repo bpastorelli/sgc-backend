@@ -9,6 +9,8 @@ import { VisitantesService } from './../visitantes.service';
 import { AuthenticationService } from 'src/app/_services/authentication.service';
 import { Veiculo } from 'src/app/veiculos/veiculo.model';
 import { ErroRegistro } from 'src/app/_models/erro-registro';
+import { PermissoesService } from 'src/app/_services/permissoes.service';
+import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
 declare var $: any;
 
@@ -33,6 +35,7 @@ export class VisitanteComponent implements OnInit {
   bairroResp: string;
   localidadeResp: string;
   ufResp: string;
+  perfil = {} as PerfilFuncionalidade;
 
   public cepResponse: Cep;
   public visit: Visitante;
@@ -52,7 +55,8 @@ export class VisitanteComponent implements OnInit {
               private cepService: CepService,
               private visitantesService: VisitantesService,
               private veiculosService: VeiculosService,
-              private authenticationService: AuthenticationService
+              private authenticationService: AuthenticationService,
+              private permissao: PermissoesService
               ) { }
   ngOnInit() {
 
@@ -60,10 +64,31 @@ export class VisitanteComponent implements OnInit {
       this.rg = this.route.snapshot.paramMap.get('rg');
       this.residencia = this.route.snapshot.paramMap.get('residencia');
       this.codigo = this.route.snapshot.paramMap.get('codigo');
+      this.acao = this.route.snapshot.paramMap.get('acao');
+
+      console.log(this.acao);
+
       this.close('customModal1');
-      if(this.codigo != "create" && this.codigo != "novo"){
+      if(this.acao != "create" && this.acao != "novo"){
           this.create = false;
           this.getVisitanteById(this.codigo);
+          this.permissao.getPermissao('7', '18')
+          .subscribe(
+            data=>{
+              this.perfil = data[0];
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );
+      }else{
+        this.permissao.getPermissao('7', '17')
+          .subscribe(
+            data=>{
+              this.perfil = data[0];
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );
       }
     }else{
       this.router.navigate(['/login']);
@@ -141,9 +166,17 @@ export class VisitanteComponent implements OnInit {
 
   }
 
+  editVisitante(codigo: string){
+
+    this.acao = 'edit';
+    this.router.navigate(['/visitante/edit/', codigo]);
+
+  }
+
   editVeiculo(codigo: string){
 
-    this.router.navigate(['/veiculo/', codigo]);
+    this.acao = 'edit';
+    this.router.navigate(['/veiculo/view/', codigo]);
 
   }
 
