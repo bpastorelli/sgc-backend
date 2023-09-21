@@ -10,7 +10,7 @@
       <form #formEdit="ngForm" novalidate *ngFor="let veiculo of veiculos" >
 
         <label class="labelPagina">
-          Atualizar Cadastro de Veículo
+          {{title}} >> Atualização
         </label>
 
         <div class="row invoice-info">
@@ -145,7 +145,7 @@
         <form #formCreate="ngForm" novalidate>
 
           <label class="labelPagina">
-            Cadastrar Veículo
+            {{title}} >> Inclusão
           </label>
 
           <div class="row invoice-info">
@@ -240,7 +240,7 @@
         <form #formEdit="ngForm" novalidate *ngFor="let veiculo of veiculos" >
   
           <label class="labelPagina">
-            Visualizar Cadastro de Veículo
+            {{title}} >> Visualização
           </label>
   
           <div class="row invoice-info">

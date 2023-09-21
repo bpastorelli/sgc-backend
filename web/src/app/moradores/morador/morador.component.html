@@ -8,7 +8,7 @@
       </div>
 
       <label class="labelPagina">
-        Alterar Cadastro de Morador
+        {{title}} >> Atualização
       </label>
       <form #formEdit="ngForm" novalidate *ngFor="let morador of moradores">
 
@@ -167,7 +167,7 @@
         </div>
 
           <label class="labelPagina">
-            Cadastro de Morador
+            {{title}} >> Inclusão
           </label>
           <form #formCreate="ngForm" novalidate>
 
@@ -290,7 +290,7 @@
       </div>
 
       <label class="labelPagina">
-        Visualizar Cadastro de Morador
+        {{title}} >> Visualização
       </label>
       <form #formEdit="ngForm" novalidate *ngFor="let morador of moradores">
 

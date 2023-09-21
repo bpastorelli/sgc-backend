@@ -8,7 +8,7 @@
     <section class="invoice">
 
       <label class="labelPagina">
-        Alterar Cadastro de Residência
+        {{title}} >> Atualização
       </label>
 
       <form #formEdit="ngForm" *ngFor="let residencia of residencias" novalidate>
@@ -143,7 +143,7 @@
     <section class="invoice">
 
       <label class="labelPagina">
-        Visualizar Cadastro de Residência
+        {{title}} >> Visualização
       </label>
 
       <form #formEdit="ngForm" *ngFor="let residencia of residencias" novalidate>
@@ -279,7 +279,7 @@
   </div>
 
   <label class="labelPagina">
-    Cadastro de Residência
+    {{title}} >> Inclusão
   </label>
   <form #formCreate="ngForm" novalidate>
 
