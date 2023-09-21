@@ -63,8 +63,8 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto, Atuali
 			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o rg "+ t.getRg() +"")));
 			
 		if(t.getCpf() != null && t.getCpf() != "") {
-			this.visitanteRepository.findByCpf(t.getCpf())				
-				.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o cpf "+ t.getCpf() +"")));
+			if(this.visitanteRepository.findByCpf(t.getCpf()).get().size() > 0)				
+				errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o cpf "+ t.getCpf() +""));
 		}
 			
 		this.visitanteRepository.findByNome(t.getNome())

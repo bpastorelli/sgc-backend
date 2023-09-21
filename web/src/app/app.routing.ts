@@ -40,7 +40,7 @@ export const ROUTES: Routes = [
   { path: 'visitante/:acao', component: VisitanteComponent },
   { path: 'visitante/:codigo', component: VisitanteComponent },
   { path: 'visitante/:acao/:codigo', component: VisitanteComponent },
-  { path: 'visitante/:codigo/residencia/:residencia/rg/:rg', component: VisitanteComponent },
+  { path: 'visitante/:acao/residencia/:residencia/rg/:rg', component: VisitanteComponent },
   { path: 'visitantes', component: VisitantesComponent },
   { path: 'veiculo/:acao', component: VeiculoComponent },
   { path: 'veiculo/:acao/:codigo', component: VeiculoComponent },

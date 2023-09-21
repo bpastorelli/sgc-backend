@@ -43,6 +43,8 @@ export class VisitasComponent implements OnInit, OnDestroy  {
   dataInicio: string; 
   dataFim: string;
 
+  title = "Cadastro de Visitas";
+
   date = new Date(Date.parse('01/01/9999'));
 
   @Input() ordenar;
