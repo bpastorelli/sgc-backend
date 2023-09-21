@@ -25,6 +25,8 @@ export class VeiculoComponent implements OnInit {
   contador: Number = 5;
   erros: ErroRegistro[] = [];
   perfil = {} as PerfilFuncionalidade;
+  
+  title = "Cadastro de Veículos";
 
   situacaoCadastral = [
         { id: 1, label: "ATIVO" },

@@ -37,6 +37,8 @@ export class MoradorComponent implements OnInit {
   residenciasVinculadas: ResidenciaResponse[];
   permissoes = {} as AcessoFuncionalidade;
 
+  title = 'Cadastro de Moradores';
+
   situacaoCadastral = [
         { id: 1, label: "ATIVO" },
         { id: 0, label: "INATIVO" }];

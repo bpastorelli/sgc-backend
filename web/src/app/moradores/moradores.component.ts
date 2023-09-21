@@ -32,6 +32,8 @@ export class MoradoresComponent implements OnInit {
 
   perfil = {} as PerfilFuncionalidade;
 
+  title = "Cadastro de Moradores";
+
   requestDto: MoradoresFilterModel = new MoradoresFilterModel();
 
   constructor(

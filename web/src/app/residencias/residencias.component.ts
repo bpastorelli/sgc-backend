@@ -25,6 +25,8 @@ export class ResidenciasComponent implements OnInit {
 
   perfil = {} as PerfilFuncionalidade;
 
+  title = "Cadastro de Residências";
+
   requestDto: ResidenciasFilterModel = new ResidenciasFilterModel();
 
   constructor(

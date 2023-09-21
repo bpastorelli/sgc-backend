@@ -4,7 +4,9 @@
     <div *ngFor="let erro of erros" class="alert alert-warning">
       <strong>Atenção! </strong>{{ erro.detalhe }}
     </div>
-
+  <label class="labelPagina">
+      {{title}}
+  </label>
   <form #form="ngForm" novalidate>
     <input type="hidden" #ord value="{{ordenar}}">
     <input type="hidden" #dir value="{{direction}}">

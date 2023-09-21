@@ -42,6 +42,8 @@ export class ResidenciaComponent implements OnInit {
   ufResp: string;
   error = '';
 
+  title = 'Cadastro de Residências'
+
   pag : Number = 1;
   contador : Number = 5;
 

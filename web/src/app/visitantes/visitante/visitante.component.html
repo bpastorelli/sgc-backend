@@ -8,7 +8,7 @@
       </div>
 
       <label class="labelPagina">
-        Atualizar Cadastro de Visitante
+        {{title}} >> <u>Atualização</u>
       </label>
       <form #formEdit="ngForm" novalidate *ngFor="let visitante of visitantes">
 
@@ -194,7 +194,7 @@
       </div>
 
       <label class="labelPagina">
-        Visualizar Cadastro de Visitante
+        {{title}} >> <u>Visualização</u>
       </label>
       <form #formEdit="ngForm" novalidate *ngFor="let visitante of visitantes">
 
@@ -380,7 +380,7 @@
           </div>
 
           <label class="labelPagina">
-            Cadastro de Visitante
+            {{title}} >> <u>Inclusão</u>
           </label>
           <form #formCreate="ngForm" novalidate>
 

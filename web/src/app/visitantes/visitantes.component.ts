@@ -18,6 +18,8 @@ export class VisitantesComponent implements OnInit {
 
   erros: ErroRegistro[] = [];
 
+  title = "Cadastro de Visitantes";
+
   pag : Number = 1 ;
   contador : Number = 20;
 

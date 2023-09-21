@@ -37,6 +37,8 @@ export class VisitanteComponent implements OnInit {
   ufResp: string;
   perfil = {} as PerfilFuncionalidade;
 
+  title = 'Cadastro de Visitantes';
+
   public cepResponse: Cep;
   public visit: Visitante;
   public visitantes: Visitante[];
