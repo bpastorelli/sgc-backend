@@ -43,7 +43,7 @@
                 <th class="pointer" scope="col" [appSort]="residencias" data-order="desc" data-name="cidade">Cidade</th>
                 <th class="pointer" scope="col" [appSort]="residencias" data-order="desc" data-name="uf">UF</th>
                 <th *ngIf="perfil.inclusao"></th>
-                <th></th>
+                <th *ngIf="perfilVisita.inclusao"></th>
             </tr>
           </thead>
           <tbody>
@@ -56,8 +56,8 @@
               <td class="textCenter"><div class="pointer" (click)="editResidencia(residencia.id)">{{ residencia.cep }}</div></td>
               <td><div class="pointer" (click)="editResidencia(residencia.id)">{{ residencia.cidade.toUpperCase() }}</div></td>
               <td class="textCenter"><div class="pointer" (click)="editResidencia(residencia.id)">{{ residencia.uf.toUpperCase() }}</div></td>
-              <td class="textCenter" *ngIf="perfil.inclusao"  ><div class="pointer" (click)="incluirMorador(residencia.id)"> + Morador</div></td>
-              <td class="textCenter"><div class="pointer" (click)="incluirVisita(residencia.id)"> + Visita</div></td>
+              <td class="textCenter" *ngIf="perfil.inclusao"><div class="pointer" (click)="incluirMorador(residencia.id)"> + Morador</div></td>
+              <td class="textCenter" *ngIf="perfilVisita.inclusao"><div class="pointer" (click)="incluirVisita(residencia.id)"> + Visita</div></td>
             </tr>
           </tbody>
         </table>

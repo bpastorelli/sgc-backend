@@ -13,6 +13,8 @@ import { AuthenticationService } from './../../_services/authentication.service'
 import { ResidenciasFilterModel } from 'src/app/residencias/residencias-filter.model';
 import { ResidenciaResponse } from 'src/app/residencias/residencia-response.model';
 import { VisitanteFilterModel } from '../visitante/visitante-filter.model';
+import { PermissoesService } from 'src/app/_services/permissoes.service';
+import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
 declare var $: any;
 
@@ -54,6 +56,7 @@ export class VisitaComponent implements OnInit {
   public residencias: ResidenciaResponse[];
   requestFilterDto: ResidenciasFilterModel;
   requestFilterVisitante: VisitanteFilterModel;
+  perfil = {} as PerfilFuncionalidade;
 
   erros: ErroRegistro[] = [];
 
@@ -63,7 +66,8 @@ export class VisitaComponent implements OnInit {
               private visitantesService: VisitantesService,
               private router: Router,
               private route: ActivatedRoute,
-              private authenticationService: AuthenticationService
+              private authenticationService: AuthenticationService,
+              private permissao: PermissoesService
               ) { }
 
   ngOnInit() {
@@ -73,6 +77,16 @@ export class VisitaComponent implements OnInit {
     }else{
         this.codigo = this.route.snapshot.paramMap.get('codigo');
         this.rgV = this.route.snapshot.paramMap.get('rg');
+
+        this.permissao.getPermissao('6','14')
+        .subscribe(
+          data=>{
+            this.perfil = data[0];
+          }, err=>{
+            console.log(err['erros']);
+          }
+        );
+
         if(this.rgV)
           this.getVisitante(this.rgV);
         this.close('customModal1');

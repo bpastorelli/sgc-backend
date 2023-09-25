@@ -12,6 +12,8 @@ import { ResidenciaResponse } from '../residencia-response.model';
 import { PermissoesService } from 'src/app/_services/permissoes.service';
 import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
+declare var $: any;
+
 @Component({
   selector: 'app-residencia',
   templateUrl: './residencia.component.html'
@@ -110,7 +112,9 @@ export class ResidenciaComponent implements OnInit {
     this.residenciaService.putResidencia(residencia, id)
       .subscribe(data => {
         this.residencia = data;
-        this.router.navigate(['/summary-edit']);
+        this.acao = 'view';
+        this.open('customModal1');
+        this.router.navigate(['/residencia/view/' + id]);
       },err => {
           this.erros = err['erros'];
       });
@@ -189,6 +193,16 @@ export class ResidenciaComponent implements OnInit {
 
   pageChanged(event){
     this.pag = event;
+  }
+
+  open(id: string) {
+
+    this.erros = null;
+    $('#' + id).modal('show');
+  }
+
+  close(id: string) {
+    $('#' + id).modal('hide');
   }
 
 }

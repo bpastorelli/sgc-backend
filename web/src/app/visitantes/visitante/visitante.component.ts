@@ -68,7 +68,7 @@ export class VisitanteComponent implements OnInit {
       this.codigo = this.route.snapshot.paramMap.get('codigo');
       this.acao = this.route.snapshot.paramMap.get('acao');
 
-      console.log(this.acao);
+      //console.log(this.acao);
 
       this.close('customModal1');
       if(this.acao != "create" && this.acao != "novo"){
@@ -125,7 +125,9 @@ export class VisitanteComponent implements OnInit {
     this.visitantesService.putVisitante(visitante, id)
       .subscribe(data => {
         this.visit = data;
-        this.router.navigate(['/summary-edit']);
+        this.acao = 'view';
+        this.open('customModal2');
+        this.router.navigate(['/visitante/view/' + id]);
     },err=>{
       this.erros = err['erros'];
     });

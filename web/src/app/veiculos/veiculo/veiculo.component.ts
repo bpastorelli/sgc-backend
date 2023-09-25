@@ -7,6 +7,8 @@ import { ErroRegistro } from 'src/app/_models/erro-registro';
 import { PermissoesService } from 'src/app/_services/permissoes.service';
 import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
+declare var $: any;
+
 @Component({
   selector: 'app-veiculo',
   templateUrl: './veiculo.component.html'
@@ -115,7 +117,9 @@ export class VeiculoComponent implements OnInit {
     this.veiculosService.putVeiculo(veiculo, id)
       .subscribe(data => {
         this.ticket = data.ticket;
-        this.router.navigate([`/summary-edit`]);
+        this.acao = 'view';
+        this.open('customModal1');
+        this.router.navigate(['/veiculo/view/' + id]);
     },err=>{
         this.erros = err['erros'];
     });
@@ -148,6 +152,16 @@ export class VeiculoComponent implements OnInit {
 
   pageChanged(event){
     this.pag = event;
+  }
+
+  open(id: string) {
+
+    this.erros = null;
+    $('#' + id).modal('show');
+  }
+
+  close(id: string) {
+    $('#' + id).modal('hide');
   }
 
 }
