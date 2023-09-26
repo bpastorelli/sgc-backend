@@ -56,7 +56,7 @@ export class VisitaComponent implements OnInit {
   public residencias: ResidenciaResponse[];
   requestFilterDto: ResidenciasFilterModel;
   requestFilterVisitante: VisitanteFilterModel;
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
 
   erros: ErroRegistro[] = [];
 
@@ -78,10 +78,16 @@ export class VisitaComponent implements OnInit {
         this.codigo = this.route.snapshot.paramMap.get('codigo');
         this.rgV = this.route.snapshot.paramMap.get('rg');
 
-        this.permissao.getPermissao('6','14')
+        let modulos: string[] = [];
+        let funcionalidades: string[] = [];
+  
+        modulos.push('6');
+        funcionalidades.push('14');
+
+        this.permissao.getPermissao(modulos,funcionalidades)
         .subscribe(
           data=>{
-            this.perfil = data[0];
+            this.perfil = data;
           }, err=>{
             console.log(err['erros']);
           }

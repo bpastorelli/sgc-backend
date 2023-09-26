@@ -34,7 +34,7 @@ export class MoradorComponent implements OnInit {
 
   mor = {} as Morador;
   guide = {} as Publisher;
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
   moradores: MoradorResponse[] = [];
   residenciasVinculadas: ResidenciaResponse[];
   permissoes = {} as AcessoFuncionalidade;
@@ -62,15 +62,20 @@ export class MoradorComponent implements OnInit {
       
       //console.log(this.acao);
       //console.log(this.codigo);
+      let modulos: string[] = [];
+      let funcionalidades: string[] = [];
+
+      modulos.push('3');
+      funcionalidades.push('7');
       
       if(this.authenticationService.currentUserValue){
         if(this.acao != "create"){
           this.create = false;
           this.getMoradorById(this.codigo);
-          this.permissao.getPermissao('3', '8')
+          this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }
@@ -78,10 +83,10 @@ export class MoradorComponent implements OnInit {
         }else{
           this.create = true;
           this.acao = "create";
-          this.permissao.getPermissao('3', '7')
+          this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }

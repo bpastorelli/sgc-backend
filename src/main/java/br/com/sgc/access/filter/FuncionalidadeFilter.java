@@ -1,5 +1,7 @@
 package br.com.sgc.access.filter;
 
+import java.util.List;
+
 import br.com.sgc.enums.FuncaoFuncionalidadeEnum;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +12,7 @@ public class FuncionalidadeFilter {
 
 	private Long id;
 	
-	private Long idModulo;
+	private List<Long> idModulo;
 	
 	private String descricao;
 	

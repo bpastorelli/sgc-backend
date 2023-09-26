@@ -26,7 +26,7 @@ export class VeiculoComponent implements OnInit {
   pag: Number = 1;
   contador: Number = 5;
   erros: ErroRegistro[] = [];
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
   
   title = "Cadastro de Veículos";
 
@@ -46,24 +46,35 @@ export class VeiculoComponent implements OnInit {
 
     this.acao = this.route.snapshot.paramMap.get('acao');
     this.codigo = this.route.snapshot.paramMap.get('codigo');
+
+    let modulos: string[] = [];
+    let funcionalidades: string[] = [];
     
     if(this.authenticationService.currentUserValue){
       if(this.acao != "create" && this.acao != "novo"){
+
+        modulos.push('5');
+        funcionalidades.push('16');
+
         this.create = false;
           this.getVeiculoById(this.codigo);
-          this.permissao.getPermissao('5', '16')
+          this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }
           );
       }else{
-        this.permissao.getPermissao('5', '15')
+
+        modulos.push('5');
+        funcionalidades.push('15');
+
+        this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }

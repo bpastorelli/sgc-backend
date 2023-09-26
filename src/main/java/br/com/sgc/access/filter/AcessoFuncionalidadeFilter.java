@@ -1,5 +1,7 @@
 package br.com.sgc.access.filter;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +15,9 @@ public class AcessoFuncionalidadeFilter {
 	
 	private Long idUsuario;
 	
-	private Long idModulo;
+	private List<Long> idModulo;
 	
-	private Long idFuncionalidade;
+	private List<Long> idFuncionalidade;
 	
 	private String path;
 	

@@ -131,7 +131,7 @@
         <div *ngIf="!create">
           <div class="row">
               <div class="col-xs-12">
-                <button *ngIf="perfil.alteracao" (click)="putVisitante(formEdit.value, id.value)" class="btn btn-success pull-right"
+                <button *ngIf="perfil[0].alteracao" (click)="putVisitante(formEdit.value, id.value)" class="btn btn-success pull-right"
                 [disabled]="!formEdit.valid"><i></i> Atualizar
                 </button>
                 <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
@@ -318,7 +318,7 @@
         <div>
           <div class="row">
               <div class="col-xs-12">
-                <button *ngIf="perfil.alteracao" (click)="editVisitante(id.value)" class="btn btn-success pull-right"><i></i> Editar
+                <button *ngIf="perfil[0].alteracao" (click)="editVisitante(id.value)" class="btn btn-success pull-right"><i></i> Editar
                 </button>
                 <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
                 </button>
@@ -481,7 +481,7 @@
             <div>
               <div class="row">
                 <div class="col-xs-12">
-                  <button class="pointer" *ngIf="perfil.inclusao" (click)="postVisitanteAmqp(formCreate.value)" class="btn btn-success pull-right"
+                  <button class="pointer" *ngIf="perfil[0].inclusao" (click)="postVisitanteAmqp(formCreate.value)" class="btn btn-success pull-right"
                     [disabled]="!formCreate.valid"><i></i> Avançar
                   </button>
                   <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
@@ -512,7 +512,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="alert alert-warning">
+          <div class="alert alert-success">
             <b>Visitante cadastrado com sucesso, deseja incluir uma visita?</b>
           </div>
         </div>

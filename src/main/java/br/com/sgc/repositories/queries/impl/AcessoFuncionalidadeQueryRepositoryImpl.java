@@ -83,11 +83,11 @@ public class AcessoFuncionalidadeQueryRepositoryImpl implements QueryRepository<
 			predicates.add(builder.equal(root.get("idUsuario"), filters.getIdUsuario()));
 		
 		if(filters.getIdModulo() != null)
-			predicates.add(builder.equal(moduloJoin_.get("id"), filters.getIdModulo()));
+			predicates.add(builder.and(moduloJoin_.get("id").in(filters.getIdModulo())));
 		
 		if(filters.getIdFuncionalidade() != null)
-			predicates.add(builder.equal(funcionalidadeJoin_.get("id"), filters.getIdFuncionalidade()));		
-		
+			predicates.add(builder.and(funcionalidadeJoin_.get("id").in(filters.getIdFuncionalidade())));		
+			
 		if(filters.getPosicao() != null)
 			predicates.add(builder.equal(root.get("posicao"), filters.getPosicao()));
 		

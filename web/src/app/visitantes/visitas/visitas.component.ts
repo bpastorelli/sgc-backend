@@ -37,7 +37,7 @@ export class VisitasComponent implements OnInit, OnDestroy  {
   posicaoDefault: number = 1;
   errorMessage;
   erros: ErroRegistro[] = [];
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
 
   id: string; 
   nome: string; 
@@ -68,14 +68,20 @@ export class VisitasComponent implements OnInit, OnDestroy  {
 
     this.ngOnDestroy();
 
+    let modulos: string[] = [];
+    let funcionalidades: string[] = [];
+
+    modulos.push('6');
+    funcionalidades.push('14');
+
     if(this.authenticationService.currentUserValue){
         this.ordenar = "dataEntrada";
         this.direction = 'DESC';
         this.getVisitas(null, null, null, null, null, this.posicaoDefault, this.ordenar, this.direction);
-        this.permissao.getPermissao('6', '14')
+        this.permissao.getPermissao(modulos, funcionalidades)
         .subscribe(
           data=>{
-            this.perfil = data[0];
+            this.perfil = data;
           }, err=>{
             console.log(err['erros']);
           }
@@ -91,6 +97,7 @@ export class VisitasComponent implements OnInit, OnDestroy  {
     this.loading = true;
     this.visitasService.baixarVisita(id)
       .subscribe(data => {
+        this.openModal('customModal2');
         this.subscription = this.everyFiveSeconds.subscribe(() => {
           this.getVisitas(this.nome, this.rg, this.cpf, this.dataInicio, this.dataFim, this.posicaoDefault, this.ordenar, this.direction);
         });
@@ -189,6 +196,12 @@ export class VisitasComponent implements OnInit, OnDestroy  {
   open(id: string, visita: Visita) {
 
     this.visita = visita;
+
+    this.erros = null;
+    $('#' + id).modal('show');
+  }
+
+  openModal(id: string) {
 
     this.erros = null;
     $('#' + id).modal('show');

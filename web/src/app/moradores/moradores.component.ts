@@ -30,7 +30,7 @@ export class MoradoresComponent implements OnInit {
 
   erros: ErroRegistro[] = [];
 
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
 
   title = "Cadastro de Moradores";
 
@@ -72,18 +72,24 @@ export class MoradoresComponent implements OnInit {
     if(email)
       this.requestDto.email = email;
 
+    //let modulos: string[] = [];
+    //let funcionalidades: string[] = [];
+
+    //modulos.push('4');
+    //funcionalidades.push('9');
+
     return this.moradoresService.getMoradores(this.requestDto)
       .subscribe(
         data=>{
           this.moradores = data;
-          this.permissao.getPermissao('4', '9')
-          .subscribe(
+          /*this.permissao.getPermissao(modulos,funcionalidades)
+          subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }
-          );
+          );*/
         }, err=>{
           this.erros = err['erros'];
         }

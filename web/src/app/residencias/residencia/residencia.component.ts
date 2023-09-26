@@ -28,7 +28,7 @@ export class ResidenciaComponent implements OnInit {
 
   requestFilterDto: ResidenciasFilterModel;
 
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
 
   erros: ErroRegistro[] = [];
 
@@ -66,24 +66,34 @@ export class ResidenciaComponent implements OnInit {
 
     //console.log(this.acao);
     //console.log(this.codigo);
+    let modulos: string[] = [];
+    let funcionalidades: string[] = [];
 
     if(this.authenticationService.currentUserValue){
       if(this.acao != "create" && this.acao != "novo2"){
+
+          modulos.push('4');
+          funcionalidades.push('10');
+
           this.create = false;
           this.getResidenciaById(this.codigo);
-          this.permissao.getPermissao('4', '10')
+          this.permissao.getPermissao(modulos, funcionalidades)
             .subscribe(
               data=>{
-                this.perfil = data[0];
+                this.perfil = data;
               }, err=>{
                 console.log(err['erros']);
               }
             );
       }else{
-        this.permissao.getPermissao('4', '9')
+
+        modulos.push('4');
+        funcionalidades.push('9');
+
+        this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }

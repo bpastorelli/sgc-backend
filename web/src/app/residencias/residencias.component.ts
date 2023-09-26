@@ -8,7 +8,6 @@ import { ResidenciasFilterModel } from './residencias-filter.model';
 import { ResidenciaResponse } from './residencia-response.model';
 import { PerfilFuncionalidade } from '../acessos-funcionalidades/acesso-funcionalidade.model';
 import { PermissoesService } from '../_services/permissoes.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-residencias',
@@ -23,7 +22,7 @@ export class ResidenciasComponent implements OnInit {
 
   erros: ErroRegistro[] = [];
 
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
   perfilVisita = {} as PerfilFuncionalidade;
 
   title = "Cadastro de Residências";
@@ -50,6 +49,7 @@ export class ResidenciasComponent implements OnInit {
   getResidencias(codigo?: string, endereco?: string, numero?: string){
 
     this.requestDto = new ResidenciasFilterModel();
+    this.perfil = [];
 
     if(codigo)
       this.requestDto.id = codigo;
@@ -60,22 +60,20 @@ export class ResidenciasComponent implements OnInit {
     if(numero)
       this.requestDto.numero = numero;
 
+    let modulos: string[] = [];
+    let funcionalidades: string[] = [];
+
+    modulos.push('3','6');
+    funcionalidades.push('7','14');
+
     this.residenciasService.residencias(this.requestDto)
     .subscribe(
       data=>{
         this.residencias = data;
-        this.permissao.getPermissao('3','7')
+        this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
-            }, err=>{
-              console.log(err['erros']);
-            }
-          );
-        this.permissao.getPermissao('6','14')
-          .subscribe(
-            data=>{
-              this.perfilVisita = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }

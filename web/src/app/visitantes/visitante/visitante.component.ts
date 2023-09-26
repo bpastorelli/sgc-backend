@@ -35,7 +35,7 @@ export class VisitanteComponent implements OnInit {
   bairroResp: string;
   localidadeResp: string;
   ufResp: string;
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
 
   title = 'Cadastro de Visitantes';
 
@@ -69,24 +69,32 @@ export class VisitanteComponent implements OnInit {
       this.acao = this.route.snapshot.paramMap.get('acao');
 
       //console.log(this.acao);
+      let modulos: string[] = [];
+      let funcionalidades: string[] = [];
 
       this.close('customModal1');
       if(this.acao != "create" && this.acao != "novo"){
+          modulos.push('7');
+          funcionalidades.push('18','17');
+
           this.create = false;
           this.getVisitanteById(this.codigo);
-          this.permissao.getPermissao('7', '18')
+          this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }
           );
       }else{
-        this.permissao.getPermissao('7', '17')
+        modulos.push('7');
+        funcionalidades.push('7','17');
+
+        this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }
