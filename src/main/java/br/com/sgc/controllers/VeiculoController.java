@@ -78,7 +78,7 @@ class VeiculoController extends RegistroExceptionHandler {
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarVeiculosFiltro(
 			VeiculoFilter filters,
-			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException{
+			@PageableDefault(sort = "modelo", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) throws NoSuchAlgorithmException{
 		
 		
 		log.info("Buscando veiculos...");
