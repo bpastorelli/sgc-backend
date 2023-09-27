@@ -81,11 +81,15 @@ public class AcessoModuloServiceImpl implements ServicesAccess<CadastroAcessoMod
 		
 		listAcessos.addAll(this.mapperModulo.listAcessoModuloToListGETAcessoModuloResponseDto(this.queryModulo.query(filter, pageable)));
 		
+		
 		//Filtra as funcionalidades
 		listAcessos.forEach(m -> {
+
+			List<Long> modulos = new ArrayList<Long>();
+			modulos.add(m.getIdModulo());
 			AcessoFuncionalidadeFilter filterAcessos = AcessoFuncionalidadeFilter.builder()
 				.idUsuario(m.getIdUsuario())
-				.idModulo(m.getIdModulo())
+				.idModulo(modulos)
 				.acesso(filter.isAcesso())
 				.build();
 			

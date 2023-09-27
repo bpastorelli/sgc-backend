@@ -11,6 +11,8 @@ import { PermissoesService } from 'src/app/_services/permissoes.service';
 import { AcessoFuncionalidade } from 'src/app/_models/acessoFuncionalidade';
 import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
+declare var $: any;
+
 @Component({
   selector: 'app-morador',
   templateUrl: './morador.component.html'
@@ -32,7 +34,7 @@ export class MoradorComponent implements OnInit {
 
   mor = {} as Morador;
   guide = {} as Publisher;
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
   moradores: MoradorResponse[] = [];
   residenciasVinculadas: ResidenciaResponse[];
   permissoes = {} as AcessoFuncionalidade;
@@ -60,15 +62,20 @@ export class MoradorComponent implements OnInit {
       
       //console.log(this.acao);
       //console.log(this.codigo);
+      let modulos: string[] = [];
+      let funcionalidades: string[] = [];
+
+      modulos.push('3');
+      funcionalidades.push('7');
       
       if(this.authenticationService.currentUserValue){
         if(this.acao != "create"){
           this.create = false;
           this.getMoradorById(this.codigo);
-          this.permissao.getPermissao('3', '8')
+          this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }
@@ -76,10 +83,10 @@ export class MoradorComponent implements OnInit {
         }else{
           this.create = true;
           this.acao = "create";
-          this.permissao.getPermissao('3', '7')
+          this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }
@@ -141,8 +148,11 @@ export class MoradorComponent implements OnInit {
       .subscribe(data => {
         this.mor = data;
         this.id = data.id;
-        if(this.mor.residenciaId != null)
-          this.router.navigate([`/summary-edit`]);
+        if(this.mor.residenciaId != null){
+          this.acao = 'view';
+          this.open('customModal1');
+          this.router.navigate(['/morador/view/' + id]);
+        }
         else
           this.router.navigate(['/residencia/novo/morador/', this.id]);
     },
@@ -157,9 +167,11 @@ export class MoradorComponent implements OnInit {
     this.moradorService.putMorador(moradorEdit, id)
       .subscribe(data => {
         this.guide = data.ticket;
-        if(this.guide != null && this.possuiResidencia)
-          this.router.navigate([`/summary-edit`]);
-        else
+        if(this.guide != null && this.possuiResidencia){
+          this.acao = 'view';
+          this.open('customModal1');
+          this.router.navigate(['/morador/view/' + id]);
+        }else
           this.router.navigate(['/residencia/novo2/morador/', this.guide]);
     },
     (err) =>{
@@ -175,7 +187,6 @@ export class MoradorComponent implements OnInit {
       data=>{
         this.moradores = data;
         this.moradores.forEach(morador => {
-          console.log(morador.residencias.length);
           if(morador.residencias.length > 0)
             this.possuiResidencia = true;
         });
@@ -230,6 +241,16 @@ export class MoradorComponent implements OnInit {
 
   pageChanged(event){
     this.pag = event;
+  }
+
+  open(id: string) {
+
+    this.erros = null;
+    $('#' + id).modal('show');
+  }
+
+  close(id: string) {
+    $('#' + id).modal('hide');
   }
 
 }

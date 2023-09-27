@@ -68,7 +68,7 @@ public class FuncionalidadeQueryRepositoryImpl implements QueryRepository<Funcio
 			predicates.add(builder.equal(root.get("id"), filters.getId()));
 		
 		if(filters.getIdModulo() != null)
-			predicates.add(builder.equal(root.get("idModulo"), filters.getIdModulo()));
+			predicates.add(builder.and(root.get("idModulo").in(filters.getIdModulo())));
 		
 		if(filters.getDescricao() != null)
 			predicates.add(builder.like(root.get("descricao"), filters.getDescricao() + '%'));

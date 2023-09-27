@@ -12,6 +12,8 @@ import { ResidenciaResponse } from '../residencia-response.model';
 import { PermissoesService } from 'src/app/_services/permissoes.service';
 import { PerfilFuncionalidade } from 'src/app/acessos-funcionalidades/acesso-funcionalidade.model';
 
+declare var $: any;
+
 @Component({
   selector: 'app-residencia',
   templateUrl: './residencia.component.html'
@@ -26,7 +28,7 @@ export class ResidenciaComponent implements OnInit {
 
   requestFilterDto: ResidenciasFilterModel;
 
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
 
   erros: ErroRegistro[] = [];
 
@@ -64,24 +66,34 @@ export class ResidenciaComponent implements OnInit {
 
     //console.log(this.acao);
     //console.log(this.codigo);
+    let modulos: string[] = [];
+    let funcionalidades: string[] = [];
 
     if(this.authenticationService.currentUserValue){
       if(this.acao != "create" && this.acao != "novo2"){
+
+          modulos.push('4');
+          funcionalidades.push('10');
+
           this.create = false;
           this.getResidenciaById(this.codigo);
-          this.permissao.getPermissao('4', '10')
+          this.permissao.getPermissao(modulos, funcionalidades)
             .subscribe(
               data=>{
-                this.perfil = data[0];
+                this.perfil = data;
               }, err=>{
                 console.log(err['erros']);
               }
             );
       }else{
-        this.permissao.getPermissao('4', '9')
+
+        modulos.push('4');
+        funcionalidades.push('9');
+
+        this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
-              this.perfil = data[0];
+              this.perfil = data;
             }, err=>{
               console.log(err['erros']);
             }
@@ -110,7 +122,9 @@ export class ResidenciaComponent implements OnInit {
     this.residenciaService.putResidencia(residencia, id)
       .subscribe(data => {
         this.residencia = data;
-        this.router.navigate(['/summary-edit']);
+        this.acao = 'view';
+        this.open('customModal1');
+        this.router.navigate(['/residencia/view/' + id]);
       },err => {
           this.erros = err['erros'];
       });
@@ -189,6 +203,16 @@ export class ResidenciaComponent implements OnInit {
 
   pageChanged(event){
     this.pag = event;
+  }
+
+  open(id: string) {
+
+    this.erros = null;
+    $('#' + id).modal('show');
+  }
+
+  close(id: string) {
+    $('#' + id).modal('hide');
   }
 
 }

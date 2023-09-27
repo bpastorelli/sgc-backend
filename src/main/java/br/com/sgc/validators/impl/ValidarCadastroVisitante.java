@@ -12,6 +12,7 @@ import br.com.sgc.dto.VisitanteDto;
 import br.com.sgc.entities.Visitante;
 import br.com.sgc.errorheadling.ErroRegistro;
 import br.com.sgc.errorheadling.RegistroException;
+import br.com.sgc.repositories.MoradorRepository;
 import br.com.sgc.repositories.VisitanteRepository;
 import br.com.sgc.validators.Validators;
 
@@ -20,6 +21,9 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto, Atuali
 
 	@Autowired
 	private VisitanteRepository visitanteRepository;
+	
+	@Autowired
+	private MoradorRepository moradorRepository;
 	
 	private static final String TITULO = "Cadastro de visitante recusado!";
 	
@@ -65,6 +69,11 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto, Atuali
 		if(t.getCpf() != null && t.getCpf() != "") {
 			if(this.visitanteRepository.findByCpf(t.getCpf()).get().size() > 0)				
 				errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o cpf "+ t.getCpf() +""));
+		}
+		
+		if(t.getCpf() != null && t.getCpf() != "") {
+			if(this.moradorRepository.findByCpf(t.getCpf()).isPresent())				
+				errors.getErros().add(new ErroRegistro("", TITULO, " O cpf informado "+ t.getCpf() + " faz parte de um cadastro de morador"));
 		}
 			
 		this.visitanteRepository.findByNome(t.getNome())

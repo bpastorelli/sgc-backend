@@ -87,7 +87,7 @@
       <div class="row">
         <div class="col-xs-12">
 
-          <button (click)="putResidencia(formEdit.value, id.value)" *ngIf="perfil.alteracao" class="btn btn-success pull-right"
+          <button (click)="putResidencia(formEdit.value, id.value)" *ngIf="perfil[0].alteracao" class="btn btn-success pull-right"
             [disabled]="!formEdit.valid"><i></i> Atualizar
           </button>
           <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
@@ -222,7 +222,7 @@
       <div class="row">
         <div class="col-xs-12">
 
-          <button (click)="editResidencia(id.value)" *ngIf="perfil.alteracao" class="btn btn-success pull-right"><i></i> Editar
+          <button (click)="editResidencia(id.value)" *ngIf="perfil[0].alteracao" class="btn btn-success pull-right"><i></i> Editar
           </button>
           <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
           </button>
@@ -362,7 +362,7 @@
 
       <div *ngIf="acao==='create' && codigo===null" class="row">
         <div class="col-xs-12">
-          <button (click)="postNovaResidenciaAmqp(formCreate.value)" *ngIf="perfil.inclusao" class="btn btn-success pull-right"
+          <button (click)="postNovaResidenciaAmqp(formCreate.value)" *ngIf="perfil[0].inclusao" class="btn btn-success pull-right"
           [disabled]="!formCreate.valid"><i></i> Salvar
           </button>
           <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
@@ -372,7 +372,7 @@
 
       <div *ngIf="acao === 'novo'"  class="row">
         <div class="col-xs-12">
-          <button (click)="postResidencia(formCreate.value)" *ngIf="perfil.inclusao" class="btn btn-success pull-right"
+          <button (click)="postResidencia(formCreate.value)" *ngIf="perfil[0].inclusao" class="btn btn-success pull-right"
           [disabled]="!formCreate.valid"><i></i> Finalizar
           </button>
           <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
@@ -382,7 +382,7 @@
 
       <div *ngIf="acao === 'novo2'"  class="row">
         <div class="col-xs-12">
-          <button (click)="postNovaResidenciaAmqp(formCreate.value)" *ngIf="perfil.inclusao" class="btn btn-success pull-right"
+          <button (click)="postNovaResidenciaAmqp(formCreate.value)" *ngIf="perfil[0].inclusao" class="btn btn-success pull-right"
           [disabled]="!formCreate.valid"><i></i> Finalizar
           </button>
           <button (click)="cancelar()" class="btn btn-primary pull-right"><i></i> Cancelar
@@ -394,3 +394,25 @@
 </section>
 </section>
 </section>
+
+ <!-- Modal -->
+ <div class="modal fade" id="customModal1" #customModal1 tabindex="-1" role="dialog" aria-labelledby="custoModal1Label" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="customModal1Label"><strong>Sucesso!</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-success">
+          <b>Registro atualizado com sucesso!</b>
+        </div>
+      </div>
+      <div class="modal-footer" >
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+       </div>
+    </div>
+  </div>
+</div>

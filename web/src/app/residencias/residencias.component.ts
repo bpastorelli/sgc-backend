@@ -2,7 +2,6 @@ import { properties } from './../../properties/properties';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
-import { Residencia } from './residencias.model';
 import { ResidenciasService } from './residencias.service';
 import { ErroRegistro } from '../_models/erro-registro';
 import { ResidenciasFilterModel } from './residencias-filter.model';
@@ -23,7 +22,8 @@ export class ResidenciasComponent implements OnInit {
 
   erros: ErroRegistro[] = [];
 
-  perfil = {} as PerfilFuncionalidade;
+  perfil = {} as PerfilFuncionalidade[];
+  perfilVisita = {} as PerfilFuncionalidade;
 
   title = "Cadastro de Residências";
 
@@ -49,6 +49,7 @@ export class ResidenciasComponent implements OnInit {
   getResidencias(codigo?: string, endereco?: string, numero?: string){
 
     this.requestDto = new ResidenciasFilterModel();
+    this.perfil = [];
 
     if(codigo)
       this.requestDto.id = codigo;
@@ -59,18 +60,24 @@ export class ResidenciasComponent implements OnInit {
     if(numero)
       this.requestDto.numero = numero;
 
+    let modulos: string[] = [];
+    let funcionalidades: string[] = [];
+
+    modulos.push('3','6');
+    funcionalidades.push('7','14');
+
     this.residenciasService.residencias(this.requestDto)
     .subscribe(
       data=>{
         this.residencias = data;
-        this.permissao.getPermissao('3', '8')
-        .subscribe(
-          data=>{
-            this.perfil = data[0];
-          }, err=>{
-            console.log(err['erros']);
-          }
-        );
+        this.permissao.getPermissao(modulos, funcionalidades)
+          .subscribe(
+            data=>{
+              this.perfil = data;
+            }, err=>{
+              console.log(err['erros']);
+            }
+          );
       }, err=>{
         this.erros = err['erros'];
       }

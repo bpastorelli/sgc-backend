@@ -1,8 +1,8 @@
 export class AcessoFuncionalidadeFilter{
 
   idUsuario?: string;
-  idModulo?: string;
-  idFuncionalidade?: string;
+  idModulo?: string[];
+  idFuncionalidade?: string[];
   posicao?: number = 1;
   acesso?: boolean;
   content: boolean = true;

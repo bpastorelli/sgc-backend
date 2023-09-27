@@ -210,7 +210,7 @@ export class AcessosModulosComponent implements OnInit {
 
   }
 
-  getAcessosFuncionalidade(idUsuario: string, idModulo: string){
+  getAcessosFuncionalidade(idUsuario: string, idModulo: string[]){
 
     this.requestListFunc = [];
     this.selecionadosFunc = [];
@@ -267,7 +267,12 @@ export class AcessosModulosComponent implements OnInit {
 
     this.nomeModulo = nomeModulo;
     this.idModulo = idModulo;
-    this.getAcessosFuncionalidade(idUsuario, idModulo);
+
+    let modulos: string[] = [];
+
+    modulos.push(idModulo);
+
+    this.getAcessosFuncionalidade(idUsuario, modulos);
 
   }
 
