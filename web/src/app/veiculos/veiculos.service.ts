@@ -95,7 +95,7 @@ export class VeiculosService extends BaseService {
     request.content == null ? request.content = true : request.content;
     request.posicao == 2 ? request.posicao = null : request.posicao;
     request.size == null ? request.size =  1000000 : request.size;
-    request.sort == null ? request.sort = 'marca' : request.sort;
+    request.sort == null ? request.sort = 'modelo' : request.sort;
     request.page == null ? request.page = 0 : request.page;
 
     return request;

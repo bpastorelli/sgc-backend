@@ -13,6 +13,8 @@ public class ResidenciaFilter {
 	
 	private Long numero;
 	
+	private String complemento;
+	
 	private String cep;
 	
 	private String cidade;

@@ -9,6 +9,7 @@ export interface Residencia {
   cidade: string,
   uf: string,
   dataVinculo: string,
-  moradorId: number
+  moradorId: number;
+  ticket: string;
 
 }

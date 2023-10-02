@@ -59,6 +59,9 @@ public class ResidenciaQueryRepositoryImpl implements QueryRepository<Residencia
 		if(filters.getNumero() != null)
 			predicates.add(builder.equal(root.get("numero"), filters.getNumero()));
 		
+		if(filters.getComplemento() != null)
+			predicates.add(builder.equal(root.get("complemento"), filters.getComplemento()));
+		
 		if(filters.getCep() != null)
 			predicates.add(builder.equal(root.get("cep"), filters.getCep()));
 		

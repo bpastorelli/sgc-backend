@@ -24,11 +24,12 @@ export class ResidenciaComponent implements OnInit {
   errorMessage;
   acao: string;
   codigo: string;
+  ticket: string;
   residenciaId: string;
 
   requestFilterDto: ResidenciasFilterModel;
 
-  perfil = {} as PerfilFuncionalidade[];
+  perfil: PerfilFuncionalidade[] = [];
 
   erros: ErroRegistro[] = [];
 
@@ -44,7 +45,8 @@ export class ResidenciaComponent implements OnInit {
   ufResp: string;
   error = '';
 
-  title = 'Cadastro de Residências'
+  title = 'Cadastro de Residências';
+  msgModal: string = '';
 
   pag : Number = 1;
   contador : Number = 5;
@@ -63,9 +65,11 @@ export class ResidenciaComponent implements OnInit {
 
     this.acao = this.route.snapshot.paramMap.get('acao');
     this.codigo = this.route.snapshot.paramMap.get('codigo');
+    this.ticket = this.route.snapshot.paramMap.get('ticket');
 
-    //console.log(this.acao);
-    //console.log(this.codigo);
+    console.log(this.acao);
+    console.log(this.codigo);
+    console.log(this.ticket);
     let modulos: string[] = [];
     let funcionalidades: string[] = [];
 
@@ -76,7 +80,12 @@ export class ResidenciaComponent implements OnInit {
           funcionalidades.push('10');
 
           this.create = false;
-          this.getResidenciaById(this.codigo);
+
+          if(this.ticket)
+            this.getResidenciaByTicket(this.ticket);
+          else
+            this.getResidenciaById(this.codigo);
+
           this.permissao.getPermissao(modulos, funcionalidades)
             .subscribe(
               data=>{
@@ -89,6 +98,8 @@ export class ResidenciaComponent implements OnInit {
 
         modulos.push('4');
         funcionalidades.push('9');
+
+        this.create = true;
 
         this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
@@ -107,10 +118,14 @@ export class ResidenciaComponent implements OnInit {
 
   postNovaResidenciaAmqp(residencia: Residencia){
 
+    this.msgModal = "Registro inserido com sucesso!";
+
     this.residenciaService.postNovaResidenciaAmqp(residencia)
       .subscribe(data => {
         this.residencia = data;
-        this.router.navigate(['/summary-add']);
+        this.acao = 'view';
+        this.open('customModal1');
+        this.getResidenciaByTicket(this.residencia.ticket);
       },err=>{
         this.erros = err['erros'];
       });
@@ -119,11 +134,13 @@ export class ResidenciaComponent implements OnInit {
 
   putResidencia(residencia: Residencia, id: string){
 
+    this.msgModal = "Registro atualizado com sucesso!";
+
     this.residenciaService.putResidencia(residencia, id)
       .subscribe(data => {
         this.residencia = data;
-        this.acao = 'view';
         this.open('customModal1');
+        this.acao = 'view';
         this.router.navigate(['/residencia/view/' + id]);
       },err => {
           this.erros = err['erros'];
@@ -138,6 +155,36 @@ export class ResidenciaComponent implements OnInit {
 
     if(codigo)
       this.requestFilterDto.id = codigo;
+
+    this.residenciasService.residencias(this.requestFilterDto)
+      .subscribe(
+        data=>{
+          this.residencias = data;
+          this.residencias.forEach(r => {
+            if(r.endereco.toString() != null){
+                this.logradouroResp = r.endereco.toUpperCase();
+                this.bairroResp = r.bairro.toUpperCase();
+                this.localidadeResp = r.cidade.toUpperCase();
+                this.ufResp = r.uf.toUpperCase();
+            }else{
+                this.getCep(r.cep)
+            }
+          });
+        }, err=>{
+          this.erros = err['erros'];
+        }
+    );
+    return this.residencias;
+
+  }
+
+  getResidenciaByTicket(ticket: string) {
+
+    this.requestFilterDto = new ResidenciasFilterModel();
+    this.residencias = [];
+
+    if(ticket)
+      this.requestFilterDto.guide = ticket;
 
     this.residenciasService.residencias(this.requestFilterDto)
       .subscribe(
@@ -190,7 +237,6 @@ export class ResidenciaComponent implements OnInit {
 
   getIdMorador(codigo: string){
 
-    console.log(`Código enviado: ${codigo}`)
     this.router.navigate([`/morador/view/`, codigo])
 
   }
@@ -209,6 +255,7 @@ export class ResidenciaComponent implements OnInit {
 
     this.erros = null;
     $('#' + id).modal('show');
+    
   }
 
   close(id: string) {

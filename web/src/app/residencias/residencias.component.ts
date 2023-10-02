@@ -1,6 +1,6 @@
 import { properties } from './../../properties/properties';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ResidenciasService } from './residencias.service';
 import { ErroRegistro } from '../_models/erro-registro';
@@ -16,6 +16,8 @@ import { PermissoesService } from '../_services/permissoes.service';
 export class ResidenciasComponent implements OnInit {
 
   residencias: ResidenciaResponse[] = [];
+
+  public ticket: string;
 
   pag : Number = 1 ;
   contador : Number = properties.itemsPerPage;
@@ -33,10 +35,13 @@ export class ResidenciasComponent implements OnInit {
       private residenciasService: ResidenciasService,
       private authenticationService: AuthenticationService,
       private router: Router,
-      private permissao: PermissoesService
+      private permissao: PermissoesService,
+      private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
+
+    //this.ticket = this.route.snapshot.paramMap.get('ticket');
 
     if(this.authenticationService.currentUserValue){
       this.getResidencias();
@@ -54,11 +59,15 @@ export class ResidenciasComponent implements OnInit {
     if(codigo)
       this.requestDto.id = codigo;
 
+    
     if(endereco)
       this.requestDto.endereco = endereco;
 
     if(numero)
       this.requestDto.numero = numero;
+
+    //if(this.ticket)
+    //  this.requestDto.guide = this.ticket;
 
     let modulos: string[] = [];
     let funcionalidades: string[] = [];
