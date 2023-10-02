@@ -45,13 +45,16 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, Atu
 		
 		log.info("Cadastrando um morador: {}", residenciaRequestBody.toString());
 		
-		residenciaRequestBody.setGuide(this.gerarGuide()); 	
+		residenciaRequestBody.setGuide(this.gerarGuide());
 		
 		this.validator.validarPost(residenciaRequestBody);
 		
 		//Preenche o id da residencia se ela já existir, para fazer apenas vinculo do morador.
 		residenciaRepository.findByCepAndNumeroAndComplemento(residenciaRequestBody.getCep(), residenciaRequestBody.getNumero(), residenciaRequestBody.getComplemento())
-			.ifPresent(r -> residenciaRequestBody.setId(r.getId()));
+			.ifPresent(r -> {
+				residenciaRequestBody.setId(r.getId());
+				residenciaRequestBody.setGuide(r.getGuide());
+			});
 		
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
