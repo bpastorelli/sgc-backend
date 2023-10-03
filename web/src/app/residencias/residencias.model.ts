@@ -1,6 +1,6 @@
 export interface Residencia {
 
-  id: number,
+  id?: number,
   endereco: string,
   numero: string,
   complemento: string,

@@ -37,7 +37,7 @@ export class ResidenciaComponent implements OnInit {
 
   residencia: Residencia;
 
-  residencias: ResidenciaResponse[];
+  residencias: ResidenciaResponse[] = [];
 
   logradouroResp: string;
   bairroResp: string;
@@ -67,9 +67,6 @@ export class ResidenciaComponent implements OnInit {
     this.codigo = this.route.snapshot.paramMap.get('codigo');
     this.ticket = this.route.snapshot.paramMap.get('ticket');
 
-    console.log(this.acao);
-    console.log(this.codigo);
-    console.log(this.ticket);
     let modulos: string[] = [];
     let funcionalidades: string[] = [];
 
@@ -80,10 +77,10 @@ export class ResidenciaComponent implements OnInit {
           funcionalidades.push('10');
 
           this.create = false;
-
-          if(this.ticket)
+          let count: number = 0;
+          if(this.ticket){
             this.getResidenciaByTicket(this.ticket);
-          else
+          }else
             this.getResidenciaById(this.codigo);
 
           this.permissao.getPermissao(modulos, funcionalidades)
@@ -118,14 +115,21 @@ export class ResidenciaComponent implements OnInit {
 
   postNovaResidenciaAmqp(residencia: Residencia){
 
+    let count: number = 0;
     this.msgModal = "Registro inserido com sucesso!";
 
     this.residenciaService.postNovaResidenciaAmqp(residencia)
-      .subscribe(data => {
+      .subscribe(async data => {
         this.residencia = data;
         this.acao = 'view';
         this.open('customModal1');
-        this.getResidenciaByTicket(this.residencia.ticket);
+
+        do{
+          this.getResidenciaByTicket(this.residencia.ticket);
+          await delay(1000);
+          count++;
+        }
+        while(this.residencias.length === 0 && count < 4);
       },err=>{
         this.erros = err['erros'];
       });
@@ -265,5 +269,9 @@ export class ResidenciaComponent implements OnInit {
 }
 function subscribe(arg0: (data: any) => void, arg1: (err: any) => void) {
   throw new Error('Function not implemented.');
+}
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
 }
 
