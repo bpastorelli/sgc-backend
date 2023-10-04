@@ -32,7 +32,7 @@ export class VeiculosService extends BaseService {
 
   }
 
-  postVeiculo(veiculo: Veiculo): Observable<any>{
+  postVeiculo(veiculo: Veiculo): Observable<Veiculo>{
 
     return this.http.post<Veiculo>(`${environment.apiUrl}/associados/veiculo/novo`
         , JSON.stringify(veiculo)
@@ -68,6 +68,12 @@ export class VeiculosService extends BaseService {
   getVeiculoById(id: string): Observable<Veiculo[]>{
 
       return this.http.get<Veiculo[]>(`${environment.protocol + environment.apiUrl}/veiculo/filtro?id=${id}&content=true`);
+
+  }
+
+  getVeiculoByTicket(ticket: string): Observable<Veiculo[]>{
+
+    return this.http.get<Veiculo[]>(`${environment.protocol + environment.apiUrl}/veiculo/filtro?guide=${ticket}&content=true`);
 
   }
 

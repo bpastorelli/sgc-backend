@@ -49,7 +49,7 @@ private moradorUrl = environment.protocol + environment.apiUrl + environment.mor
     this.moradorRequest  = this.setCamposDefault(this.moradorRequest);
 
     if(ticket)
-      this.moradorRequest.ticket = ticket;
+      this.moradorRequest.guide = ticket;
 
     return this.getMoradores(this.moradorRequest);
 

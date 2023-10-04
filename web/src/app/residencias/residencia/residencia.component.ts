@@ -77,7 +77,6 @@ export class ResidenciaComponent implements OnInit {
           funcionalidades.push('10');
 
           this.create = false;
-          let count: number = 0;
           if(this.ticket){
             this.getResidenciaByTicket(this.ticket);
           }else
@@ -123,13 +122,8 @@ export class ResidenciaComponent implements OnInit {
         this.residencia = data;
         this.acao = 'view';
         this.open('customModal1');
-
-        do{
-          this.getResidenciaByTicket(this.residencia.ticket);
-          await delay(1000);
-          count++;
-        }
-        while(this.residencias.length === 0 && count < 4);
+        this.getResidenciaByTicket(this.residencia.ticket);
+        this.router.navigate(['/residencia/view/', this.residencias[0].id]);
       },err=>{
         this.erros = err['erros'];
       });
@@ -182,7 +176,9 @@ export class ResidenciaComponent implements OnInit {
 
   }
 
-  getResidenciaByTicket(ticket: string) {
+  async getResidenciaByTicket(ticket: string) {
+
+    let count: number = 0;
 
     this.requestFilterDto = new ResidenciasFilterModel();
     this.residencias = [];
@@ -190,24 +186,31 @@ export class ResidenciaComponent implements OnInit {
     if(ticket)
       this.requestFilterDto.guide = ticket;
 
-    this.residenciasService.residencias(this.requestFilterDto)
-      .subscribe(
-        data=>{
-          this.residencias = data;
-          this.residencias.forEach(r => {
-            if(r.endereco.toString() != null){
-                this.logradouroResp = r.endereco.toUpperCase();
-                this.bairroResp = r.bairro.toUpperCase();
-                this.localidadeResp = r.cidade.toUpperCase();
-                this.ufResp = r.uf.toUpperCase();
-            }else{
-                this.getCep(r.cep)
+      do{
+
+        this.residenciasService.residencias(this.requestFilterDto)
+          .subscribe(
+            data=>{
+              this.residencias = data;
+              this.residencias.forEach(r => {
+                if(r.endereco.toString() != null){
+                    this.logradouroResp = r.endereco.toUpperCase();
+                    this.bairroResp = r.bairro.toUpperCase();
+                    this.localidadeResp = r.cidade.toUpperCase();
+                    this.ufResp = r.uf.toUpperCase();
+                }else{
+                    this.getCep(r.cep)
+                }
+              });
+            }, err=>{
+              this.erros = err['erros'];
             }
-          });
-        }, err=>{
-          this.erros = err['erros'];
-        }
-    );
+        );
+        await delay(1000);
+        count++;
+      }
+      while(this.residencias.length === 0 && count < 4);
+    
     return this.residencias;
 
   }

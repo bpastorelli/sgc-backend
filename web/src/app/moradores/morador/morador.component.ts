@@ -40,6 +40,8 @@ export class MoradorComponent implements OnInit {
   permissoes = {} as AcessoFuncionalidade;
 
   title = 'Cadastro de Moradores';
+  msgModal: string = '';
+  ticket:       string;
 
   situacaoCadastral = [
         { id: 1, label: "ATIVO" },
@@ -59,19 +61,23 @@ export class MoradorComponent implements OnInit {
 
       this.acao = this.route.snapshot.paramMap.get('acao');
       this.codigo = this.route.snapshot.paramMap.get('codigo');
-      
-      //console.log(this.acao);
-      //console.log(this.codigo);
+      this.ticket = this.route.snapshot.paramMap.get('ticket');
+
       let modulos: string[] = [];
       let funcionalidades: string[] = [];
 
       modulos.push('3');
       funcionalidades.push('7');
-      
+
       if(this.authenticationService.currentUserValue){
         if(this.acao != "create"){
           this.create = false;
-          this.getMoradorById(this.codigo);
+
+          if(this.ticket){
+            this.getMoradorByGuide(this.ticket);
+          }else
+            this.getMoradorById(this.codigo);
+
           this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
@@ -115,18 +121,24 @@ export class MoradorComponent implements OnInit {
 
   postMoradorAmqp(morador: Morador, cadastrResidencia: boolean){
 
+    this.msgModal = "Registro incluído com sucesso!";
     this.erros = [];
 
     morador.cpf = morador.cpf.replace('.','').replace('-','');
 
     this.moradorService.postMoradorAmqp(morador)
-      .subscribe(data => {
+      .subscribe(async data => {
         this.mor = data;
         this.id = data.ticket;
+        this.ticket = data.ticket;
         if(cadastrResidencia)
             this.router.navigate(['/residencia/novo2/morador/', this.id]);
-        else
-          this.router.navigate([`/summary-edit`]);
+        else{
+          this.acao = 'view';
+          this.open('customModal1');
+          this.getMoradorByGuide(this.ticket);
+          this.router.navigate(['/morador/view/', this.moradores[0].id]);
+        }
     },err=>{
         this.erros = err['erros'];
     });
@@ -142,6 +154,7 @@ export class MoradorComponent implements OnInit {
 
   putMorador(moradorEdit: Morador, id: string){
 
+    this.msgModal = "Registro atualizado com sucesso!";
     this.erros = [];
 
     this.moradorService.putMorador(moradorEdit, id)
@@ -163,6 +176,8 @@ export class MoradorComponent implements OnInit {
   }
 
   putMoradorAmqp(moradorEdit: Morador, id: string){
+
+    this.msgModal = "Registro atualizado com sucesso!";
 
     this.moradorService.putMorador(moradorEdit, id)
       .subscribe(data => {
@@ -202,14 +217,44 @@ export class MoradorComponent implements OnInit {
   getMoradorByTicket(ticket: string) {
 
     this.moradorService.getTicketMorador(ticket)
-    .subscribe(
-      data=>{
-        this.mor = data;
-      }, err=>{
-        this.errorMessage = err;
-      }
-    );
+      .subscribe(
+        data=>{
+          this.mor = data;
+        }, err=>{
+          this.errorMessage = err;
+        }
+      );
+
+
     return this.mor;
+
+  }
+
+  async getMoradorByGuide(ticket:string){
+
+    let count: number = 0;
+
+    do{
+
+      this.moradorService.getTicketMorador(ticket)
+      .subscribe(
+        data=>{
+          this.moradores = data;
+          this.moradores.forEach(morador => {
+            if(morador.residencias.length > 0)
+              this.possuiResidencia = true;
+          });
+
+        }, err=>{
+          this.erros = err['erros'];
+        }
+      );
+      await delay(1000);
+      count++;
+    }
+    while(this.moradores.length === 0 && count < 4);
+    
+    return this.moradores;
 
   }
 
@@ -253,5 +298,9 @@ export class MoradorComponent implements OnInit {
     $('#' + id).modal('hide');
   }
 
+}
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
 }
 
