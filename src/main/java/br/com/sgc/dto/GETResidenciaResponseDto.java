@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GETResidenciaResponseDto {
+public class GETResidenciaResponseDto implements Comparable<GETResidenciaResponseDto> {
 	
 	private Long   id;
 	
@@ -32,4 +32,10 @@ public class GETResidenciaResponseDto {
 	private List<GETMoradorSemResidenciasResponseDto> moradores;
 
 	private String guide;
+
+	@Override
+	public int compareTo(GETResidenciaResponseDto o) {
+		// TODO Auto-generated method stub
+		return this.endereco.compareTo(o.endereco);
+	}
 }

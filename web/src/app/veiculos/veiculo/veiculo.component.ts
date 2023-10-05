@@ -20,7 +20,7 @@ export class VeiculoComponent implements OnInit {
   codigo:       string;
   create:       boolean = true
   veiculo:      Veiculo;
-  veiculos:     Veiculo[];
+  veiculos:     Veiculo[] = [];
   ticket:       string;
   errorMessage;
   pag: Number = 1;
@@ -29,6 +29,7 @@ export class VeiculoComponent implements OnInit {
   perfil = {} as PerfilFuncionalidade[];
   
   title = "Cadastro de Veículos";
+  msgModal: string = '';
 
   situacaoCadastral = [
         { id: 1, label: "ATIVO" },
@@ -46,6 +47,7 @@ export class VeiculoComponent implements OnInit {
 
     this.acao = this.route.snapshot.paramMap.get('acao');
     this.codigo = this.route.snapshot.paramMap.get('codigo');
+    this.ticket = this.route.snapshot.paramMap.get('ticket');
 
     let modulos: string[] = [];
     let funcionalidades: string[] = [];
@@ -57,8 +59,12 @@ export class VeiculoComponent implements OnInit {
         funcionalidades.push('16');
 
         this.create = false;
+        if(this.ticket){
+          this.getVeiculoByTicket(this.ticket);
+        }else
           this.getVeiculoById(this.codigo);
-          this.permissao.getPermissao(modulos, funcionalidades)
+
+        this.permissao.getPermissao(modulos, funcionalidades)
           .subscribe(
             data=>{
               this.perfil = data;
@@ -88,13 +94,23 @@ export class VeiculoComponent implements OnInit {
 
   postVeiculo(veiculo: Veiculo){
 
+    let count: number = 0;
+
     if(this.codigo != "create")
       veiculo.ticketVisitante = this.codigo;
 
     this.veiculosService.postVeiculo(veiculo)
-      .subscribe(data => {
-        this.id = data.ticket;
-        this.router.navigate([`/summary-add`]);
+      .subscribe(async data => {
+        this.ticket = data.ticket;
+        this.acao = 'view';
+        this.open('customModal1');
+
+        do{
+          this.getVeiculoByTicket(this.ticket);
+          await delay(1000);
+          count++;
+        }
+        while(this.veiculos.length === 0 && count < 4);
     },err=>{
         this.erros = err['erros'];
     });
@@ -110,13 +126,18 @@ export class VeiculoComponent implements OnInit {
 
   postVeiculoAmqp(veiculo: Veiculo){
 
+    this.msgModal = "Registro inserido com sucesso!";
+
     if(this.codigo != "create")
       veiculo.ticketVisitante = this.codigo;
     
     this.veiculosService.postVeiculoAmqp(veiculo)
-      .subscribe(data => {
-        this.id = data.ticket;
-        this.router.navigate([`/summary-add`]);
+      .subscribe(async data => {
+        this.ticket = data.ticket;
+        this.acao = 'view';
+        this.open('customModal1');
+        this.getVeiculoByTicket(this.ticket);
+        this.router.navigate(['/viculo/view', this.veiculos[0].id]);
     },err=>{
         this.erros = err['erros'];
     });
@@ -124,6 +145,8 @@ export class VeiculoComponent implements OnInit {
   }
 
   putVeiculo(veiculo: Veiculo, id: string){
+
+    this.msgModal = "Registro atualizado com sucesso!";
 
     this.veiculosService.putVeiculo(veiculo, id)
       .subscribe(data => {
@@ -145,6 +168,24 @@ export class VeiculoComponent implements OnInit {
     },err=>{
         this.errorMessage = err;
     });
+
+  }
+
+  async getVeiculoByTicket(ticket: string){
+
+    let count: number = 0;
+
+    do{
+      this.veiculosService.getVeiculoByTicket(ticket)
+        .subscribe(data => {
+          this.veiculos = data;
+      },err=>{
+          this.errorMessage = err;
+      });
+      await delay(1000);
+      count++;
+    }
+    while(this.veiculos.length === 0 && count < 4);
 
   }
 
@@ -175,4 +216,8 @@ export class VeiculoComponent implements OnInit {
     $('#' + id).modal('hide');
   }
 
+}
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
 }

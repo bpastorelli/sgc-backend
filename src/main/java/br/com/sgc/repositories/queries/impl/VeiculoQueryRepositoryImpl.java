@@ -36,6 +36,7 @@ public class VeiculoQueryRepositoryImpl implements QueryRepository<Veiculo, Veic
         entity_ = query.from(Veiculo.class);
         
         this.query.where(this.criarFiltros(entity_, filters, builder));
+        this.query.orderBy(builder.asc(entity_.get("modelo")));
         
         TypedQuery<Veiculo> typedQuery = manager.createQuery(query);
         

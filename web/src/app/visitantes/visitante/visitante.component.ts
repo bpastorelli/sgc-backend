@@ -23,6 +23,7 @@ export class VisitanteComponent implements OnInit {
 
   id: string;
   rg: string;
+  ticket: string;
   residencia: string;
   acao: string;
   codigo: string;
@@ -67,6 +68,7 @@ export class VisitanteComponent implements OnInit {
       this.residencia = this.route.snapshot.paramMap.get('residencia');
       this.codigo = this.route.snapshot.paramMap.get('codigo');
       this.acao = this.route.snapshot.paramMap.get('acao');
+      this.ticket = this.route.snapshot.paramMap.get('ticket');
 
       //console.log(this.acao);
       let modulos: string[] = [];
@@ -117,7 +119,10 @@ export class VisitanteComponent implements OnInit {
           this.id = data.ticket;
           this.router.navigate(['/veiculo/create/visitante/', this.id]);
         }else{
+          this.acao = 'view';
           this.open('customModal1');
+          this.getVisitanteByTicket(data.ticket);
+          this.router.navigate(['/visitante/view/' + this.visitantes[0].id]);
         }
     },err=>{
       this.erros = err['erros'];
@@ -160,6 +165,37 @@ export class VisitanteComponent implements OnInit {
           this.erros = err['erros'];
       }
     );
+    return this.visitantes;
+
+  }
+
+  async getVisitanteByTicket(ticket: string){
+
+    let count: number = 0;
+    this.request = new VisitanteFilterModel();
+
+    if(ticket)
+      this.request.guide = ticket;
+
+    do{
+
+      this.visitantesService.getVisitantes(this.request)
+        .subscribe(
+          data=>{
+              this.visitantes = data;
+              this.visitantes.forEach(v => {
+                  this.getCep(v.cep)
+              });
+          }, err=>{
+            this.erros = err['erros'];
+        }
+      );
+
+      await delay(1000);
+      count++;
+    }
+    while(this.visitantes.length === 0 && count < 4);
+
     return this.visitantes;
 
   }
@@ -248,4 +284,8 @@ export class VisitanteComponent implements OnInit {
 
   }
 
+}
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
 }
