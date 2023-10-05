@@ -37,6 +37,7 @@ public class ResidenciaQueryRepositoryImpl implements QueryRepository<Residencia
         entity_ = query.from(Residencia.class);
         
         this.query.where(this.criarFiltros(entity_, filters, builder));
+        this.query.orderBy(builder.asc(entity_.get("endereco")));
         
         TypedQuery<Residencia> typedQuery = manager.createQuery(query);
         

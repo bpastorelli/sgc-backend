@@ -47,6 +47,7 @@ export class VeiculoComponent implements OnInit {
 
     this.acao = this.route.snapshot.paramMap.get('acao');
     this.codigo = this.route.snapshot.paramMap.get('codigo');
+    this.ticket = this.route.snapshot.paramMap.get('ticket');
 
     let modulos: string[] = [];
     let funcionalidades: string[] = [];
@@ -125,7 +126,6 @@ export class VeiculoComponent implements OnInit {
 
   postVeiculoAmqp(veiculo: Veiculo){
 
-    let count: number = 0;
     this.msgModal = "Registro inserido com sucesso!";
 
     if(this.codigo != "create")
@@ -136,13 +136,8 @@ export class VeiculoComponent implements OnInit {
         this.ticket = data.ticket;
         this.acao = 'view';
         this.open('customModal1');
-
-        do{
-          this.getVeiculoByTicket(this.ticket);
-          await delay(1000);
-          count++;
-        }
-        while(this.veiculos.length === 0 && count < 4);
+        this.getVeiculoByTicket(this.ticket);
+        this.router.navigate(['/viculo/view', this.veiculos[0].id]);
     },err=>{
         this.erros = err['erros'];
     });
@@ -176,14 +171,21 @@ export class VeiculoComponent implements OnInit {
 
   }
 
-  getVeiculoByTicket(ticket: string){
+  async getVeiculoByTicket(ticket: string){
 
-    this.veiculosService.getVeiculoByTicket(ticket)
-      .subscribe(data => {
-        this.veiculos = data;
-    },err=>{
-        this.errorMessage = err;
-    });
+    let count: number = 0;
+
+    do{
+      this.veiculosService.getVeiculoByTicket(ticket)
+        .subscribe(data => {
+          this.veiculos = data;
+      },err=>{
+          this.errorMessage = err;
+      });
+      await delay(1000);
+      count++;
+    }
+    while(this.veiculos.length === 0 && count < 4);
 
   }
 
