@@ -112,11 +112,13 @@ export class VisitaComponent implements OnInit {
     this.numeroResp = null;
     this.cidadeResp = null;
     this.ufResp = null;
-
+    
     this.requestFilterVisitante = new VisitanteFilterModel();
+    this.requestFilterVisitante.posicao = 1;
 
     if(rg){
       this.requestFilterVisitante.rg = rg;
+
 
       this.visitantesService.getVisitantes(this.requestFilterVisitante)
       .subscribe(

@@ -64,7 +64,7 @@ public class ValidarCadastroVisitante implements Validators<VisitanteDto, Atuali
 			errors.getErros().add(new ErroRegistro("", TITULO, " O campo UF é obrigatório"));
 			
 		this.visitanteRepository.findByRg(t.getRg())
-			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o rg "+ t.getRg() +"")));
+			.ifPresent(res -> errors.getErros().add(new ErroRegistro("", TITULO, " Visitante já cadastrado para o rg "+ t.getRg() +" e está " + (res.getPosicao() == 0 ? "INATIVO" : "ATIVO"))));
 			
 		if(t.getCpf() != null && t.getCpf() != "") {
 			if(this.visitanteRepository.findByCpf(t.getCpf()).get().size() > 0)				
