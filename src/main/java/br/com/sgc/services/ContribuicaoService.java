@@ -48,7 +48,7 @@ public class ContribuicaoService {
 	
 	private List<String> cpfs = new ArrayList<String>();
 	
-	private HistoricoImportacao historico = new HistoricoImportacao();
+	private HistoricoImportacao historico;
 	
 	@Autowired
 	private MoradorRepository moradorRepository;
@@ -107,9 +107,8 @@ public class ContribuicaoService {
 		
 		this.salvarHistorico(file.getOriginalFilename(), SituacaoEnum.IMPORTANDO);
 		
-		Double pages = ((double) lancamentos.size() / PAGE_SIZE);
-		Double resto = ((double) lancamentos.size() % PAGE_SIZE);
-		pages = pages < 1 ? 1 : pages;
+		Long pages = ((long) lancamentos.size() / PAGE_SIZE);
+		Integer resto = (lancamentos.size() % PAGE_SIZE);
 		pages = resto > 0 ? Math.round(pages) + 1 : pages;
 		
 		int page;
@@ -148,9 +147,7 @@ public class ContribuicaoService {
 		List<ContribuicaoDto> lancamentoList = this.getDataFromFile(file);
 	    
 		if(this.errorsList.size() == 0) 
-			this.loadBases();
-		
-		this.historico.setIdRequisicao(UUID.randomUUID().toString()); 
+			this.loadBases(); 
 	    
 		log.info("Validando os dados...");
 		
@@ -330,7 +327,9 @@ public class ContribuicaoService {
 	@Async
 	private void salvarHistorico(String file, SituacaoEnum situacao) {
 		
-		if(!Optional.ofNullable(this.historico.getId()).isPresent()) {
+		if(situacao.equals(SituacaoEnum.INICIANDO)) {
+			this.historico = new HistoricoImportacao();
+			this.historico.setIdRequisicao(UUID.randomUUID().toString());
 			this.historico.setNomeArquivo(file);
 			this.historico.setSituacao(situacao);			
 		}else
