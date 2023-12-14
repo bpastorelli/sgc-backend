@@ -36,8 +36,7 @@ public class ConvertListLancamentoToContribuicaoAvro implements Converter<Contri
 		ContribuicaoAvro contribuicao = ContribuicaoAvro.newBuilder()
 				.setRequisicaoId(lancamentos.get(0).getRequisicaoId())
 				.setLancamentos(lancamentosAvro)
-				.build();
-		
+				.build();	
 		
 		return contribuicao;
 	}

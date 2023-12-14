@@ -146,6 +146,11 @@ public class ValidarCadastroMorador implements Validators<MoradorDto, AtualizaMo
 			if(this.moradorRepository.findByNome(morador.getNome()).isPresent())
 				errors.getErros().add(new ErroRegistro("", TITULO, " O novo nome (" + morador.getNome() + ") informado já existe!"));
 		}
+		
+		if(!morador.getEmail().toLowerCase().equals(moradorSource.get().getEmail().toLowerCase())) {
+			if(this.moradorRepository.findByEmail(morador.getEmail()).isPresent())
+				errors.getErros().add(new ErroRegistro("", TITULO, " O novo e-mail (" + morador.getEmail() + ") informado já existe!"));
+		}
 				
 		morador.setPerfil(moradorSource.get().getPerfil());
 		morador.setGuide(moradorSource.get().getGuide());

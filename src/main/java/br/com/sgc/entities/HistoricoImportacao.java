@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,6 +33,7 @@ public class HistoricoImportacao implements Serializable {
 	@Column(name = "nome_arquivo", nullable = false)
 	private String nomeArquivo;
 	
+	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "situacao", nullable = false)
 	private SituacaoEnum situacao;
 	
