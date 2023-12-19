@@ -39,7 +39,7 @@ public class ContribuicaoKafkaProducerImpl extends KafkaTemplateAbstract<Contrib
 				@Override
 				public void onSuccess(SendResult<String, ContribuicaoAvro> result) {
 					
-					log.info("Mensagem enviada: " + result.getProducerRecord().value());
+					log.info("Mensagem enviada.");
 					
 				}
 
@@ -59,9 +59,11 @@ public class ContribuicaoKafkaProducerImpl extends KafkaTemplateAbstract<Contrib
 			log.error("Catch Erro: " + ex.getMessage());
 			
 		}finally{
-			log.info("Finalizando a Thread...");
+			log.info("Finalizando a Thread {}", Thread.currentThread().getName());
 			stopThread();
 		}
+		
+		log.info("Finalizado.");
 		
 	}
 
