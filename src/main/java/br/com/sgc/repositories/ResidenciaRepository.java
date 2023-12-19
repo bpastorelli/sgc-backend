@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.sgc.entities.Residencia;
 
 @Repository
+@Transactional(readOnly = true)
 public interface ResidenciaRepository extends JpaRepository<Residencia, Long> {
 	
 	@Transactional(readOnly = true)

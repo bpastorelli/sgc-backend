@@ -107,12 +107,8 @@ public class ContribuicaoService {
 		
 		this.salvarHistorico(file.getOriginalFilename(), SituacaoEnum.IMPORTANDO);
 		
-		Long pages = ((long) lancamentos.size() / PAGE_SIZE);
-		Integer resto = (lancamentos.size() % PAGE_SIZE);
-		pages = resto > 0 ? Math.round(pages) + 1 : pages;
-		
 		int page;
-		for(page = 1; page <= Math.round(pages); page++) {
+		for(page = 1; page <= Math.round(this.calcularPaginas()); page++) {
 			log.info("Enviando página: {}...", page);
 			this.amqp.producerAsync(this.convert.convert(Utils.getPage(lancamentos, page, PAGE_SIZE)));
 		}
@@ -337,6 +333,15 @@ public class ContribuicaoService {
 		
 		this.historico = this.historicoRepository.save(historico);
 		
+	}
+	
+	private Long calcularPaginas() {
+		
+		Long pages = ((long) lancamentos.size() / PAGE_SIZE);
+		Integer resto = (lancamentos.size() % PAGE_SIZE);
+		pages = resto > 0 ? Math.round(pages) + 1 : pages;
+		
+		return pages;
 	}
 
 }
