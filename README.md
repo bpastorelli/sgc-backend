@@ -27,13 +27,13 @@ sudo docker container ls -a
 
 <b>Comando para commitar uma imagem no Docker Hub</b>
 
-docker commit "<ID CONTAINER>" "<Usuario>"/"<repositório>":"<tag>"
+docker commit "{ID CONTAINER}" "{Usuario}"/"{repositório}":"{tag}"
  
 docker commit 2084a2befb9a bpastorelli/sgc_consumer:1.0.0
 
 <b>Comando para enviar para o repositório do Docker Hub</b>
 
-dicker push "<usuario>"/"<repositório>":"<tag>"
+dicker push "{usuario}"/"{repositório}":"{tag}"
 
 docker push bpastorelli/sgc_consumer:1.0.0
  
