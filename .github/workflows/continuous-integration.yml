@@ -34,4 +34,4 @@ jobs:
       
     - name: Push Docker Compose Application
       run: |
-        docker tag sgc-backend:latest ${{ secrets.DOCKER_USERNAME }}/associados:latest ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }}
+        docker tag ${{ secrets.DOCKER_USERNAME }}/associados:latest ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }}
