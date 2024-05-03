@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 
 public enum FuncaoFuncionalidadeEnum {
 	
-	CREATE("CREATE"),
-	EDIT("EDIT"),
-	VIEW("VIEW"),
-	DELETE("DELETE");
+	CREATE("create"),
+	EDIT("edit"),
+	VIEW("view"),
+	DELETE("delete");
 	
 	public String funcao;
 	
