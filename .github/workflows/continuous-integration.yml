@@ -25,9 +25,13 @@ jobs:
         cache: maven
         
     - name: Build Application
-      working-directory: ./git/sgc-backend
+      working-directory: ./sgc-backend
       run: mvn clean package
 
     - name: Build Docker Compose Application
-      working-directory: ./git/sgc-backend
-      run: docker compose build
+      working-directory: ./sgc-backend
+      run: docker build -f Dockerfile -t sgc_producer .
+      
+    - name: Push Docker Compose Application
+      run: |
+        docker tag sgc-backend:latest ${{ secrets.DOCKER_USERNAME }}/associados:latest ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }}
