@@ -81,38 +81,18 @@ services:
       - 9000:9000
     environment:
       KAFKA_BROKERCONNECT: broker:29092
-  
-  mysql_sgc2:
-    image: mysql:8
-    build:
-      context: .
-      dockerfile: -f MySqlDockerfile
-    networks:
-      - app-net
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_HOST=mysql_sgc2
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=sgc_db
-      - TZ=America/Sao_Paulo
       
   sgc:
-    image: sgc_producer
-    build: 
-      context: .
-      dockerfile: -f Dockerfile -t sgc_producer .
+    image: bpastorelli/associados:2.0.0     
     ports:
       - "9090:8080"
     networks:
       - app-net
     depends_on:
-      - mysql_sgc2
       - broker
       - schema-registry
       - zookeeper
     environment:
-      - MYSQL_HOST=mysql_sgc2
       - SPRING_KAFKA_HOST=broker
       - SPRING_KAFKA_REGISTRY=http://schema-registry
       - TZ=America/Sao_Paulo
@@ -122,32 +102,25 @@ services:
       - /etc/localtime:/etc/localtime:ro
       
   sgc-consumer:
-    image: sgc_consumer
-    build: 
-      context: .
-      dockerfile: -f Dockerfile -t sgc_consumer .
+    image: bpastorelli/sgc_consumer:2.0.0
     ports:
       - "9191:8181"
     networks:
       - app-net
     depends_on:
-      - mysql_sgc2
       - broker
       - schema-registry
       - zookeeper
     environment:
-      - MYSQL_HOST=mysql_sgc2
       - SPRING_KAFKA_HOST=broker
       - DEBIAN_FRONTEND=noninteractive
-      - MYSQL_ROOT_PASSWORD=root
       - TZ=America/Sao_Paulo
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       
   angular-app:
-    image: angular_app
-    build: ./web
+    image: bpastorelli/sgc_angular:1.0.0
     environment:
        NODE_ENV: production
     ports: 
