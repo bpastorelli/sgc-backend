@@ -34,7 +34,7 @@ jobs:
       
     - name: Push Docker Compose Application
       run: |
-        docker tag ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }} ${{ secrets.DOCKER_USERNAME }}/associados:latest 
+        docker tag ${{ secrets.DOCKER_USERNAME }}/associados:latest ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }}
 
         docker push ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }}
         docker push ${{ secrets.DOCKER_USERNAME }}/associados:latest
