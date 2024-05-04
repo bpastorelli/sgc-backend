@@ -53,6 +53,10 @@ sudo docker build -f Dockerfile -t sgc_producer .
 
 <diretorio do arquivo> sudo docker-compose up -d
 
+<b>Comando para parar um arquivo docker-compose em segundo plano</b>
+
+<diretorio do arquivo> sudo docker-compose stop
+
 <b>Comando para alterar o endereço de IP do arquivo de configuração do docker</b>
 
 Exemplo:
