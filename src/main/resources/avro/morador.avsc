@@ -1,0 +1,61 @@
+{
+	"type": "record",
+	"name": "MoradorAvro",
+	"namespace": "br.com.sgc",
+	"fields": [
+		{
+			"name": "id",
+			"type": ["long", "null"], "default": 0			
+		},
+		{
+			"name": "nome",
+			"type": "string" 
+		},
+		{
+			"name": "cpf",
+			"type": ["string", "null"], "default": "null" 
+		},
+		{
+			"name": "rg",
+			"type": "string" 
+		},
+		{
+			"name": "email",
+			"type": "string" 
+		},
+		{
+			"name": "telefone",
+			"type": "string" 
+		},
+		{
+			"name": "celular",
+			"type": "string" 
+		},
+		{
+            "name": "perfil",
+            "type": ["null", {
+                    "type": "enum",
+                    "name": "PerfilEnum",
+                    "symbols": ["ROLE_USUARIO", "ROLE_ADMIN"],
+                    "default": "ROLE_USUARIO"
+                }
+            ]
+        },
+		{
+			"name": "residenciaId",
+			"type": ["long", "null"], "default": 0 
+		},
+		{
+			"name": "associado",
+			"type": "long" 
+		},
+		{
+			"name": "posicao",
+			"type": "long" 
+		},
+		{
+			"name": "guide",
+			"type": "string" 
+		}
+	]
+}

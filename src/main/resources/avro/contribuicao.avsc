@@ -1,0 +1,51 @@
+{
+	"type": "record",
+	"name": "ContribuicaoAvro",
+	"namespace": "br.com.sgc",
+	"fields": [
+		{
+			"name": "requisicaoId",
+			"type": "string"	
+		},
+		{
+			"name":"lancamentos",
+            "type":{
+                "type": "array",  
+                "items":{
+                    "name":"LancamentoAvro",
+                    "type":"record",
+                    "fields":[
+                        		{
+									"name": "id",
+									"type": ["long", "null"], "default": 0			
+								},
+								{
+									"name": "moradorId",
+									"type": ["long", "null"], "default": 0	
+								},
+								{
+									"name": "dataPagamento",
+									"type": "string" 
+								},
+								{
+									"name": "periodo",
+									"type": "string" 
+								},
+								{
+									"name": "documento",
+									"type": "string" 
+								},
+								{
+									"name": "valor",
+									"type": "double" 
+								},
+								{
+									"name": "residenciaId",
+									"type": ["long", "null"], "default": 0	
+								}
+                    ]
+                }
+            }		
+		}
+	]
+}

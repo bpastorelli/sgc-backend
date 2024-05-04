@@ -1,0 +1,67 @@
+[
+    {
+    "type": "record",
+    "name": "VeiculoVisitaAvro",
+    "namespace": "br.com.sgc",
+    "fields": [
+      {
+        "name": "marca",
+        "type": "string"
+      },
+      {
+        "name": "modelo",
+        "type": "string"
+      },
+      {
+        "name": "cor",
+        "type": "string"
+      },
+      {
+        "name": "ano",
+        "type": "long",
+        "default": 0
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "name": "VisitaAvro",
+    "namespace": "br.com.sgc",
+    "fields": [
+      {
+        "name": "guide",
+        "type": "string"
+      },
+      {
+        "name": "rg",
+        "type": "string"
+      },
+      {
+      	"name": "residenciaId",
+      	"type": "long"
+      },
+      {
+      	"name": "placa",
+      	"type": "string"
+      },
+      {
+        "name": "veiculoVisita",
+        "type": ["null", "VeiculoVisitaAvro"],
+        "default": null
+      }
+    ]
+  },
+  {
+    "type": "record",
+    "name": "EncerraVisitaAvro",
+    "namespace": "br.com.sgc",
+    "fields": [
+      {
+        "name": "id",
+        "type": "long",
+        "default": 0
+      }
+    ]
+  }
+  
+]

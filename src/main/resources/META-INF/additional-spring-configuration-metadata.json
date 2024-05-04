@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "guide.size",
+    "type": "java.lang.String",
+    "description": "A description for 'guide.size'"
+  },
+  {
+    "name": "guide.limit",
+    "type": "java.lang.String",
+    "description": "A description for 'guide.limit'"
+  },
+  {
+    "name": "spring.kafka.producer.group-id",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.kafka.producer.group-id'"
+  },
+  {
+    "name": "spring.kafka.producer.auto.register.schemas",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.kafka.producer.auto.register.schemas'"
+  },
+  {
+    "name": "spring.http.multipart.max-request-size",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.http.multipart.max-request-size'"
+  },
+  {
+    "name": "spring.http.multipart.max-file-size",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.http.multipart.max-file-size'"
+  },
+  {
+    "name": "apicurio.registry.use-specific-avro-reader",
+    "type": "java.lang.String",
+    "description": "A description for 'apicurio.registry.use-specific-avro-reader'"
+  }
+]}

@@ -1,0 +1,208 @@
+<section  class="content">
+
+  <!--Inicio Form de Edição-->
+  <section class="invoice">
+
+      <div *ngFor="let erro of erros" class="alert alert-warning">
+        <strong>Atenção! </strong>{{ erro.detalhe }}
+      </div>
+
+      <label class="labelPagina">
+        Incluir Visita
+      </label>
+      <form #formEdit="ngForm" novalidate>
+
+        <div class="row invoice-info">
+          <div class="col-sm-2 col-xs-6">
+            <input  class="form-control" type="hidden" [(ngModel)]="idResp"  #id name="id" maxlength="11" disabled placeholder="Código" pattern="^[0-9]*$" autocomplete="off">
+          </div>
+
+          <div>
+
+            <div class="col-xs-12">
+              <p class="control-label"> RG: </p>
+            </div>
+            <div class="col-sm-2 col-xs-2">
+              <input class="form-control" #rg style="font-weight:bold" [(ngModel)]="rgV" type="text" name="rg" maxlength="10" placeholder="RG" autocomplete="off">
+            </div>
+            <div ngModel (click)="getVisitante(rg.value)" >
+              <img class="lupa" src="assets/img/pesquisa/pesquisa.png">
+            </div>
+
+            <div class="col-xs-12">
+              <p class="control-label"> Nome: </p>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+              <input class="form-control" #nome ngModel type="text" [(ngModel)]="nomeResp" name="nome" disabled maxlength="100" placeholder="Nome" autocomplete="off">
+            </div>
+
+            <div class="col-xs-12">
+              <p class="control-label"> Logradouro: </p>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+              <input class="form-control" #endereco ngModel type="text" [(ngModel)]="enderecoResp" name="endereco" disabled maxlength="100" placeholder="Endereço" autocomplete="off">
+            </div>
+
+            <div class="col-sm-2 col-xs-6">
+              <input class="form-control" #numero ngModel type="text" [(ngModel)]="numeroResp" name="numero" disabled minlength="1" placeholder="Número" pattern="^[0-9]*$" autocomplete="off">
+            </div>
+
+            <div class="col-xs-12">
+              <p class="control-label">Cidade:</p>
+            </div>
+            <div class="col-sm-4 col-xs-6">
+              <input class="form-control" #cidade ngModel type="text" [(ngModel)]="cidadeResp" name="cidade" disabled  maxlength="50" placeholder="Cidade" autocomplete="off">
+            </div>
+
+            <div class="col-xs-12">
+              <p class="control-label"> UF: </p>
+            </div>
+            <div class="col-sm-1 col-xs-6">
+              <input class="form-control" #uf name="uf" ngModel type="text" [(ngModel)]="ufResp" disabled maxlength="2" placeholder="UF" autocomplete="off">
+            </div>
+
+    
+            <div class="col-xs-12">
+              <p class="control-label"> <b>Dados de veiculo:</b> </p>
+            </div>
+
+            <div class="col-xs-12">
+              <p class="control-label"> Placa: </p>
+            </div>
+            <div class="col-sm-2 col-xs-2">
+              <input class="form-control" (ngModelChange)="placa.value=$event.toUpperCase()" style="font-weight:bold" [(ngModel)]="placaResp" ngModel #placa mask="AAA-AAAA" (blur)="getVeiculo(placa.value)" type="text" name="placa" maxlength="8" placeholder="Placa" autocomplete="off">
+            </div>
+
+        </div>
+
+        <div formGroupName="veiculoVisita" *ngIf="createVeiculo">
+          <div *ngIf="createVeiculo">
+            <div class="col-xs-12">
+              <p class="control-label"> Marca: </p>
+            </div>
+            <div class="col-sm-4 col-xs-4">
+              <input class="form-control" (ngModelChange)="marca.value=$event.toUpperCase()" #marca ngModel type="text" name="marca" ngModel maxlength="20" placeholder="Marca" autocomplete="off">
+            </div>
+          </div>
+
+          <div *ngIf="createVeiculo">
+            <div class="col-xs-12">
+              <p class="control-label"> Modelo: </p>
+            </div>
+            <div *ngIf="createVeiculo" class="col-sm-4 col-xs-4">
+              <input class="form-control" (ngModelChange)="modelo.value=$event.toUpperCase()" #modelo ngModel type="text" name="modelo" ngModel maxlength="20" placeholder="Modelo" autocomplete="off">
+            </div>
+          </div>
+
+          <div *ngIf="createVeiculo">
+            <div class="col-xs-12">
+              <p class="control-label"> Cor: </p>
+            </div>
+            <div *ngIf="createVeiculo" class="col-sm-2 col-xs-4">
+              <input class="form-control" (ngModelChange)="cor.value=$event.toUpperCase()" #cor ngModel type="text" name="cor" ngModel maxlength="20" placeholder="Cor" autocomplete="off">
+            </div>
+          </div>
+
+          <div *ngIf="createVeiculo">
+            <div class="col-xs-12">
+              <p class="control-label"> Ano: </p>
+            </div>
+            <div *ngIf="createVeiculo" class="col-sm-2 col-xs-4">
+              <input class="form-control" ngModel type="text" name="ano" ngModel maxlength="4" placeholder="Ano" pattern="^[0-9]*$" autocomplete="off">
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+        <div>
+          <div class="row">
+              <div class="col-xs-12">
+                <button *ngIf="perfil[0].inclusao" (click)="postVisitaAmqp(formEdit.value)" class="btn btn-success pull-right"
+                [disabled]="!formEdit.valid"><i></i> Salvar
+                </button>
+              </div>
+          </div>
+        </div>
+
+      </form>
+
+    <!--Fim Invoice-->
+    </section>
+
+    <!--Fim do Form de Edição-->
+    <section class="invoice" *ngIf="visitantes.length > 0">
+
+      <div class="col-xs-12">
+        <p class="control-label"><b>Veículos vinculados: selecione ou digite a Placa</b></p>
+      </div>
+      <table class="table-striped">
+
+        <thead>
+          <tr>
+              <th class="pointer" scope="col" [appSort]="veiculosVinculados" data-order="desc" data-name="placa">Placa</th>
+              <th class="pointer" scope="col" [appSort]="veiculosVinculados" data-order="desc" data-name="marca">Marca</th>
+              <th class="pointer" scope="col" [appSort]="veiculosVinculados" data-order="desc" data-name="modelo">Modelo</th>
+              <th class="pointer" scope="col" [appSort]="veiculosVinculados" data-order="desc" data-name="cor">Cor</th>
+              <th class="pointer" scope="col" [appSort]="veiculosVinculados" data-order="desc" data-name="ano">Ano</th>
+            </tr>
+          </thead>
+        <tbody *ngFor="let visitante of visitantes">
+          <tr *ngFor="let veiculo of visitante.veiculos | paginate: { itemsPerPage: contador, currentPage: pag }">
+            <td class="textCenter"><div class="pointer" (click)="selecionaVeiculo(veiculo.placa.toUpperCase())">{{ formatPlaca(veiculo.placa.toUpperCase()) }}</div></td>
+            <td><div class="pointer" (click)="selecionaVeiculo(veiculo.placa.toUpperCase())">{{ veiculo.marca.toUpperCase() }}</div></td>
+            <td><div class="pointer" (click)="selecionaVeiculo(veiculo.placa.toUpperCase())">{{ veiculo.modelo.toUpperCase() }}</div></td>
+            <td><div class="pointer" (click)="selecionaVeiculo(veiculo.placa.toUpperCase())">{{ veiculo.cor.toUpperCase() }}</div></td>
+            <td class="textCenter" (click)="selecionaVeiculo(veiculo.placa.toUpperCase())"><div class="pointer">{{ veiculo.ano }}</div></td>
+          </tr>
+        </tbody>
+
+      </table>
+
+      <!--inclindo o controle de paginação.-->
+      <div style="padding: 20px;">
+        <div class="text-right">
+          <pagination-controls class="pointer" (pageChange)="pageChanged($event)"
+            previousLabel="Anterior"
+            nextLabel="Próximo">
+          </pagination-controls>
+        </div>
+      </div>
+
+    </section>
+ <!--Fim da Content-->
+</section>
+
+ <!-- Modal -->
+ <div class="modal fade" id="customModal1" #customModal1 tabindex="-1" role="dialog" aria-labelledby="custoModal1Label" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="customModal1Label"><strong>Visitante não encontrado!</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning">
+          <b>Visitante não encontrado. Deseja cadastrar?</b>
+        </div>
+      </div>
+      <div class="modal-footer" >
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="abreCadastroVisitante(rg.value)">Prosseguir</button>
+       </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
