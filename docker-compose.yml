@@ -83,7 +83,9 @@ services:
       KAFKA_BROKERCONNECT: broker:29092
       
   sgc:
-    image: bpastorelli/associados:2.0.0     
+    image: bpastorelli/associados
+    restart: always
+    build: .
     ports:
       - "9090:8080"
     networks:
