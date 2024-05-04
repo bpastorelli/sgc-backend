@@ -3,7 +3,7 @@ name: Continuous Integration with GitHub Actions
 on:
   push:
     branches: 
-      - master
+      - develop
 jobs:
   build:
 
