@@ -83,7 +83,7 @@ services:
       KAFKA_BROKERCONNECT: broker:29092
       
   sgc:
-    image: bpastorelli/associados
+    image: bpastorelli/associados:latest
     restart: always
     build: .
     ports:
@@ -104,7 +104,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       
   sgc-consumer:
-    image: bpastorelli/sgc_consumer
+    image: bpastorelli/sgc_consumer:latest
     ports:
       - "9191:8181"
     networks:
