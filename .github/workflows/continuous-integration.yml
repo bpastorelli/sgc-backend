@@ -3,7 +3,7 @@ name: Continuous Integration with GitHub Actions
 on:
   push:
     branches: 
-      - main
+      - master
 jobs:
   build:
 
@@ -25,11 +25,11 @@ jobs:
         cache: maven
         
     - name: Build Application
-      working-directory: .
+      working-directory: ./sgc-backend
       run: mvn clean package
 
     - name: Build Docker Compose Application
-      working-directory: .
+      working-directory: ./sgc-backend
       run: docker compose build
       
     - name: Push Docker Compose Application
