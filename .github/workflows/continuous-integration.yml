@@ -29,7 +29,7 @@ jobs:
       run: mvn clean package
 
     - name: Build Docker Compose Application
-      working-directory: ./sgc-backend
+      working-directory: .
       run: docker compose build
       
     - name: Push Docker Compose Application
