@@ -57,6 +57,10 @@ sudo docker build -f Dockerfile -t sgc_producer .
 
 <diretorio do arquivo> sudo docker-compose stop
 
+<b>Comando para visualizar os logs de um container em execução</b>
+
+<diretorio do arquivo>  sudo docker logs <nome do container>
+
 <b>Comando para alterar o endereço de IP do arquivo de configuração do docker</b>
 
 Exemplo:
