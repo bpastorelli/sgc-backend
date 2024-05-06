@@ -106,7 +106,6 @@ services:
   sgc-consumer:
     image: bpastorelli/sgc_consumer:latest
     restart: always
-    build: .
     ports:
       - "9191:8181"
     networks:
