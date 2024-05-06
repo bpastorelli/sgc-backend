@@ -134,9 +134,9 @@ services:
     networks:
       - app-net
     volumes:
-      - ./src/app/dist/sgc-tres-marias:/usr/share/nginx/html
-      - ./public:/app/public
-      - ./templates:/app/templates
+      - /src/app/dist/sgc-tres-marias:/usr/share/nginx/html
+      - /public:/app/public
+      - /templates:/app/templates
  
 networks:
   app-net:    
