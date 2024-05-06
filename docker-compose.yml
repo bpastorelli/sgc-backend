@@ -134,7 +134,7 @@ services:
     networks:
       - app-net
     volumes:
-      - ./web:/app/web
+      - ./web:/web:ro
       - ./public:/app/public
       - ./templates:/app/templates
  
