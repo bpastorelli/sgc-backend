@@ -77,3 +77,12 @@ docker context create ecs <TIPO CONTEXTO, PARA INFORMAÇÕES DIGITE --help> <NOM
 Exemplo:
 docker context create ecs --from-env sgcecscontext
 
+<b>Subir um docker compose para a AWS</b>
+
+Após as configurações de Login no AWS via prompt comando (aws cli ou Git Bach):
+
+Implantar: docker compose up
+Remover: docker compose down
+
+
+
