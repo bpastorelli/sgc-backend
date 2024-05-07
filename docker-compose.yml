@@ -76,9 +76,9 @@ services:
     environment:
       KAFKA_BROKERCONNECT: broker:29092
       
-  sgc:
+  sgc_producer:
     image: bpastorelli/associados:latest
-    build: sgc
+    build: sgc_producer
     ports:
       - "8080:8080"
     networks:
