@@ -2,4 +2,4 @@ server:
   port: 80
 
 file:
-  upload-dir: /home/runner/work/sgc-backend/sgc-backend/sgc
+  upload-dir: /home/runner/work/sgc-backend/sgc-backend/sgc_producer
