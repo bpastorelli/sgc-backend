@@ -100,7 +100,6 @@ services:
       - TZ=America/Sao_Paulo
       - DEBIAN_FRONTEND=noninteractive
     volumes:
-      - /src:/app/src
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       
@@ -121,7 +120,6 @@ services:
       - DEBIAN_FRONTEND=noninteractive
       - TZ=America/Sao_Paulo
     volumes:
-      - /src:/app/src
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       
