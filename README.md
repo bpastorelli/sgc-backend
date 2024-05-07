@@ -73,6 +73,7 @@ https://educoutinho.com.br/windows/instalando-docker-no-wsl/
 <b>Comando para criar um novo Context no ECS AWS "--from-env": Pega as credenciais do profile AWS</b>
 
 docker context create ecs <TIPO CONTEXTO, PARA INFORMAÇÕES DIGITE --help> <NOME DO CONTEXTO>
+
 Exemplo:
 docker context create ecs --from-env sgcecscontext
 
