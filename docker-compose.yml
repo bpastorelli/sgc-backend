@@ -95,7 +95,6 @@ services:
       
   sgc-consumer:
     image: bpastorelli/sgc_consumer:latest
-    build: sgc-consumer
     ports:
       - "8181:8181"
     networks:
