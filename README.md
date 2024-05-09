@@ -81,6 +81,8 @@ docker context create ecs --from-env sgcecscontext
 
 Após as configurações de Login no AWS via prompt comando (aws cli ou Git Bach):
 
+<b>Comandos uteis Linux</b>
+
 Implantar: docker compose up
 Remover: docker compose down
 
