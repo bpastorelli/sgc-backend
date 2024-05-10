@@ -119,5 +119,13 @@ cp {diretorio origem}/arquivo {diretorio destino}
 
 Exemplo: cp sgc-backend/deploy/docker-compose.yml sgc
 
+Editando um arquivo pelo Ububtu:
+
+nano {arquivo}
+
+Exemplo:
+
+nano teste.txt
+
 
 
