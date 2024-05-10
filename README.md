@@ -90,23 +90,33 @@ Remover app no docker:
 docker compose down
 
 Instalar o docker no Ubuntu:
+
 yum-config-manager --enable rhui-REGION-rhel-server-extras
+
 yum -y install docker 
+
 systemctl start docker
+
 systemctl enable docker
+
 docker version
 
 Instalar o Git no Ubuntu:
+
 sudo yum update
+
 sudo yum install git
+
 git --version
 
 Criado um diretorio no Ubuntu
+
 mkdir <nome do diretorio>
 
 Copiando um arquivo de um diretório para outro
 
 cp <diretorio origem>/arquivo <diretorio destino>
+
 Exemplo: cp sgc-backend/deploy/docker-compose.yml sgc
 
 
