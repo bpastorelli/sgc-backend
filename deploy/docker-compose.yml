@@ -95,7 +95,7 @@ services:
   sgc-consumer:
     image: bpastorelli/sgc_consumer:latest
     ports:
-      - "8181:8181"
+      - "9191:8181"
     networks:
       - app-net
     depends_on:
