@@ -79,7 +79,7 @@ services:
   sgc:
     image: bpastorelli/associados:latest
     ports:
-      - "8080:8080"
+      - "9090:8080"
     networks:
       - app-net
     depends_on:
