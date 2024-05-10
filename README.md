@@ -111,11 +111,11 @@ git --version
 
 Criado um diretorio no Ubuntu
 
-mkdir <nome do diretorio>
+mkdir {nome do diretorio}
 
 Copiando um arquivo de um diretório para outro
 
-cp <diretorio origem>/arquivo <diretorio destino>
+cp {diretorio origem}/arquivo {diretorio destino}
 
 Exemplo: cp sgc-backend/deploy/docker-compose.yml sgc
 
