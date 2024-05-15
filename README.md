@@ -127,5 +127,16 @@ Exemplo:
 
 nano teste.txt
 
+Visualizando logs do congainer
+
+docker logs {ID DO CONTAINER} | head
+
+Exemplo: docker logs e985bcc0ac27 | head
+
+Listando os containers
+
+docker ps -a
+
+
 
 
