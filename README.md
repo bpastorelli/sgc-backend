@@ -137,6 +137,25 @@ Listando os containers
 
 docker ps -a
 
+<b>Deploy no EC2 via linha de comando</b>
+
+Criando uma configuração de Cluster:
+
+ecs-cli configure --cluster {NOME DO CLUSTER} --default-launch-type {TIPO EC2 ou FARGATE} --region {REGIAO} --config-name {NOME DA CONFIGURAÇÃO} 
+
+Exemplo:
+
+ecs-cli configure --cluster sgc_deploy --default-launch-type EC2 --region sa-east-1 --config-name config_sgc_deploy   
+
+Deploy:
+
+ecs-cli compose --project-name {NOME DO SERVIÇO} --file {NOME DO ARQUIVO .YML} --debug service up  --deployment-max-percent 100 --deployment-min-healthy-percent 0 --region {REGIÃO} --ecs-profile {PERFIL} --cluster-config {NOME DA CONFIG} --timeout 10
+
+Exemplo:
+
+ecs-cli compose --project-name sgc-backend --file docker-compose.yml --debug service up  --deployment-max-percent 100 --deployment-min-healthy-percent 0 --region sa-east-1 --ecs-profile sgc --cluster-config config_sgc_deploy --timeout 10
+
+
 
 
 
