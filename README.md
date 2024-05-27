@@ -158,9 +158,3 @@ ecs-cli compose --project-name {NOME DO SERVIÇO} --file {NOME DO ARQUIVO .YML} 
 Exemplo:
 
 ecs-cli compose --project-name sgc-backend --file docker-compose.yml --debug service up  --deployment-max-percent 100 --deployment-min-healthy-percent 0 --region sa-east-1 --ecs-profile sgc --cluster-config config_sgc_deploy --timeout 10
-
-
-
-
-
-
