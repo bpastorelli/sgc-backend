@@ -33,7 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
         		.mvcMatchers(HttpMethod.POST, "/sgc/token").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/token/**").permitAll()
-        		.mvcMatchers(HttpMethod.POST, "/sgc/morador/**").permitAll()
+        		/*.mvcMatchers(HttpMethod.POST, "/sgc/morador/**").permitAll()
         		.mvcMatchers(HttpMethod.PUT, "/sgc/morador/**").permitAll()
         		.mvcMatchers(HttpMethod.GET, "/sgc/morador/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/visita/**").permitAll()
@@ -52,7 +52,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         		.mvcMatchers(HttpMethod.PUT, "/sgc/access/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/access/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/contribuicao/**").permitAll()
-        		.mvcMatchers(HttpMethod.GET, "/sgc/contribuicao/**").permitAll()
+        		.mvcMatchers(HttpMethod.GET, "/sgc/contribuicao/**").permitAll()*/
+        		.antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -68,6 +69,22 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.csrf().disable();
     }
+    
+    private static final String[] AUTH_WHITELIST = {
+
+            // for Swagger UI v2
+            "/v2/api-docs",
+            "/swagger-ui.html",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/webjars/**",
+
+            // for Swagger UI v3 (OpenAPI)
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
     
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -88,13 +105,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(appUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
-
-    /*@Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }*/
     
     @Override
     @Bean
