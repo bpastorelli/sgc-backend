@@ -36,6 +36,10 @@ docker commit 2084a2befb9a bpastorelli/sgc_consumer:1.0.0
 docker push "{usuario}"/"{repositório}":"{tag}"
 
 docker push bpastorelli/sgc_consumer:1.0.0
+
+<b>Comando alternativo para buildar o container e criar uma tag</b>
+
+docker build -t {usuario}/{repositorio}:{tag} .
  
 =======
 <b>Comando para atualizar o container:</b>
