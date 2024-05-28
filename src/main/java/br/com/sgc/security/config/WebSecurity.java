@@ -33,7 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
         		.mvcMatchers(HttpMethod.POST, "/sgc/token").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/token/**").permitAll()
-        		/*.mvcMatchers(HttpMethod.POST, "/sgc/morador/**").permitAll()
+        		.mvcMatchers(HttpMethod.POST, "/sgc/morador/**").permitAll()
         		.mvcMatchers(HttpMethod.PUT, "/sgc/morador/**").permitAll()
         		.mvcMatchers(HttpMethod.GET, "/sgc/morador/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/visita/**").permitAll()
@@ -52,7 +52,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         		.mvcMatchers(HttpMethod.PUT, "/sgc/access/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/access/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "/sgc/contribuicao/**").permitAll()
-        		.mvcMatchers(HttpMethod.GET, "/sgc/contribuicao/**").permitAll()*/
+        		.mvcMatchers(HttpMethod.GET, "/sgc/contribuicao/**").permitAll()
         		.antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
                 .anyRequest()
                 .authenticated()
