@@ -169,6 +169,3 @@ Kafdrop:
 
 http://{hostname}:{porta do container do kafdrop}
 
-
-
-
