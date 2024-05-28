@@ -94,7 +94,7 @@ services:
     #    - TZ=America/Sao_Paulo
         
     sgc:
-      image: associados
+      image: bpastorelli/associados
       build: 
         context: .
       ports:
