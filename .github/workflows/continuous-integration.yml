@@ -8,8 +8,36 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [22]
+        
     steps:
+    # {2}
+    - name: Checkout the source code
+      uses: actions/checkout@v3
+
+    # {3}
+    - name: Setup Node.js $
+      uses: actions/setup-node@v3
+      with:
+          node-version: $
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+    # {4}
+    - name: Install dependencies
+    - working-directory: ./web
+      run: npm ci
+    # {5}
+    - name: Run tests
+    - working-directory: ./web
+      run: npm run test:ci
+    # {6}
+    - name: Build
+    - working-directory: ./web
+      run: npm run build
+
     - uses: actions/checkout@v4
     - name: Docker Login
       uses: docker/login-action@v3.1.0
