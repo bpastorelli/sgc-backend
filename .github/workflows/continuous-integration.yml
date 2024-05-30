@@ -30,7 +30,7 @@ jobs:
     - name: build
       working-directory: ./web
       run: |
-        npm run build
+        npm audit fix --force
     
     - uses: actions/checkout@v4
     - name: Docker Login
