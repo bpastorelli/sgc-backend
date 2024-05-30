@@ -14,18 +14,18 @@ jobs:
         node-version: [22.x]
 
     steps:
-    - working-directory: ./web
-
+  
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4  
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: ./web/package-lock.json
         
-    #- name: ci
-    #  working-directory: ./web   
-    #  run: npm ci
+    - name: ci
+      working-directory: ./web   
+      run: npm ci
       
     - name: build
       working-directory: ./web
