@@ -30,7 +30,7 @@ jobs:
     - name: build
       working-directory: ./web
       run: |
-        npm build --prod
+        ng build --prod
     
     - uses: actions/checkout@v4
     - name: Docker Login
