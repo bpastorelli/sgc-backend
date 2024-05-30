@@ -30,8 +30,8 @@ jobs:
     - name: build
       working-directory: ./web
       run: |
-        ng install
-        ng build --if-present
+        npm install
+        npm run build --if-present
         npm run test --if-present
     
     - uses: actions/checkout@v4
