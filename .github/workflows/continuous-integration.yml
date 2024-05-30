@@ -23,9 +23,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         
-    - name: ci
-      working-directory: ./web   
-      run: npm ci
+    #- name: ci
+    #  working-directory: ./web   
+    #  run: npm ci
       
     - name: build
       working-directory: ./web
