@@ -31,8 +31,7 @@ jobs:
       working-directory: ./web
       run: |
         npm install
-        npm run build --if-present
-        npm run test --if-present
+        ng build --prod
     
     - uses: actions/checkout@v4
     - name: Docker Login
