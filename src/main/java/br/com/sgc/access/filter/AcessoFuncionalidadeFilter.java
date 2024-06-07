@@ -21,7 +21,8 @@ public class AcessoFuncionalidadeFilter {
 	
 	private String path;
 	
-	private boolean acesso;
+	@Builder.Default
+	private boolean acesso = true;
 	
 	private Long posicao;
 	

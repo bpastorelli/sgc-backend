@@ -4,7 +4,7 @@ export class AcessoFuncionalidadeFilter{
   idModulo?: string[];
   idFuncionalidade?: string[];
   posicao?: number = 1;
-  acesso?: boolean;
+  acesso: boolean = true;
   content: boolean = true;
   sort?: string = 'nomeFuncionalidade';
   page: number = 0;
