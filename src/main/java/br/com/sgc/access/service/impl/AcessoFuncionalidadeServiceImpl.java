@@ -68,6 +68,7 @@ public class AcessoFuncionalidadeServiceImpl implements ServicesAccess<CadastroA
 
 		log.info("Buscando acesso funcionalidades...");
 		
+		filter.setAcesso(true);
 		Response<List<GETAcessoFuncionalidadeResponseDto>> response = new Response<List<GETAcessoFuncionalidadeResponseDto>>(); 
 		
 		List<GETAcessoFuncionalidadeResponseDto> listAcessos = new ArrayList<GETAcessoFuncionalidadeResponseDto>();

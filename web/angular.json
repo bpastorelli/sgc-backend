@@ -125,5 +125,8 @@
       }
     }
   },
-  "defaultProject": "sgc-tres-marias"
+  "defaultProject": "sgc-tres-marias",
+  "cli": {
+    "analytics": "35d07426-71b3-4677-ab49-7faa6a9e46d4"
+  }
 }
