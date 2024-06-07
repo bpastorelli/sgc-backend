@@ -1,6 +1,6 @@
 export class PerfilFuncionalidade {
 
-  idUsuario: string;
+  id: string;
   idModulo: string;
   idFuncionalidade: string;
   nomeFuncionalidade: string;

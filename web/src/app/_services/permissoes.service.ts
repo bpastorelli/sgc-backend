@@ -4,17 +4,19 @@ import { Observable } from "rxjs";
 import { AcessoFuncionalidadeService } from "../acessos-funcionalidades/acessos-funcionalidades.service";
 import { PerfilFuncionalidade } from "../acessos-funcionalidades/acesso-funcionalidade.model";
 import { AcessoFuncionalidadeFilter } from "../acessos-funcionalidades/acesso-funcionalidade-filter.model";
+import { BaseService } from "./base.service";
 
 @Injectable({ providedIn: 'root' })
-export class PermissoesService  {
+export class PermissoesService extends BaseService  {
 
     private filter = {} as AcessoFuncionalidadeFilter;
 
     constructor(
-        private http: HttpClient,
         private acesso: AcessoFuncionalidadeService
     ) 
-    { }
+    {
+        super();
+    }
 
     getPermissao(idModulo: string[], idFuncionalidade: string[]) : Observable<PerfilFuncionalidade[]>{
 

@@ -1,5 +1,5 @@
 import { properties } from './../../properties/properties';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ResidenciasService } from './residencias.service';
@@ -7,6 +7,7 @@ import { ErroRegistro } from '../_models/erro-registro';
 import { ResidenciasFilterModel } from './residencias-filter.model';
 import { ResidenciaResponse } from './residencia-response.model';
 import { PerfilFuncionalidade } from '../acessos-funcionalidades/acesso-funcionalidade.model';
+import { PerfilRequestModel } from './perfil-request.model';
 import { PermissoesService } from '../_services/permissoes.service';
 
 @Component({
@@ -14,6 +15,9 @@ import { PermissoesService } from '../_services/permissoes.service';
   templateUrl: './residencias.component.html'
 })
 export class ResidenciasComponent implements OnInit {
+
+  public inclusaoVisita: boolean = false;
+  public inclusaoMorador: boolean = false;
 
   residencias: ResidenciaResponse[] = [];
 
@@ -24,7 +28,7 @@ export class ResidenciasComponent implements OnInit {
 
   erros: ErroRegistro[] = [];
 
-  perfil = {} as PerfilFuncionalidade[];
+  perfis = {} as PerfilFuncionalidade[];
   perfilVisita = {} as PerfilFuncionalidade;
 
   title = "Cadastro de Residências";
@@ -32,18 +36,17 @@ export class ResidenciasComponent implements OnInit {
   requestDto: ResidenciasFilterModel = new ResidenciasFilterModel();
 
   constructor(
+      private permissaoService: PermissoesService,
       private residenciasService: ResidenciasService,
       private authenticationService: AuthenticationService,
-      private router: Router,
-      private permissao: PermissoesService,
-      private route: ActivatedRoute,
-  ) { }
+      private router: Router  ) { }
 
   ngOnInit() {
 
-    //this.ticket = this.route.snapshot.paramMap.get('ticket');
-
     if(this.authenticationService.currentUserValue){
+      this.getAcessoVisita();
+      console.log('Valor recebido: ' + this.inclusaoVisita);
+      this.getAcessoMorador();
       this.getResidencias();
     }else{
       this.router.navigate(['/login']);
@@ -54,11 +57,11 @@ export class ResidenciasComponent implements OnInit {
   getResidencias(codigo?: string, endereco?: string, numero?: string){
 
     this.requestDto = new ResidenciasFilterModel();
-    this.perfil = [];
+    this.perfis = [] as PerfilFuncionalidade[];
+    this.perfilVisita = new PerfilFuncionalidade();
 
     if(codigo)
       this.requestDto.id = codigo;
-
     
     if(endereco)
       this.requestDto.endereco = endereco;
@@ -66,32 +69,66 @@ export class ResidenciasComponent implements OnInit {
     if(numero)
       this.requestDto.numero = numero;
 
-    //if(this.ticket)
-    //  this.requestDto.guide = this.ticket;
-
-    let modulos: string[] = [];
-    let funcionalidades: string[] = [];
-
-    modulos.push('3','6');
-    funcionalidades.push('7','14');
-
     this.residenciasService.residencias(this.requestDto)
     .subscribe(
       data=>{
         this.residencias = data;
-        this.permissao.getPermissao(modulos, funcionalidades)
-          .subscribe(
-            data=>{
-              this.perfil = data;
-            }, err=>{
-              console.log(err['erros']);
-            }
-          );
       }, err=>{
         this.erros = err['erros'];
       }
     );
     return this.residencias;
+
+  }
+
+  getAcessoVisita() : boolean{
+
+    let modulos: string[] = [];
+    let funcionalidades: string[] = [];
+    let value: boolean = false;
+
+    modulos.push('6');
+    funcionalidades.push('14');
+
+    this.permissaoService.getPermissao(modulos, funcionalidades)
+      .subscribe(
+        data =>{
+            if(data.length > 0){
+              console.log(data[0].idModulo);
+              this.inclusaoVisita = data[0].inclusao;
+            }
+        }, err=>{
+          console.log(err['erros']);
+        }
+      );
+
+      console.log('Resultado:' + value);
+      return value;
+
+  }
+
+  getAcessoMorador() : boolean{
+
+    let modulos: string[] = [];
+    let funcionalidades: string[] = [];
+    let value: boolean = false;
+
+    modulos.push('3');
+    funcionalidades.push('7');
+
+    this.permissaoService.getPermissao(modulos, funcionalidades)
+      .subscribe(
+        data =>{
+            if(data.length > 0){
+              console.log(data[0].idModulo);
+              this.inclusaoMorador = data[0].inclusao;            }
+        }, err=>{
+          console.log(err['erros']);
+        }
+      );
+
+      console.log('Resultado:' + value);
+      return value;
 
   }
 
