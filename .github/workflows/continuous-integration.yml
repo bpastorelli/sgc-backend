@@ -60,6 +60,13 @@ jobs:
       working-directory: .
       run: docker compose build
 
+    - name: Push Docker Compose Application
+      run: |
+        docker tag ${{ secrets.DOCKER_USERNAME }}/associados:latest ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }} 
+        
+        docker push ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }} 
+        docker push ${{ secrets.DOCKER_USERNAME }}/associados:latest
+
     - name: Download task definition
       run: |
         aws ecs describe-task-definition --task-definition ${{ secrets.TASK_DEFINITION_NAME }} --query taskDefinition > task-definition.json
@@ -79,10 +86,3 @@ jobs:
         service: ${{ secrets.SERVICE_NAME }}
         cluster: ${{ secrets.CLUSTER_NAME }}
         wait-for-service-stability: true
-      
-    - name: Push Docker Compose Application
-      run: |
-        docker tag ${{ secrets.DOCKER_USERNAME }}/associados:latest ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }} 
-        
-        docker push ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }} 
-        docker push ${{ secrets.DOCKER_USERNAME }}/associados:latest
