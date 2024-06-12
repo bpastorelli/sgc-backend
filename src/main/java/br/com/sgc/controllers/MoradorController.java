@@ -32,10 +32,12 @@ import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.services.ServicesCore;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 	
 @Slf4j
 @RestController
+@Api(tags = "Cadastro de Moradores")
 @RequestMapping("/sgc/morador")
 @CrossOrigin(origins = "*")
 public class MoradorController extends RegistroExceptionHandler {
@@ -48,10 +50,6 @@ public class MoradorController extends RegistroExceptionHandler {
 	
 	@Autowired
 	private ServicesCore<GETMoradorResponseDto, MoradorFilter> moradorService;
-	
-	public MoradorController() {
-		
-	}
 		
 	/**
 	 * Envia um objeto tipo MoradorDto para o Consumer
