@@ -18,10 +18,12 @@ import br.com.sgc.dto.ResponsePublisherDto;
 import br.com.sgc.dto.VinculoResidenciaDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@Api(tags = "Cadastro de Vinculo - Morador a Residência")
 @RequestMapping("/sgc/vinculo")
 @CrossOrigin(origins = "*")
 class VinculoResidenciaController extends RegistroExceptionHandler {

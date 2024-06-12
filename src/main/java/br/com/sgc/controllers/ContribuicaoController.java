@@ -27,10 +27,12 @@ import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.filter.ContribuicaoFilter;
 import br.com.sgc.services.ContribuicaoService;
 import br.com.sgc.services.ServicesCore;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@Api(tags = "Cadastro de Contribuições")
 @RequestMapping("/sgc/contribuicao")
 @CrossOrigin(origins = "*")
 public class ContribuicaoController {
