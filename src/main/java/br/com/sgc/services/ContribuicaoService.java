@@ -13,7 +13,6 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -320,7 +319,6 @@ public class ContribuicaoService {
 		
 	}
 	
-	@Async
 	private void salvarHistorico(String file, SituacaoEnum situacao) {
 		
 		if(situacao.equals(SituacaoEnum.INICIANDO)) {
@@ -340,6 +338,9 @@ public class ContribuicaoService {
 		Long pages = ((long) lancamentos.size() / PAGE_SIZE);
 		Integer resto = (lancamentos.size() % PAGE_SIZE);
 		pages = resto > 0 ? Math.round(pages) + 1 : pages;
+		
+		if(pages == 0)
+			pages = Long.parseLong("1");
 		
 		return pages;
 	}

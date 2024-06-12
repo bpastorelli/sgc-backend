@@ -28,6 +28,7 @@ import br.com.sgc.filter.ContribuicaoFilter;
 import br.com.sgc.services.ContribuicaoService;
 import br.com.sgc.services.ServicesCore;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -43,6 +44,7 @@ public class ContribuicaoController {
 	@Autowired
 	private ServicesCore<GETContribuicaoResponseDto, ContribuicaoFilter> serviceBusca;
 	
+	@ApiOperation(value = "Realiza a validação do arquivo, dos dados e produz mensagens para o Kafka de contribuições.")
 	@PostMapping(value = "/import")
 	public ResponseEntity<?> importacaoContribuicao(@RequestParam("file") MultipartFile file) throws RegistroException, IOException, InterruptedException, ExecutionException{
 		
@@ -58,6 +60,7 @@ public class ContribuicaoController {
 		
 	}
 	
+	@ApiOperation(value = "Pesquisa contribuições a partir dos filtros informados.")
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarVisitasFiltro(
 			ContribuicaoFilter filters,
@@ -72,6 +75,7 @@ public class ContribuicaoController {
 		
 	}
 	
+	@ApiOperation(value = "Pesquisa o histórico de importações pela situação (INICIANDO, IMMPORTANDO, FALHA ou CONCLUIDO).")
 	@GetMapping(value = "/import/listar")
 	public ResponseEntity<?> buscarHistoricoImportacaoFiltro(
 			@RequestParam("situacao") List<SituacaoEnum> situacao) throws NoSuchAlgorithmException {
