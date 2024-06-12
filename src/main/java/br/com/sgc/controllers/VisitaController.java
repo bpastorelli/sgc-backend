@@ -29,10 +29,12 @@ import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.VisitaFilter;
 import br.com.sgc.services.ServicesCore;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@Api(tags = "Cadastro de Visitas")
 @RequestMapping("/sgc/visita")
 @CrossOrigin(origins = "*")
 class VisitaController extends RegistroExceptionHandler {
