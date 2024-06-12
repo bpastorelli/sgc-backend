@@ -87,11 +87,11 @@ public class AcessoModuloServiceImpl implements ServicesAccess<CadastroAcessoMod
 
 			List<Long> modulos = new ArrayList<Long>();
 			modulos.add(m.getIdModulo());
-			AcessoFuncionalidadeFilter filterAcessos = AcessoFuncionalidadeFilter.builder()
-				.idUsuario(m.getIdUsuario())
-				.idModulo(modulos)
-				.acesso(filter.isAcesso())
-				.build();
+			AcessoFuncionalidadeFilter filterAcessos = new AcessoFuncionalidadeFilter();
+			filterAcessos.setIdUsuario(m.getIdUsuario());
+			filterAcessos.setIdModulo(modulos);
+			filterAcessos.setAcesso(filter.isAcesso());
+			filterAcessos.setContent(filter.isContent());
 			
 			m.setFuncionalidades(this.mapperFuncionalidade.listAcessoFuncionalidadeToListGETAcessoFuncionalidadeResponseDto(this.queryFuncionalidade.query(filterAcessos, pageable)));
 		});

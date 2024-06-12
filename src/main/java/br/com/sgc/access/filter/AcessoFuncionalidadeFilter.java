@@ -2,13 +2,11 @@ package br.com.sgc.access.filter;
 
 import java.util.List;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class AcessoFuncionalidadeFilter {
 
 	private Long id;
@@ -21,8 +19,7 @@ public class AcessoFuncionalidadeFilter {
 	
 	private String path;
 	
-	@Builder.Default
-	private boolean acesso = true;
+	private boolean acesso;
 	
 	private Long posicao;
 	

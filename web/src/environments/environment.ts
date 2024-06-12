@@ -24,7 +24,7 @@ export const environment = {
   visita: '/visita',
   contribuicao: '/contribuicao', 
   veiculo: '/veiculo', 
-  apiUrl: 'localhost:4200/api/sgc',
+  apiUrl: 'ec2-15-229-187-241.sa-east-1.compute.amazonaws.com:9090/sgc',
   apiUrlCep: `https://viacep.com.br/ws`
 };
 

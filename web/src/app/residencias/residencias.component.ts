@@ -45,7 +45,6 @@ export class ResidenciasComponent implements OnInit {
 
     if(this.authenticationService.currentUserValue){
       this.getAcessoVisita();
-      console.log('Valor recebido: ' + this.inclusaoVisita);
       this.getAcessoMorador();
       this.getResidencias();
     }else{
@@ -87,6 +86,8 @@ export class ResidenciasComponent implements OnInit {
     let funcionalidades: string[] = [];
     let value: boolean = false;
 
+    this.inclusaoVisita = false;
+
     modulos.push('6');
     funcionalidades.push('14');
 
@@ -94,7 +95,6 @@ export class ResidenciasComponent implements OnInit {
       .subscribe(
         data =>{
             if(data.length > 0){
-              console.log(data[0].idModulo);
               this.inclusaoVisita = data[0].inclusao;
             }
         }, err=>{
@@ -102,7 +102,6 @@ export class ResidenciasComponent implements OnInit {
         }
       );
 
-      console.log('Resultado:' + value);
       return value;
 
   }
@@ -113,6 +112,8 @@ export class ResidenciasComponent implements OnInit {
     let funcionalidades: string[] = [];
     let value: boolean = false;
 
+    this.inclusaoMorador = false;
+
     modulos.push('3');
     funcionalidades.push('7');
 
@@ -120,14 +121,12 @@ export class ResidenciasComponent implements OnInit {
       .subscribe(
         data =>{
             if(data.length > 0){
-              console.log(data[0].idModulo);
               this.inclusaoMorador = data[0].inclusao;            }
         }, err=>{
           console.log(err['erros']);
         }
       );
 
-      console.log('Resultado:' + value);
       return value;
 
   }
