@@ -41,10 +41,6 @@ public class AcessoFuncionalidadeController {
 							GETAcessoFuncionalidadeResponseDto, 
 							AcessoFuncionalidadeFilter> service;
 	
-	public AcessoFuncionalidadeController() {
-		
-	}
-	
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarAcessosFuncionalidade(			
 			AcessoFuncionalidadeFilter filters,
