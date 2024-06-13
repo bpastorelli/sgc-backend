@@ -75,7 +75,7 @@ public class ContribuicaoController {
 		
 	}
 	
-	@ApiOperation(value = "Pesquisa o histórico de importações pela situação (INICIANDO, IMMPORTANDO, FALHA ou CONCLUIDO).")
+	@ApiOperation(value = "Pesquisa o histórico de importações pela situação (INICIANDO, IMPORTANDO, FALHA ou CONCLUIDO).")
 	@GetMapping(value = "/import/listar")
 	public ResponseEntity<?> buscarHistoricoImportacaoFiltro(
 			@RequestParam("situacao") List<SituacaoEnum> situacao) throws NoSuchAlgorithmException {

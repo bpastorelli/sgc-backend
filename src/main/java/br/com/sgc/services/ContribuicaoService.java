@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ContribuicaoService {
     
 	@Autowired
-	private ImportService importService;
+	private ImportServiceAnsync importService;
 	
 	@Autowired
 	private HistoricoImportacaoMapper historicoMapper;
@@ -31,11 +32,15 @@ public class ContribuicaoService {
 	
     public CabecalhoResponsePublisherDto processarContribuicoes(final MultipartFile file) throws RegistroException, IOException {
         
+    	importService.validarTipoArquivo(file);
+    	
         String idRequisicao = UUID.randomUUID().toString();
         
-        log.info("Requisição {}", idRequisicao);
+        log.info("Requisição: {}", idRequisicao);
         
-        importService.processar(file, idRequisicao);
+        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+        
+        importService.processar(workbook, file.getOriginalFilename(), idRequisicao);
 		
 		CabecalhoResponsePublisherDto response = CabecalhoResponsePublisherDto.builder()
 			.ticket(idRequisicao)

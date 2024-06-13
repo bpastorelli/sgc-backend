@@ -40,7 +40,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ImportService {
+public class ImportServiceAnsync {
+	
+	private static final String TITULO = "Importação de Arquivo de Contribuição";
 	
 	private List<String> cpfs = new ArrayList<String>();
 	
@@ -65,8 +67,6 @@ public class ImportService {
 	private List<Lancamento> lancamentos = new ArrayList<Lancamento>();
 	
 	private List<VinculoResidencia> vinculos = new ArrayList<VinculoResidencia>();
-
-	private XSSFWorkbook workbook;
 	
 	@Autowired
 	private ContribuicaoProducer producer;
@@ -77,48 +77,72 @@ public class ImportService {
 	private static int PAGE_SIZE = 1000;
 	
     @Async("asyncExecutor")
-    public void processar(final MultipartFile file, String idRequisicao) throws RegistroException, IOException {
+    public void processar(final XSSFWorkbook workbook, String fileName, String idRequisicao) throws RegistroException, IOException {
     	
-    	log.info("Iniciando o processamento de importação {}", file.getOriginalFilename());
+    	log.info("Iniciando o tratamento do aquivo para importação.");
     	
-		this.salvarHistorico(file.getOriginalFilename(), SituacaoEnum.INICIANDO, idRequisicao);
-        
-        RegistroException errors = new RegistroException();
-        
-		if(file.isEmpty()) {
-			this.addError("Nenhum arquivo selecionado para importação.");
-			this.salvarHistorico(file.getName(), SituacaoEnum.FALHA, idRequisicao);
+    	RegistroException errors = new RegistroException();
+    	
+    	try {
+    		
+    		XSSFSheet sheet = workbook.getSheetAt(0);
+    		this.salvarHistorico(fileName, SituacaoEnum.INICIANDO, idRequisicao);
+    		
+    	    List<LancamentoDto> lancamentos = this.prepararDadosImportacao(sheet);
+    	    
+    		if(this.errorsList.size() > 0) {
+    			this.errorsList.forEach(erro -> errors.getErros().add(new ErroRegistro("","", erro)));
+    			this.salvarHistorico(fileName, SituacaoEnum.FALHA, idRequisicao);
+    			throw errors;
+    		}
+    		
+    		this.salvarHistorico(fileName, SituacaoEnum.IMPORTANDO, idRequisicao);
+    		
+    		int page;
+    		for(page = 1; page <= Math.round(this.calcularPaginas(lancamentos)); page++) {
+    			log.info("Enviando página: {}...", page);
+    			this.producer.producerAsync(this.convert.convert(Utils.getPage(lancamentos, page, PAGE_SIZE)));
+    		}
+    		
+    		log.info("Conteúdo enviado para processamento.");
+    		
+    		
+    	}catch(Exception e) {
+    		
+			this.addError(e.getMessage());
+			this.salvarHistorico(fileName, SituacaoEnum.FALHA, idRequisicao);
 			throw errors;
-		}
-		
-	    List<LancamentoDto> lancamentos = this.prepararDadosImportacao(file);
-	    
-		if(this.errorsList.size() > 0) {
-			this.errorsList.forEach(erro -> errors.getErros().add(new ErroRegistro("","", erro)));
-			this.salvarHistorico(file.getName(), SituacaoEnum.FALHA, idRequisicao);
-			throw errors;
-		}
-		
-		this.salvarHistorico(file.getOriginalFilename(), SituacaoEnum.IMPORTANDO, idRequisicao);
-		
-		int page;
-		for(page = 1; page <= Math.round(this.calcularPaginas()); page++) {
-			log.info("Enviando página: {}...", page);
-			this.producer.producerAsync(this.convert.convert(Utils.getPage(lancamentos, page, PAGE_SIZE)));
-		}
-		
-		log.info("Conteúdo enviado para processamento.");
+    		
+    	}finally{
+    		
+    		workbook.close();
+    	}
     	
     }
     
-	private List<LancamentoDto> prepararDadosImportacao(MultipartFile file) throws RegistroException, IOException{
+    public void validarTipoArquivo(MultipartFile file) throws RegistroException {
+    	
+    	log.info("Validando formato do arquivo...");
+    	
+    	RegistroException errors = new RegistroException();
+    	
+		if(!FilenameUtils.getExtension(file.getOriginalFilename()).equals("xlsx") 
+				&& !FilenameUtils.getExtension(file.getOriginalFilename()).equals("xls"))
+			errors.getErros().add(new ErroRegistro("", TITULO, "Formato de arquivo inválido. Formatos suportados: .xlsx e .xls"));
 		
-		log.info("Realizando a leitura do arquivo {}", file.getName());
+		if(!errors.getErros().isEmpty())
+			throw errors;
+    	
+    }
+    
+	private List<LancamentoDto> prepararDadosImportacao(XSSFSheet sheet) throws RegistroException, IOException{
+		
+		log.info("Realizando a leitura do arquivo");
 		
 		this.errorsList = new ArrayList<String>();
 		
 		List<LancamentoDto> listPreparada = new ArrayList<LancamentoDto>();
-		List<ContribuicaoDto> lancamentoList = this.getDataFromFile(file);
+		List<ContribuicaoDto> lancamentoList = this.getDataFromFile(sheet);
 	    
 		if(this.errorsList.size() == 0) 
 			this.loadBases(); 
@@ -214,48 +238,42 @@ public class ImportService {
 	}
 	    	
 	//Lê o aquivo de importação e trata os dados para ContribuicaoDto
-	private List<ContribuicaoDto> getDataFromFile(MultipartFile file) throws IOException{
+	/**
+	 * @param worksheet
+	 * @return List<ContuibuicaoDTO>
+	 * @throws IOException
+	 */
+	private List<ContribuicaoDto> getDataFromFile(XSSFSheet worksheet) throws IOException{
 		
-		log.info("Extraindo dados do arquivo {}...", file.getName());
+		log.info("Extraindo dados do arquivo...");
 		
 		List<ContribuicaoDto> lancamentoList = new ArrayList<ContribuicaoDto>();
-		
-		if(!FilenameUtils.getExtension(file.getOriginalFilename()).equals("xlsx") 
-				&& !FilenameUtils.getExtension(file.getOriginalFilename()).equals("xls"))
-			this.addError("Formato de arquivo inválido. Formatos suportados: .xlsx e .xls");
-		
-		//Se não houver erro de tipo de arquivo, inicia a preparação
-		if(this.errorsList.size() == 0) {			
 			
-			workbook = new XSSFWorkbook(file.getInputStream());
-			XSSFSheet worksheet = workbook.getSheetAt(0);
+		this.validarArquivo(worksheet);
 			
-			this.validarArquivo(worksheet);
-			
-			if(worksheet.getPhysicalNumberOfRows() > 1 && this.errorsList.size() == 0) {
+		if(worksheet.getPhysicalNumberOfRows() > 1 && this.errorsList.size() == 0) {
 				
-			    for(int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+			 for(int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
 		            
-			    	XSSFRow row = worksheet.getRow(i);
-			    	if(row.getCell(0) != null && row.getCell(0).getRawValue() != null) {
+			    XSSFRow row = worksheet.getRow(i);
+			    if(row.getCell(0) != null && row.getCell(0).getRawValue() != null) {
 			    		
-			    		ContribuicaoDto lanca = new ContribuicaoDto();
-			    		lanca.setCpf(WorkbookUtils.<String>getCellValue(i, 0, worksheet, DataTypeEnum.CPF).replace(".", "").replace("-", ""));
-			    		lanca.setDataPagamento(WorkbookUtils.<LocalDate>getCellValue(i, 1, worksheet, DataTypeEnum.DATE));
-			    		lanca.setValor(WorkbookUtils.getCellValue(i, 2, worksheet, DataTypeEnum.BIG_DECIMAL));
-			    		lanca.setDocumento(WorkbookUtils.getCellValue(i, 3, worksheet, DataTypeEnum.STRING));
+			    	ContribuicaoDto contribuicao = new ContribuicaoDto();
+			    	contribuicao.setCpf(WorkbookUtils.<String>getCellValue(i, 0, worksheet, DataTypeEnum.CPF).replace(".", "").replace("-", ""));
+			    	contribuicao.setDataPagamento(WorkbookUtils.<LocalDate>getCellValue(i, 1, worksheet, DataTypeEnum.DATE));
+			    	contribuicao.setValor(WorkbookUtils.getCellValue(i, 2, worksheet, DataTypeEnum.BIG_DECIMAL));
+			    	contribuicao.setDocumento(WorkbookUtils.getCellValue(i, 3, worksheet, DataTypeEnum.STRING));
 			    		
-			    		if(!this.cpfs.contains(lanca.getCpf()))
-			    			this.cpfs.add(lanca.getCpf());
+			    	if(!this.cpfs.contains(contribuicao.getCpf()))
+			    		this.cpfs.add(contribuicao.getCpf());
 			    		
-			    		lancamentoList.add(lanca);
-			    	}
+			    	lancamentoList.add(contribuicao);
+			    }
 			       
-			    }	
+			 }	
 				
-			}			
+		}			
 			
-		}
 		
 		if(lancamentoList.size() == 0 && this.errorsList.size() == 0)
 			this.addError("Não existem dados para importação.");
@@ -312,7 +330,7 @@ public class ImportService {
 		
 	}
 	
-	private Long calcularPaginas() {
+	private Long calcularPaginas(List<LancamentoDto> lancamentos) {
 		
 		Long pages = ((long) lancamentos.size() / PAGE_SIZE);
 		Integer resto = (lancamentos.size() % PAGE_SIZE);
