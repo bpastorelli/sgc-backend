@@ -11,13 +11,12 @@ import br.com.sgc.amqp.producer.KafkaTemplateAbstract;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
-public class ContribuicaoKafkaProducerImpl extends KafkaTemplateAbstract<ContribuicaoAvro> {
+@Component("contribuicaoProducer")
+public class ContribuicaoProducer extends KafkaTemplateAbstract<ContribuicaoAvro> {
 	
 	@Value("${contribuicao.topic.name}")
 	private String topic;
 	
-	@Override
 	public void producer(ContribuicaoAvro dto) {
 		
 		kafkaTemplate.send(topic, dto).addCallback(
@@ -27,8 +26,7 @@ public class ContribuicaoKafkaProducerImpl extends KafkaTemplateAbstract<Contrib
 		
 	}
 
-	@Async
-	@Override
+	@Async("asyncKafka")
 	public void producerAsync(ContribuicaoAvro dto) {
 		
 		
@@ -60,7 +58,7 @@ public class ContribuicaoKafkaProducerImpl extends KafkaTemplateAbstract<Contrib
 			
 		}finally{
 			log.info("Finalizando a Thread {}", Thread.currentThread().getName());
-			stopThread();
+			Thread.currentThread().isInterrupted();;
 		}
 		
 		log.info("Finalizado.");

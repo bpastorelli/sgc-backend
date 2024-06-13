@@ -33,6 +33,7 @@ import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.services.ServicesCore;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 	
 @Slf4j
@@ -58,6 +59,7 @@ public class MoradorController extends RegistroExceptionHandler {
 	 * @return ResponsePublisher
 	 * @throws Exception
 	 */
+	@ApiOperation(value = "Produz uma nova mensagem no Kafka para cadastramento de um novo morador.")
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP( 
 			@Valid @RequestBody MoradorDto moradorRequestBody,
@@ -80,6 +82,8 @@ public class MoradorController extends RegistroExceptionHandler {
 	 * @return ResponsePublisher
 	 * @throws Exception
 	 */
+	
+	@ApiOperation(value = "Produz uma nova mensagem no Kafka para cadastro de um novo morador e uma nova residência (se não existir).")
 	@PostMapping(value = "/amqp/processo")
 	public ResponseEntity<?> processoCadastroAMQP( 
 			@Valid @RequestBody ProcessoCadastroDto processoRequestBody,
@@ -95,6 +99,7 @@ public class MoradorController extends RegistroExceptionHandler {
 		
 	}
 	
+	@ApiOperation(value = "Produz uma nova mensagem no Kafka para atualização de um cadastro de morador.")
 	@PutMapping(value = "/amqp/alterar")
 	public ResponseEntity<?> alterarAMQP( 
 			@Valid @RequestBody AtualizaMoradorDto moradorRequestBody,
@@ -112,6 +117,7 @@ public class MoradorController extends RegistroExceptionHandler {
 		
 	}
 	
+	@ApiOperation(value = "Pesquisa moradores a partir dos filtros informados.")
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarMoradoresFiltro(
 			MoradorFilter filters,

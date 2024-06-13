@@ -13,12 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class VisitaKafkaProducerImpl extends KafkaTemplateAbstract<VisitaAvro> {
+public class VisitaProducer extends KafkaTemplateAbstract<VisitaAvro> {
 	
 	@Value("${visita.topic.name}")
 	private String topic;
 	
-	@Override
 	public void producer(VisitaAvro dto) {
 		
 		ListenableFuture<SendResult<String, VisitaAvro>> future = kafkaTemplate.send(topic, dto);
@@ -43,8 +42,7 @@ public class VisitaKafkaProducerImpl extends KafkaTemplateAbstract<VisitaAvro> {
 		
 	}
 
-	@Async
-	@Override
+	@Async("asyncKafka")
 	public void producerAsync(VisitaAvro dto) {
 		
 		try {
@@ -75,7 +73,7 @@ public class VisitaKafkaProducerImpl extends KafkaTemplateAbstract<VisitaAvro> {
 			
 		}finally{
 			log.info("Finalizando a Thread...");
-			stopThread();
+			Thread.currentThread().isInterrupted();
 		}
 		
 	}

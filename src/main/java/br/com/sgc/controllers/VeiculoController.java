@@ -31,6 +31,7 @@ import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.VeiculoFilter;
 import br.com.sgc.services.ServicesCore;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -46,6 +47,7 @@ class VeiculoController extends RegistroExceptionHandler {
 	@Autowired
 	private ServicesCore<GETVeiculoResponseDto, VeiculoFilter> veiculoService;
 	
+	@ApiOperation(value = "Produz uma nova mensagem no Kafka para cadastro de um novo veículo de visitante.")
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody VeiculoDto veiculoRequestBody,
 											   BindingResult result ) throws RegistroException{
@@ -60,6 +62,7 @@ class VeiculoController extends RegistroExceptionHandler {
 		
 	}
 	
+	@ApiOperation(value = "Produz uma nova mensagem no Kafka para atualização de um veículo.")
 	@PutMapping(value = "/amqp/alterar")
 	public ResponseEntity<?> atualizarAMQP(
 			@Valid @RequestBody AtualizaVeiculoDto veiculoRequestBody,
@@ -77,6 +80,7 @@ class VeiculoController extends RegistroExceptionHandler {
 		
 	}
 	
+	@ApiOperation(value = "Pesquisa veículos a partir dos filtros informados.")
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarVeiculosFiltro(
 			VeiculoFilter filters,

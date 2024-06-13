@@ -12,12 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class EncerraVisitaKafkaProducerImpl extends KafkaTemplateAbstract<EncerraVisitaAvro> {
+public class EncerraVisitaProducer extends KafkaTemplateAbstract<EncerraVisitaAvro> {
 	
 	@Value("${visita.topic.name}")
 	private String topic;
 	
-	@Override
 	public void producer(EncerraVisitaAvro dto) {
 		
 		kafkaTemplate.send(topic, dto).addCallback(
@@ -27,8 +26,7 @@ public class EncerraVisitaKafkaProducerImpl extends KafkaTemplateAbstract<Encerr
 		
 	}
 
-	@Async
-	@Override
+	@Async("asyncKafka")
 	public void producerAsync(EncerraVisitaAvro dto) {
 		
 		Runnable runnable = () -> kafkaTemplate.send(topic, dto).addCallback(new ListenableFutureCallback<>() {

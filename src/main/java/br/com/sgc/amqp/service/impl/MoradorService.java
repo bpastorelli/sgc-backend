@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.sgc.MoradorAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.impl.MoradorProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.AtualizaMoradorDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
@@ -20,14 +19,14 @@ import br.com.sgc.validators.Validators;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
-public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaMoradorDto> {
+@Service("moradorService")
+public class MoradorService implements AmqpService<MoradorDto, AtualizaMoradorDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
 	
 	@Autowired
-	private AmqpProducer<MoradorAvro> amqp;
+	private MoradorProducer producer;
 	
 	@Autowired
 	private Validators<MoradorDto, AtualizaMoradorDto> validator;
@@ -37,7 +36,6 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 	
 	@Autowired
 	private MoradorMapper moradorMapper;
-	
 	
 	@Override
 	public ResponsePublisherDto sendToConsumerPost(MoradorDto moradorRequestBody) throws RegistroException {
@@ -51,7 +49,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producerAsync(moradorMapper.moradorDtoToMoradorAvro(moradorRequestBody));
+		this.producer.producerAsync(moradorMapper.moradorDtoToMoradorAvro(moradorRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -77,7 +75,7 @@ public class MoradorServiceAMQPImpl implements AmqpService<MoradorDto, AtualizaM
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producerAsync(moradorMapper.moradorDtoToMoradorAvro(this.mergeObject(this.moradorMapper.moradorToMoradorDto(moradorRepository.findById(id).get()), moradorRequestBody)));
+		this.producer.producerAsync(moradorMapper.moradorDtoToMoradorAvro(this.mergeObject(this.moradorMapper.moradorToMoradorDto(moradorRepository.findById(id).get()), moradorRequestBody)));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

@@ -19,6 +19,7 @@ import br.com.sgc.dto.VinculoResidenciaDto;
 import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,6 +32,7 @@ class VinculoResidenciaController extends RegistroExceptionHandler {
 	@Autowired
 	private AmqpService<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> vinculoAmqpService;
 	
+	@ApiOperation(value = "Produz uma nova mensagem no Kafka para vincular um morador existente a uma residência existente.")
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody VinculoResidenciaDto vinculoRequestBody,
 											   BindingResult result ) throws RegistroException{

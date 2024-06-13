@@ -30,6 +30,7 @@ import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.VisitaFilter;
 import br.com.sgc.services.ServicesCore;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -45,6 +46,7 @@ class VisitaController extends RegistroExceptionHandler {
 	@Autowired
 	private AmqpService<VisitaDto, EncerraVisitaDto> visitaAmqpService;
 	
+	@ApiOperation(value = "Produz uma nova mensagem no Kafka para cadastro de visita.")
 	@PostMapping(value = "/amqp/novo")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody VisitaDto visitaRequestBody,
 											   BindingResult result ) throws RegistroException{
@@ -59,6 +61,7 @@ class VisitaController extends RegistroExceptionHandler {
 		
 	}
 	
+	@ApiOperation(value = "Produz uma nova mensagem no Kafka para encerrar uma visita.")
 	@PutMapping(value = "/amqp/encerrar")
 	public ResponseEntity<?> encerrarVisitaAMQP(@Valid @RequestBody EncerraVisitaDto encerraVisitaDto,
 			BindingResult result) throws RegistroException{
@@ -73,6 +76,7 @@ class VisitaController extends RegistroExceptionHandler {
 		
 	}
 	
+	@ApiOperation(value = "Pesquisa visitas a partir dos filtros informados.")
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarVisitasFiltro(
 			VisitaFilter filters,

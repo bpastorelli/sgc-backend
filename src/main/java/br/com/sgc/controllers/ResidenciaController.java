@@ -31,6 +31,7 @@ import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.ResidenciaFilter;
 import br.com.sgc.services.ServicesCore;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -46,6 +47,7 @@ class ResidenciaController extends RegistroExceptionHandler {
 	@Autowired
 	private ServicesCore<GETResidenciaResponseDto, ResidenciaFilter> residenciaService;
 	
+	@ApiOperation(value = "Produz uma mensagem no Kafka para cadastramento de uma nova residência.")
 	@PostMapping(value = "/amqp/nova")
 	public ResponseEntity<?> cadastrarNovoAMQP(@Valid @RequestBody ResidenciaDto residenciaRequestBody,
 											   BindingResult result ) throws RegistroException{
@@ -60,6 +62,7 @@ class ResidenciaController extends RegistroExceptionHandler {
 		
 	}
 	
+	@ApiOperation(value = "Pesquisa residências a partir dos filtros informados.")
 	@GetMapping(value = "/filtro")
 	public ResponseEntity<?> buscarResidenciasFiltro(
 			ResidenciaFilter filters,
@@ -72,6 +75,7 @@ class ResidenciaController extends RegistroExceptionHandler {
 		
 	}
 	
+	@ApiOperation(value = "Produz uma mensagem no Kafka para atualização de uma residência.")
 	@PutMapping(value = "/amqp/alterar")
 	public ResponseEntity<?> alterarAMQP( 
 			@Valid @RequestBody AtualizaResidenciaDto residenciaRequestBody,

@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.sgc.VinculoResidenciaAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.impl.VinculoResidenciaProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.AtualizaVinculoResidenciaDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
@@ -21,13 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> {
+public class VinculoResidenciaService implements AmqpService<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
 	
 	@Autowired
-	private AmqpProducer<VinculoResidenciaAvro> amqp;
+	private VinculoResidenciaProducer producer;
 	
 	@Autowired
 	private Validators<VinculoResidenciaDto, AtualizaVinculoResidenciaDto> validator;
@@ -51,7 +50,7 @@ public class VinculoResidenciaAMQPImpl implements AmqpService<VinculoResidenciaD
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  vinculoRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producerAsync(this.vinculoMapper.vinculoResidenciaDtoToVinculoResidenciaAvro(vinculoRequestBody));
+		this.producer.producerAsync(this.vinculoMapper.vinculoResidenciaDtoToVinculoResidenciaAvro(vinculoRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

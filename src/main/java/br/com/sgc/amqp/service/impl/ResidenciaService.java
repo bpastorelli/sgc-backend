@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.sgc.ResidenciaAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.impl.ResidenciaProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.AtualizaResidenciaDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
@@ -22,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, AtualizaResidenciaDto> {
+public class ResidenciaService implements AmqpService<ResidenciaDto, AtualizaResidenciaDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
 	
 	@Autowired
-	private AmqpProducer<ResidenciaAvro> amqp;
+	private ResidenciaProducer producer;
 	
 	@Autowired
 	private Validators<ResidenciaDto, AtualizaResidenciaDto> validator;
@@ -59,7 +58,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, Atu
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producerAsync(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaRequestBody));
+		this.producer.producerAsync(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -90,7 +89,7 @@ public class ResidenciaServiceAMQPImpl implements AmqpService<ResidenciaDto, Atu
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  residenciaRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producerAsync(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaDto));
+		this.producer.producerAsync(this.residenciaMapper.residenciaDtoToResidenciaAvro(residenciaDto));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
