@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.sgc.VeiculoAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.impl.VeiculoProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.AtualizaVeiculoDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
@@ -22,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class VeiculoAMQPImpl implements AmqpService<VeiculoDto, AtualizaVeiculoDto> {
+public class VeiculoService implements AmqpService<VeiculoDto, AtualizaVeiculoDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
 	
 	@Autowired
-	private AmqpProducer<VeiculoAvro> amqp;
+	private VeiculoProducer producer;
 	
 	@Autowired
 	private Validators<VeiculoDto, AtualizaVeiculoDto> validator;
@@ -52,7 +51,7 @@ public class VeiculoAMQPImpl implements AmqpService<VeiculoDto, AtualizaVeiculoD
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  veiculoRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producerAsync(this.veiculoMapper.veiculoDtoToVeiculoAvro(veiculoRequestBody));
+		this.producer.producerAsync(this.veiculoMapper.veiculoDtoToVeiculoAvro(veiculoRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -81,7 +80,7 @@ public class VeiculoAMQPImpl implements AmqpService<VeiculoDto, AtualizaVeiculoD
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  veiculoRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producerAsync(this.veiculoMapper.veiculoDtoToVeiculoAvro(veiculoDto));
+		this.producer.producerAsync(this.veiculoMapper.veiculoDtoToVeiculoAvro(veiculoDto));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

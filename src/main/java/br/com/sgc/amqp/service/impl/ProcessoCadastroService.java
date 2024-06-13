@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import br.com.sgc.ProcessoCadastroAvro;
-import br.com.sgc.amqp.producer.AmqpProducer;
+import br.com.sgc.amqp.producer.impl.ProcessoCadastroMoradorProducer;
 import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.AtualizaProcessoCadastroDto;
 import br.com.sgc.dto.CabecalhoResponsePublisherDto;
@@ -21,13 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCadastroDto, AtualizaProcessoCadastroDto> {
+public class ProcessoCadastroService implements AmqpService<ProcessoCadastroDto, AtualizaProcessoCadastroDto> {
 	
 	@Value("${guide.limit}")
 	private int guideLimit;
 	
 	@Autowired
-	private AmqpProducer<ProcessoCadastroAvro> amqp;
+	private ProcessoCadastroMoradorProducer producer;
 	
 	@Autowired
 	private Validators<ProcessoCadastroDto, AtualizaProcessoCadastroDto> validator;
@@ -51,7 +50,7 @@ public class ProcessoCadastroServiceAMQPImpl implements AmqpService<ProcessoCada
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  processoRequestBody.toString() + " para o consumer.");
 		
-		this.amqp.producerAsync(moradorMapper.processoDtoToProcessoAvro(processoRequestBody));
+		this.producer.producerAsync(moradorMapper.processoDtoToProcessoAvro(processoRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

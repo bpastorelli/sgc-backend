@@ -17,7 +17,6 @@ public class VisitanteKafkaProducerImpl extends KafkaTemplateAbstract<VisitanteA
 	@Value("${visitante.topic.name}")
 	private String topic;
 	
-	@Override
 	public void producer(VisitanteAvro dto) {
 		
 		kafkaTemplate.send(topic, dto).addCallback(
@@ -27,8 +26,7 @@ public class VisitanteKafkaProducerImpl extends KafkaTemplateAbstract<VisitanteA
 		
 	}
 
-	@Async
-	@Override
+	@Async("asyncKafka")
 	public void producerAsync(VisitanteAvro dto) {
 		
 		Runnable runnable = () -> kafkaTemplate.send(topic, dto).addCallback(new ListenableFutureCallback<>() {

@@ -6,19 +6,18 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import br.com.sgc.VinculoResidenciaAvro;
+import br.com.sgc.VeiculoAvro;
 import br.com.sgc.amqp.producer.KafkaTemplateAbstract;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class VinculoResidenciaKafkaProducerImpl extends KafkaTemplateAbstract<VinculoResidenciaAvro> {
+public class VeiculoProducer extends KafkaTemplateAbstract<VeiculoAvro> {
 	
-	@Value("${vinculo.topic.name}")
+	@Value("${veiculo.topic.name}")
 	private String topic;
 	
-	@Override
-	public void producer(VinculoResidenciaAvro dto) {
+	public void producer(VeiculoAvro dto) {
 		
 		kafkaTemplate.send(topic, dto).addCallback(
 				success -> log.info("Message send " + success.getProducerRecord().value()),
@@ -27,14 +26,13 @@ public class VinculoResidenciaKafkaProducerImpl extends KafkaTemplateAbstract<Vi
 		
 	}
 
-	@Async
-	@Override
-	public void producerAsync(VinculoResidenciaAvro dto) {
+	@Async("asyncKafka")
+	public void producerAsync(VeiculoAvro dto) {
 		
 		Runnable runnable = () -> kafkaTemplate.send(topic, dto).addCallback(new ListenableFutureCallback<>() {
 
 			@Override
-			public void onSuccess(SendResult<String, VinculoResidenciaAvro> result) {
+			public void onSuccess(SendResult<String, VeiculoAvro> result) {
 				
 				log.info("Mensagem enviada: " + result.getProducerRecord().value());
 				
@@ -52,6 +50,7 @@ public class VinculoResidenciaKafkaProducerImpl extends KafkaTemplateAbstract<Vi
 	    new Thread(runnable).start();
 		
 	}
+
 	
 }
 
