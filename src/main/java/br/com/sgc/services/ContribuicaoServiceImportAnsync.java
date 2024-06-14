@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ImportServiceAnsync {
+public class ContribuicaoServiceImportAnsync {
 	
 	private static final String TITULO = "Importação de Arquivo de Contribuição";
 	
@@ -88,7 +88,7 @@ public class ImportServiceAnsync {
     		XSSFSheet sheet = workbook.getSheetAt(0);
     		this.salvarHistorico(fileName, SituacaoEnum.INICIANDO, idRequisicao);
     		
-    	    List<LancamentoDto> lancamentos = this.prepararDadosImportacao(sheet);
+    	    List<LancamentoDto> lancamentos = this.prepararDadosImportacao(sheet, idRequisicao);
     	    
     		if(this.errorsList.size() > 0) {
     			this.errorsList.forEach(erro -> errors.getErros().add(new ErroRegistro("","", erro)));
@@ -99,9 +99,14 @@ public class ImportServiceAnsync {
     		this.salvarHistorico(fileName, SituacaoEnum.IMPORTANDO, idRequisicao);
     		
     		int page;
-    		for(page = 1; page <= Math.round(this.calcularPaginas(lancamentos)); page++) {
+    		int totalPages = Math.round(this.calcularPaginas(lancamentos));
+    		for(page = 1; page <= totalPages; page++) {
     			log.info("Enviando página: {}...", page);
-    			this.producer.producerAsync(this.convert.convert(Utils.getPage(lancamentos, page, PAGE_SIZE)));
+    			List<LancamentoDto> lancamentosPage = new ArrayList<>();
+    			lancamentosPage.addAll(Utils.getPage(lancamentos, page, PAGE_SIZE));
+    			lancamentosPage.get(0).setPage(page);
+    			lancamentosPage.get(0).setTotalPages(totalPages);
+    			this.producer.producerAsync(this.convert.convert(lancamentosPage));
     		}
     		
     		log.info("Conteúdo enviado para processamento.");
@@ -135,14 +140,14 @@ public class ImportServiceAnsync {
     	
     }
     
-	private List<LancamentoDto> prepararDadosImportacao(XSSFSheet sheet) throws RegistroException, IOException{
+	private List<LancamentoDto> prepararDadosImportacao(XSSFSheet sheet, String idRequisicao) throws RegistroException, IOException{
 		
 		log.info("Realizando a leitura do arquivo");
 		
 		this.errorsList = new ArrayList<String>();
 		
 		List<LancamentoDto> listPreparada = new ArrayList<LancamentoDto>();
-		List<ContribuicaoDto> lancamentoList = this.getDataFromFile(sheet);
+		List<ContribuicaoDto> lancamentoList = this.recuperarDadosArquivo(sheet);
 	    
 		if(this.errorsList.size() == 0) 
 			this.loadBases(); 
@@ -218,7 +223,7 @@ public class ImportServiceAnsync {
 						.documento(l.getDocumento())
 						.periodo(l.getDataPagamento().getMonth().getValue() + "/" + l.getDataPagamento().getYear())
 						.residencia(vinculo.isPresent() ? vinculo.get().getResidencia() : null)
-						.requisicaoId(this.historico.getIdRequisicao())
+						.requisicaoId(idRequisicao)
 						.build();
 					
 					listPreparada.add(lancamento);
@@ -243,7 +248,7 @@ public class ImportServiceAnsync {
 	 * @return List<ContuibuicaoDTO>
 	 * @throws IOException
 	 */
-	private List<ContribuicaoDto> getDataFromFile(XSSFSheet worksheet) throws IOException{
+	private List<ContribuicaoDto> recuperarDadosArquivo(XSSFSheet worksheet) throws IOException{
 		
 		log.info("Extraindo dados do arquivo...");
 		
@@ -295,7 +300,7 @@ public class ImportServiceAnsync {
 		//Busca todos os lancamentos uma unica vez para utilização
 		this.lancamentos = this.lancamentoRepository.findByMoradorIdIn(codigosList);
 		    
-		 //Busca todos os vinculos uma unica vez para uitilização
+		//Busca todos os vinculos uma unica vez para uitilização
 		this.vinculos = this.vinculoResidenciaRespository.findAll(); 
 	
 		

@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ContribuicaoService {
     
 	@Autowired
-	private ImportServiceAnsync importService;
+	private ContribuicaoServiceImportAnsync contribuicaoServiceImportAnsync;
 	
 	@Autowired
 	private HistoricoImportacaoMapper historicoMapper;
@@ -32,7 +32,7 @@ public class ContribuicaoService {
 	
     public CabecalhoResponsePublisherDto processarContribuicoes(final MultipartFile file) throws RegistroException, IOException {
         
-    	importService.validarTipoArquivo(file);
+    	contribuicaoServiceImportAnsync.validarTipoArquivo(file);
     	
         String idRequisicao = UUID.randomUUID().toString();
         
@@ -40,7 +40,7 @@ public class ContribuicaoService {
         
         XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
         
-        importService.processar(workbook, file.getOriginalFilename(), idRequisicao);
+        contribuicaoServiceImportAnsync.processar(workbook, file.getOriginalFilename(), idRequisicao);
 		
 		CabecalhoResponsePublisherDto response = CabecalhoResponsePublisherDto.builder()
 			.ticket(idRequisicao)

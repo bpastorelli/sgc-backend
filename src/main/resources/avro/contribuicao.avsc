@@ -8,6 +8,14 @@
 			"type": "string"	
 		},
 		{
+			"name": "page",
+			"type": ["int", "null"], "default": 0			
+		},
+		{
+			"name": "totalPages",
+			"type": ["int", "null"], "default": 0			
+		},
+		{
 			"name":"lancamentos",
             "type":{
                 "type": "array",  
