@@ -28,13 +28,14 @@ public class ConvertListLancamentoToContribuicaoAvro implements Converter<Contri
 			lancamento.setMoradorId(l.getMorador().getId());
 			lancamento.setResidenciaId(l.getResidencia().getId());
 			lancamento.setValor(Double.parseDouble(l.getValor().toString()));
-			
 			lancamentosAvro.add(lancamento);
 			
 		});
 		
 		ContribuicaoAvro contribuicao = ContribuicaoAvro.newBuilder()
 				.setRequisicaoId(lancamentos.get(0).getRequisicaoId())
+				.setPage(lancamentos.get(0).getPage())
+				.setTotalPages(lancamentos.get(0).getTotalPages())
 				.setLancamentos(lancamentosAvro)
 				.build();	
 		

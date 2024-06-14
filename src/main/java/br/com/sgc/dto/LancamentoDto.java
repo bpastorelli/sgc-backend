@@ -28,5 +28,9 @@ public class LancamentoDto {
 	private Residencia residencia;
 	
 	private String requisicaoId;
+	
+	private Integer page;
+	
+	private Integer totalPages;
 
 }
