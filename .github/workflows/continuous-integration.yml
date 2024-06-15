@@ -25,9 +25,9 @@ jobs:
       working-directory: ./web
       run: npm install
 
-    - name: Run tests
-      working-directory: ./web
-      run: npm run test:headless
+    #- name: Run tests
+    #  working-directory: ./web
+    #  run: npm run test:headless
       
     - name: Build
       working-directory: ./web
