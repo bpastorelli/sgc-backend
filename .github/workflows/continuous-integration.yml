@@ -28,6 +28,10 @@ jobs:
     - name: Build sgc_angular
       working-directory: ./web
       run: npm run build:prod
+
+    - name: Build Docker Compose sgc_angular Application
+      working-directory: ./web
+      run: docker compose build
     
     - uses: actions/checkout@v4
     - name: Docker Login
