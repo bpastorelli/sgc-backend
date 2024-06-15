@@ -2,6 +2,8 @@
   "name": "sgc-tres-marias",
   "version": "0.0.0",
   "scripts": {
+    "ng": "ng",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider && ng serve -o",
     "build:prod": "ng build --prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

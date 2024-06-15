@@ -74,7 +74,7 @@ public class ContribuicaoServiceImportAnsync {
 	@Autowired
 	private Converter<ContribuicaoAvro, List<LancamentoDto>> convert;
 	
-	private static int PAGE_SIZE = 1000;
+	private static int PAGE_SIZE = 100;
 	
     @Async("asyncExecutor")
     public void processar(final XSSFWorkbook workbook, String fileName, String idRequisicao) throws RegistroException, IOException {
