@@ -15,11 +15,6 @@ jobs:
     
     - name: Checkout
       uses: actions/checkout@v3
-        
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
     
     - uses: actions/checkout@v4
     - name: Docker Login
@@ -76,43 +71,3 @@ jobs:
         service: ${{ secrets.SERVICE_NAME }}
         cluster: ${{ secrets.CLUSTER_NAME }}
         wait-for-service-stability: true
-
-    - name: Install dependencies
-      working-directory: ./web
-      run: npm install
-      
-    - name: Build sgc_angular
-      working-directory: ./web
-      run: npm run build:prod
-
-    - name: Build Docker Compose sgc_angular Application
-      working-directory: ./web
-      run: docker compose build
-
-    - name: Push Docker Sgc-angular Application
-      run: |
-        docker tag ${{ secrets.DOCKER_USERNAME }}/sgc_angular:latest ${{ secrets.DOCKER_USERNAME }}/sgc_angular:${{ github.run_id }} 
-        
-        docker push ${{ secrets.DOCKER_USERNAME }}/sgc_angular:${{ github.run_id }} 
-        docker push ${{ secrets.DOCKER_USERNAME }}/sgc_angular:latest
-
-    - name: Download task definition sgc_angular
-      run: |
-        aws ecs describe-task-definition --task-definition ${{ secrets.TASK_DEFINITION_ANGULAR }} --query taskDefinition > task-definition.json
-
-    - name: Fill in the new image ID sgc_angular in the Amazon ECS task definition
-      id: task-def-sgc-angular
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition.json
-        container-name: ${{ secrets.CONTAINER_NAME_ANGULAR }}
-        image: ${{ secrets.IMAGE_REPO_URL_ANGULAR }}:latest
-
-    - name: Deploy Amazon ECS task definition sgc_angular
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.task-def-sgc-angular.outputs.task-definition }}
-        service: ${{ secrets.SERVICE_NAME_ANGULAR }}
-        cluster: ${{ secrets.CLUSTER_NAME }}
-        wait-for-service-stability: true
-    
