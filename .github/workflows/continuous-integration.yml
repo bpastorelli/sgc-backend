@@ -72,7 +72,7 @@ jobs:
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        task-definition: ${{ steps.task-def-sgc-backend.outputs.task-definition }}
         service: ${{ secrets.SERVICE_NAME }}
         cluster: ${{ secrets.CLUSTER_NAME }}
         wait-for-service-stability: true
@@ -111,7 +111,7 @@ jobs:
     - name: Deploy Amazon ECS task definition sgc_angular
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        task-definition: ${{ steps.task-def-sgc-angular.outputs.task-definition }}
         service: ${{ secrets.SERVICE_NAME_ANGULAR }}
         cluster: ${{ secrets.CLUSTER_NAME }}
         wait-for-service-stability: true
