@@ -20,18 +20,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18
-
-    - name: Install dependencies
-      working-directory: ./web
-      run: npm install
-      
-    - name: Build sgc_angular
-      working-directory: ./web
-      run: npm run build:prod
-
-    - name: Build Docker Compose sgc_angular Application
-      working-directory: ./web
-      run: docker compose build
     
     - uses: actions/checkout@v4
     - name: Docker Login
@@ -54,6 +42,10 @@ jobs:
         distribution: 'adopt'
         cache: maven
 
+    - name: Build Application sgc-backend
+      working-directory: .
+      run: mvn clean package
+
     - name: Build Docker Compose sgc-backend Application
       working-directory: .
       run: docker compose build
@@ -64,13 +56,6 @@ jobs:
         
         docker push ${{ secrets.DOCKER_USERNAME }}/associados:${{ github.run_id }} 
         docker push ${{ secrets.DOCKER_USERNAME }}/associados:latest
-
-    - name: Push Docker Sgc-angular Application
-      run: |
-        docker tag ${{ secrets.DOCKER_USERNAME }}/sgc_angular:latest ${{ secrets.DOCKER_USERNAME }}/sgc_angular:${{ github.run_id }} 
-        
-        docker push ${{ secrets.DOCKER_USERNAME }}/sgc_angular:${{ github.run_id }} 
-        docker push ${{ secrets.DOCKER_USERNAME }}/sgc_angular:latest
 
     - name: Download task definition
       run: |
@@ -91,6 +76,25 @@ jobs:
         service: ${{ secrets.SERVICE_NAME }}
         cluster: ${{ secrets.CLUSTER_NAME }}
         wait-for-service-stability: true
+
+    - name: Install dependencies
+      working-directory: ./web
+      run: npm install
+      
+    - name: Build sgc_angular
+      working-directory: ./web
+      run: npm run build:prod
+
+    - name: Build Docker Compose sgc_angular Application
+      working-directory: ./web
+      run: docker compose build
+
+    - name: Push Docker Sgc-angular Application
+      run: |
+        docker tag ${{ secrets.DOCKER_USERNAME }}/sgc_angular:latest ${{ secrets.DOCKER_USERNAME }}/sgc_angular:${{ github.run_id }} 
+        
+        docker push ${{ secrets.DOCKER_USERNAME }}/sgc_angular:${{ github.run_id }} 
+        docker push ${{ secrets.DOCKER_USERNAME }}/sgc_angular:latest
 
     - name: Download task definition sgc_angular
       run: |
