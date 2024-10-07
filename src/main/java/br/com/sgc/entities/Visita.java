@@ -38,10 +38,10 @@ public class Visita implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long       id;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	private Visitante  visitante;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	private Residencia residencia;
 	
 	@Temporal(TemporalType.TIMESTAMP)

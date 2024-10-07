@@ -25,6 +25,7 @@ import br.com.sgc.amqp.service.AmqpService;
 import br.com.sgc.dto.AtualizaMoradorDto;
 import br.com.sgc.dto.AtualizaProcessoCadastroDto;
 import br.com.sgc.dto.GETMoradorResponseDto;
+import br.com.sgc.dto.GETMoradoresResponseDto;
 import br.com.sgc.dto.MoradorDto;
 import br.com.sgc.dto.ProcessoCadastroDto;
 import br.com.sgc.dto.ResponsePublisherDto;
@@ -32,6 +33,7 @@ import br.com.sgc.errorheadling.RegistroException;
 import br.com.sgc.errorheadling.RegistroExceptionHandler;
 import br.com.sgc.filter.MoradorFilter;
 import br.com.sgc.services.ServicesCore;
+import br.com.sgc.services.impl.MoradorSemResidenciasService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +53,9 @@ public class MoradorController extends RegistroExceptionHandler {
 	
 	@Autowired
 	private ServicesCore<GETMoradorResponseDto, MoradorFilter> moradorService;
+	
+	@Autowired
+	private MoradorSemResidenciasService moradorSemResidenciasService;
 		
 	/**
 	 * Envia um objeto tipo MoradorDto para o Consumer
@@ -127,6 +132,17 @@ public class MoradorController extends RegistroExceptionHandler {
 		
 		return filters.isContent() ? new ResponseEntity<>(moradores.getContent(), HttpStatus.OK) :
 					new ResponseEntity<>(moradores, HttpStatus.OK);
+		
+	}
+	
+	@ApiOperation(value = "Pesquisa moradores a partir do id da residência.")
+	@GetMapping(value = "/residencia")
+	public ResponseEntity<?> buscarMoradoresPorResidencia(
+			@RequestParam(value = "residenciaId", defaultValue = "0") Long residenciaId) throws NoSuchAlgorithmException {
+		
+		GETMoradoresResponseDto moradores = this.moradorSemResidenciasService.buscar(residenciaId);
+		
+		return new ResponseEntity<>(moradores, HttpStatus.OK);
 		
 	}
 

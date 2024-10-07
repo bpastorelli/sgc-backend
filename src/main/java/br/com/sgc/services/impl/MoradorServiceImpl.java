@@ -22,11 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MoradorServiceImpl implements ServicesCore<GETMoradorResponseDto, MoradorFilter> {
 	
-	@Autowired
-	private Converter<List<GETMoradorResponseDto>, List<Morador>> converter;
 	
 	@Autowired
 	private QueryRepository<Morador, MoradorFilter> queryRepository;
+	
+	@Autowired
+	private Converter<List<GETMoradorResponseDto>, List<Morador>> converter;
 
 	@Override
 	public Page<GETMoradorResponseDto> buscar(MoradorFilter filtros, Pageable pageable) {

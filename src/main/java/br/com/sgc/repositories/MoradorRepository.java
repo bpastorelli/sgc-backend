@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,16 @@ public interface MoradorRepository extends JpaRepository<Morador, Long> {
 	Page<Morador> findByIdOrCpfOrRgOrNomeContainsOrEmailOrPosicao(Long id, String cpf, String rg, String nome, String email, Long posicao, Pageable pageable);
 	
 	Page<Morador> findByPosicao(Long posicao, Pageable pageable);
+	
+	
+	@Query(value = "select * "
+			+ " from morador m "
+			+ " inner join vinculo_residencia v"
+			+ " on v.morador_id = m.id"
+			+ " inner join residencia r"
+			+ " on v.residencia_id = r.id"
+			+ " where (r.id = :residenciaId) ", nativeQuery = true)
+	public List<Morador> findByResidenciaId(@Param("residenciaId") Long residenciaId);
 	
 	
 	
