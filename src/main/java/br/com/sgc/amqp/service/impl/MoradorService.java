@@ -49,7 +49,7 @@ public class MoradorService implements AmqpService<MoradorDto, AtualizaMoradorDt
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
 		
-		this.producer.producerAsync(moradorMapper.moradorDtoToMoradorAvro(moradorRequestBody));
+		this.producer.producerAsync(moradorRequestBody);
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()
@@ -75,7 +75,7 @@ public class MoradorService implements AmqpService<MoradorDto, AtualizaMoradorDt
 		//Envia para a fila de Morador
 		log.info("Enviando mensagem " +  moradorRequestBody.toString() + " para o consumer.");
 		
-		this.producer.producerAsync(moradorMapper.moradorDtoToMoradorAvro(this.mergeObject(this.moradorMapper.moradorToMoradorDto(moradorRepository.findById(id).get()), moradorRequestBody)));
+		this.producer.producerAsync(this.mergeObject(this.moradorMapper.moradorToMoradorDto(moradorRepository.findById(id).get()), moradorRequestBody));
 		
 		ResponsePublisherDto response = ResponsePublisherDto
 				.builder()

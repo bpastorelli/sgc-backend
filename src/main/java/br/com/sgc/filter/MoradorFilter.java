@@ -1,6 +1,5 @@
 package br.com.sgc.filter;
 
-import br.com.sgc.entities.Residencia;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

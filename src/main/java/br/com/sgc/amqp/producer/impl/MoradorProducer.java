@@ -6,35 +6,35 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import br.com.sgc.MoradorAvro;
 import br.com.sgc.amqp.producer.KafkaTemplateAbstract;
+import br.com.sgc.dto.MoradorDto;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class MoradorProducer extends KafkaTemplateAbstract<MoradorAvro> {
+public class MoradorProducer extends KafkaTemplateAbstract<MoradorDto> {
 	
 	@Value("${morador.topic.name}")
 	private String topic;
 	
-	public void producer(MoradorAvro dto) {
+	public void producer(MoradorDto dto) {
 		
 		kafkaTemplate.send(topic, dto).addCallback(
-				success -> log.info("Message send " + success.getProducerRecord().value()),
-				failure -> log.info("Message failure " + failure.getMessage())
+				success -> log.info("Mensagem publicada: {}", success.getProducerRecord().value()),
+				failure -> log.info("Erro ao publicar mensagem: {}", failure.getMessage())
 		);	
 		
 	}
 
 	@Async("asyncKafka")
-	public void producerAsync(MoradorAvro dto) {
+	public void producerAsync(MoradorDto dto) {
 		
 		Runnable runnable = () -> kafkaTemplate.send(topic, dto).addCallback(new ListenableFutureCallback<>() {
 
 			@Override
-			public void onSuccess(SendResult<String, MoradorAvro> result) {
+			public void onSuccess(SendResult<String, MoradorDto> result) {
 				
-				log.info("Mensagem enviada: " + result.getProducerRecord().value());
+				log.info("Mensagem publicada: {}", result.getProducerRecord().value());
 				
 			}
 
@@ -42,7 +42,7 @@ public class MoradorProducer extends KafkaTemplateAbstract<MoradorAvro> {
 			public void onFailure(Throwable ex) {
 				
 				if(ex != null)
-					log.error(ex.getMessage());
+					log.error("Erro ao publicar mensagem: {}", ex.getMessage());
 				
 			}
 
