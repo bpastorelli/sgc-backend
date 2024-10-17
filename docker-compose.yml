@@ -49,8 +49,8 @@ services:
         KAFKA_BROKERCONNECT: broker:29092
 
     sgc:
-      image: associados
       image: bpastorelli/associados
+      restart: always
       build: 
         context: .
       ports:
