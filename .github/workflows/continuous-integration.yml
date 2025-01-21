@@ -65,7 +65,7 @@ jobs:
         image: ${{ secrets.IMAGE_REPO_URL }}:latest
 
     - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v2
       with:
         task-definition: ${{ steps.task-def-sgc-backend.outputs.task-definition }}
         service: ${{ secrets.SERVICE_NAME }}
