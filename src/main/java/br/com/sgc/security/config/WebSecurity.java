@@ -31,7 +31,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(requests -> requests
-        		.mvcMatchers(HttpMethod.GET, "*").permitAll()
+        	.mvcMatchers(HttpMethod.GET, "http://ec2-15-229-187-241.sa-east-1.compute.amazonaws.com/**").permitAll()
                 .mvcMatchers(HttpMethod.POST, "**/sgc/token").permitAll()
                 .mvcMatchers(HttpMethod.GET, "**/sgc/access/**").permitAll()
                 .mvcMatchers(HttpMethod.PUT, "**/access/**").permitAll()
