@@ -31,7 +31,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        		.mvcMatchers(HttpMethod.POST, "**/prod/sgc/token").permitAll()
+        		.mvcMatchers(HttpMethod.POST, "**/sgc/token").permitAll()
         		.mvcMatchers(HttpMethod.GET, "**/sgc/access/**").permitAll()
         		.mvcMatchers(HttpMethod.PUT, "**/access/**").permitAll()
         		.mvcMatchers(HttpMethod.POST, "**/sgc/access/**").permitAll()
