@@ -30,29 +30,27 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-		        .mvcMatchers(HttpMethod.GET, "*").permitAll()
-        		.mvcMatchers(HttpMethod.POST, "**/sgc/token").permitAll()
-        		.mvcMatchers(HttpMethod.GET, "**/sgc/access/**").permitAll()
-        		.mvcMatchers(HttpMethod.PUT, "**/access/**").permitAll()
-        		.mvcMatchers(HttpMethod.POST, "**/sgc/access/**").permitAll()
-        		.mvcMatchers(HttpMethod.POST, "**/sgc/contribuicao/**").permitAll()
-        		.mvcMatchers(HttpMethod.GET, "**/contribuicao/**").permitAll()
-        		.antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
+        http.authorizeRequests(requests -> requests
+        		.mvcMatchers(HttpMethod.GET, "*").permitAll()
+                .mvcMatchers(HttpMethod.POST, "**/sgc/token").permitAll()
+                .mvcMatchers(HttpMethod.GET, "**/sgc/access/**").permitAll()
+                .mvcMatchers(HttpMethod.PUT, "**/access/**").permitAll()
+                .mvcMatchers(HttpMethod.POST, "**/sgc/access/**").permitAll()
+                .mvcMatchers(HttpMethod.POST, "**/sgc/contribuicao/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "**/contribuicao/**").permitAll()
+                .antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
                 .anyRequest()
-                .authenticated()
-                .and()
-                .cors()
-                .configurationSource(corsConfigurationSource())
-                .and()
+                .authenticated())
+                .cors(cors -> cors
+                        .configurationSource(corsConfigurationSource()))
                 //.oauth2ResourceServer()
                 //.jwt();
                 //.addFilter(new JWTAuthenticationFilter(authenticationManager(), moradorRepository))
                 //.addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 //.addFilter(new AuthenticationService(authenticationManager(), moradorRepository))
                 // this disables session creation on Spring Security
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.csrf().disable();
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.csrf(csrf -> csrf.disable());
     }
     
     private static final String[] AUTH_WHITELIST = {
