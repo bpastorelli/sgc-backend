@@ -33,6 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests(requests -> requests
         	.mvcMatchers(HttpMethod.GET, "http://ec2-15-229-187-241.sa-east-1.compute.amazonaws.com/**").permitAll()
                 .mvcMatchers(HttpMethod.POST, "**/sgc/token").permitAll()
+		.mvcMatchers(HttpMethod.POST, "**/sgc/token/alterarSenha").permitAll()
                 .mvcMatchers(HttpMethod.GET, "**/sgc/access/**").permitAll()
                 .mvcMatchers(HttpMethod.PUT, "**/access/**").permitAll()
                 .mvcMatchers(HttpMethod.POST, "**/sgc/access/**").permitAll()
