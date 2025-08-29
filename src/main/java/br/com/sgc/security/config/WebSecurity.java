@@ -31,7 +31,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(requests -> requests
-        	.mvcMatchers(HttpMethod.GET, "http://ec2-15-229-187-241.sa-east-1.compute.amazonaws.com/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "https://j77akndu44.execute-api.sa-east-1.amazonaws.com/prod/**").permitAll()
+                .mvcMatchers(HttpMethod.POST, "https://j77akndu44.execute-api.sa-east-1.amazonaws.com/prod/**").permitAll()
+                .mvcMatchers(HttpMethod.PUT, "https://j77akndu44.execute-api.sa-east-1.amazonaws.com/prod/**").permitAll()
                 .mvcMatchers(HttpMethod.POST, "**/sgc/token").permitAll()
                 .mvcMatchers(HttpMethod.POST, "**/sgc/token/alterarSenha").permitAll()
                 .antMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
