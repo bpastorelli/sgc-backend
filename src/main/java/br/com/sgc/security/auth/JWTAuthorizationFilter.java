@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import br.com.sgc.security.constants.SecurityConstants;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter  {
+	
+	@Value("${jwt.secret}")
+	private String secret;
 	
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
 		
@@ -48,7 +52,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter  {
 
         if (token != null) {
             // parse the token.
-            String user = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()))
+            String user = JWT.require(Algorithm.HMAC512(secret.getBytes()))
                     .build()
                     .verify(token.replace(SecurityConstants.TOKEN_PREFIX, ""))
                     .getSubject();

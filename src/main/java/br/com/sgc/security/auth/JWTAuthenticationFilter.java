@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,9 @@ import br.com.sgc.utils.PasswordUtils;
 
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+	
+	@Value("${jwt.secret}")
+	private String secret;
 	
 	@Autowired
 	private Morador creds;
@@ -71,7 +75,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = JWT.create()
                 .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .sign(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()));
+                .sign(Algorithm.HMAC512(secret.getBytes()));
         
         Morador morador = this.moradorRepository.findByEmail(this.creds.getEmail()).get();
         
